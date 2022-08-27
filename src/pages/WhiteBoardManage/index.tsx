@@ -11,6 +11,7 @@ import {
 import { whiteboardManageFormReducer } from './Update';
 import { State } from '../../Model';
 import WhiteBoardManageForm from './WhiteBoardManageForm';
+import { Navigate } from 'react-router-dom';
 
 const WhiteBoardManage = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -21,6 +22,7 @@ const WhiteBoardManage = () => {
   );
 
   useEffect(() => {
+    if (state.authInitializing) return;
     if (!whiteboardManageFormState.initialize) return;
     const fetchData = async () => {
       const users: { uid: string; name: string }[] = [];
@@ -48,7 +50,16 @@ const WhiteBoardManage = () => {
       whiteboardManageFormDispatch(whiteboardManageFormState);
     };
     fetchData();
-  }, [state.whiteBoardTexts, whiteboardManageFormState.initialize]);
+  }, [
+    state.whiteBoardTexts,
+    state.authInitializing,
+    whiteboardManageFormState.initialize,
+  ]);
+
+  if (state.authInitializing) return <></>;
+
+  if (!state.user || state.user.uid !== import.meta.env.VITE_ADMIN_UID)
+    return <Navigate to='/' />;
 
   return (
     <WhiteBoardManageForm
