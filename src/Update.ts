@@ -3,13 +3,14 @@ import { User } from '@firebase/auth';
 import { State } from './Model';
 
 export const ActionTypes = {
-  setState: 'setState',
   setUser: 'setUser',
+  setState: 'setState',
+  setWhiteBoardText: 'setWhiteBoardText',
 };
 
 export type Action = {
   type: string;
-  payload?: State | null | User;
+  payload?: State | null | User | string;
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -17,6 +18,9 @@ export const reducer = (state: State, action: Action): State => {
   switch (type) {
     case ActionTypes.setState:
       return payload as State;
+    case ActionTypes.setWhiteBoardText:
+      const text = payload as string;
+      return R.assocPath<string, State>(['whiteBoardText'], text)(state);
     case ActionTypes.setUser:
       const user = payload as User | null;
       return R.compose(

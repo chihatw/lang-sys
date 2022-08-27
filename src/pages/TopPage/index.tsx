@@ -3,15 +3,16 @@ import trainingImageURL from './images/training.jpg';
 import { Button, Card, CardContent, CardMedia, useTheme } from '@mui/material';
 import { Container } from '@mui/system';
 import React, { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../App';
 
 const TopPage = () => {
   const { state } = useContext(AppContext);
+  const navigate = useNavigate();
   if (!state.user) return <Navigate to='/signIn' />;
 
   const handleClick = (path: string) => {
-    console.log(path);
+    navigate(path);
   };
   return (
     <Container maxWidth='sm'>
@@ -19,12 +20,12 @@ const TopPage = () => {
         <TopPageCard
           label='白板'
           imageURL={classroomImageURL}
-          handleClick={() => handleClick('whiteboard')}
+          handleClick={() => handleClick('/whiteboard')}
         />
         <TopPageCard
           label='練習'
           imageURL={trainingImageURL}
-          handleClick={() => handleClick('practice')}
+          handleClick={() => handleClick('/practice')}
         />
       </div>
     </Container>
