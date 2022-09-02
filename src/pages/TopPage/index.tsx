@@ -21,12 +21,12 @@ const TopPage = () => {
         <TopPageCard
           label='聽力'
           imageURL={headphoneURL}
-          handleClick={() => handleClick('/workout/list')}
+          handleClick={() => handleClick('/workout/list/listening')}
         />
         <TopPageCard
           label='認字'
           imageURL={lettersURL}
-          handleClick={() => handleClick('/workout/list')}
+          handleClick={() => handleClick('/workout/list/kana')}
         />
       </div>
     </Container>

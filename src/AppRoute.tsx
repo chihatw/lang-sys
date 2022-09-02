@@ -10,7 +10,7 @@ const AppRoute = () => {
       <Route index element={<TopPage />} />
 
       <Route path='/workout'>
-        <Route path='list' element={<WorkoutList />} />
+        <Route path='list/:type' element={<WorkoutList />} />
         <Route path='rhythm/:workoutId' element={<div>rhythm</div>} />
       </Route>
 
