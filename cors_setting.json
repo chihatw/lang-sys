@@ -1,0 +1,12 @@
+[
+  {
+    "maxAgeSeconds": 3600, 
+    "method": ["GET"], 
+    "origin": 
+      [
+      "https://www.lang-sys.app/", 
+      "http://127.0.0.1:5173"
+      ],
+    "responseHeader": ["Content-Type"]  
+  }
+]

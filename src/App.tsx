@@ -1,9 +1,16 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 import AppRoute from './AppRoute';
 import Layout from './Layout';
-import { INITIAL_STATE, State } from './Model';
+import { State } from './Model';
 import { auth as firebaseAuth } from './repositories/firebase';
 import { Action, ActionTypes, reducer } from './Update';
+
+const INITIAL_STATE: State = {
+  user: null,
+  rhythmWorkouts: {},
+  whiteBoardTexts: {},
+  authInitializing: true,
+};
 
 export const AppContext = createContext<{
   state: State;
