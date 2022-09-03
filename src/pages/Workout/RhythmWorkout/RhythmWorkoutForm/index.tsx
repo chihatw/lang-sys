@@ -1,7 +1,8 @@
 import * as R from 'ramda';
 import { Button, Container } from '@mui/material';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { RhythmWorkoutState } from '../Model';
 import RhythmWorkoutOpening from './RhythmWorkoutOpening';
 import RhythmWorkoutPractice from './RhythmWorkoutPractice';

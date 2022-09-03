@@ -4,33 +4,33 @@ import { PlayCircleRounded } from '@mui/icons-material';
 import { Button, IconButton, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import { PITCHES } from '../../../../../assets/pitches';
+import { KanaWorkoutState } from '../../Model';
 import { AppContext } from '../../../../../App';
-import { ActionTypes } from '../../../../../Update';
-import { setRhythmWorkout } from '../../../../../services/rhythmWorkout';
+import { KANAS } from '../../../../../assets/kanas';
 import { createSourceNode } from '../../../../../services/utils';
-import { RhythmWorkoutState } from '../../Model';
-import RhythmWorkoutPracticeRow from './RhythmWorkoutPracticeRow';
-import { RhythmWorkout, RhythmWorkoutLog, State } from '../../../../../Model';
+import { KanaWorkout, KanaWorkoutLog, State } from '../../../../../Model';
+import { ActionTypes } from '../../../../../Update';
+import { setKanaWorkout } from '../../../../../services/kanaWorkout';
+import KanaWorkoutPracticeRow from './KanaWorkoutPracticeRow';
 
-const RhythmWorkoutPractice = ({
+const KanaWorkoutPractice = ({
   state,
   dispatch,
 }: {
-  state: RhythmWorkoutState;
-  dispatch: React.Dispatch<RhythmWorkoutState>;
+  state: KanaWorkoutState;
+  dispatch: React.Dispatch<KanaWorkoutState>;
 }) => {
   const theme = useTheme();
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const [initialize, setInitialize] = useState(true);
-  const [selectedId, setSelectedId] = useState('');
+  const [selectedKana, setSelectedKana] = useState('');
   const AnimationElemRef = useRef<HTMLDivElement>(null);
 
-  const currentCueId = state.cueIds[state.currentIndex];
-  const currentCue = PITCHES[currentCueId];
-
-  const isLast = state.currentIndex + 1 === state.cueIds.length;
+  const currentKana = state.kanas[state.currentIndex];
+  const currentKanaCue = Object.values(KANAS).find((item) =>
+    [item.hira, item.kata].includes(currentKana)
+  );
 
   useEffect(() => {
     if (initialize) {
@@ -44,14 +44,22 @@ const RhythmWorkoutPractice = ({
     }
   }, [initialize]);
 
+  if (!currentKanaCue) return <></>;
+
+  const isLast = state.currentIndex + 1 === state.kanas.length;
+
   const play = async () => {
     if (!state.blob || !state.audioContext) return;
     const sourceNode = await createSourceNode(state.blob, state.audioContext);
-    sourceNode.start(0, currentCue.start, currentCue.end - currentCue.start);
+    sourceNode.start(
+      0,
+      currentKanaCue.start,
+      currentKanaCue.end - currentKanaCue.start
+    );
   };
+
   const handleClickPlay = () => {
     play();
-
     let updatedPlayedAt: number[] = [];
     if (state.log.practice.answers[state.currentIndex].playedAt) {
       updatedPlayedAt = [
@@ -60,39 +68,39 @@ const RhythmWorkoutPractice = ({
     }
 
     updatedPlayedAt.push(new Date().getTime());
-    const updatedState = R.assocPath<number[], RhythmWorkoutState>(
+    const updatedState = R.assocPath<number[], KanaWorkoutState>(
       ['log', 'practice', 'answers', state.currentIndex, 'playedAt'],
       updatedPlayedAt
     )(state);
     dispatch(updatedState);
   };
 
-  const handleClickRow = (cueId: string) => {
-    cueId = selectedId === cueId ? '' : cueId;
-    setSelectedId(cueId);
+  const handleClickRow = (kana: string) => {
+    kana = selectedKana === kana ? '' : kana;
+    setSelectedKana(kana);
   };
 
   const handleNext = () => {
-    let updatedState = R.assocPath<string, RhythmWorkoutState>(
+    let updatedState = R.assocPath<string, KanaWorkoutState>(
       ['log', 'practice', 'answers', state.currentIndex, 'selected'],
-      selectedId
+      selectedKana
     )(state);
 
     if (!isLast) {
       updatedState = R.compose(
-        R.assocPath<number, RhythmWorkoutState>(
+        R.assocPath<number, KanaWorkoutState>(
           ['currentIndex'],
           state.currentIndex + 1
         ),
-        R.assocPath<number, RhythmWorkoutState>(
+        R.assocPath<number, KanaWorkoutState>(
           ['log', 'practice', 'answers', state.currentIndex + 1, 'createdAt'],
           new Date().getTime()
         )
       )(updatedState);
     } else {
       updatedState = R.compose(
-        R.assocPath<string, RhythmWorkoutState>(['pane'], 'result'),
-        R.assocPath<number, RhythmWorkoutState>(
+        R.assocPath<string, KanaWorkoutState>(['pane'], 'result'),
+        R.assocPath<number, KanaWorkoutState>(
           ['log', 'result', 'createdAt'],
           new Date().getTime()
         )
@@ -100,21 +108,22 @@ const RhythmWorkoutPractice = ({
     }
 
     dispatch(updatedState);
-    setSelectedId('');
+    setSelectedKana('');
     setInitialize(true);
 
-    const updatedRhythmWorkout = R.assocPath<RhythmWorkoutLog, RhythmWorkout>(
+    const updatedKanaWorkout = R.assocPath<KanaWorkoutLog, KanaWorkout>(
       ['logs', updatedState.log.id],
       updatedState.log
-    )(appState.rhythmWorkouts[state.id]);
+    )(appState.kanaWorkouts[state.id]);
 
-    const updatedAppState = R.assocPath<RhythmWorkout, State>(
-      ['rhythmWorkouts', updatedRhythmWorkout.id],
-      updatedRhythmWorkout
+    const updatedAppState = R.assocPath<KanaWorkout, State>(
+      ['kanaWorkouts', updatedKanaWorkout.id],
+      updatedKanaWorkout
     )(appState);
     appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
-    setRhythmWorkout(updatedRhythmWorkout);
+    setKanaWorkout(updatedKanaWorkout);
   };
+
   return (
     <div style={{ display: 'grid', rowGap: 8 }}>
       <div
@@ -127,7 +136,7 @@ const RhythmWorkoutPractice = ({
       >
         <span>{state.currentIndex + 1}</span>
         <span style={{ fontSize: 32 }}> / </span>
-        <span>{state.cueIds.length}</span>
+        <span>{state.kanas.length}</span>
       </div>
       <div
         ref={AnimationElemRef}
@@ -157,16 +166,24 @@ const RhythmWorkoutPractice = ({
           paddingTop: 24,
         }}
       >
-        {Object.values(PITCHES)
-          .filter((item) => state.cueIds.includes(item.id))
-          .map((card, index) => (
-            <RhythmWorkoutPracticeRow
-              key={index}
-              pitchStr={card.pitchStr}
-              isSelected={selectedId === card.id}
-              handleClickRow={() => handleClickRow(card.id)}
-            />
-          ))}
+        {Object.values(KANAS)
+          .filter(
+            (item) =>
+              state.kanas.includes(item.hira) || state.kanas.includes(item.kata)
+          )
+          .map((kanaCue, index) => {
+            const kana = state.kanas.includes(kanaCue.hira)
+              ? kanaCue.hira
+              : kanaCue.kata;
+            return (
+              <KanaWorkoutPracticeRow
+                key={index}
+                kana={kana}
+                isSelected={kana === selectedKana}
+                handleClickRow={() => handleClickRow(kana)}
+              />
+            );
+          })}
       </div>
       <div
         style={{ display: 'flex', justifyContent: 'center', paddingTop: 40 }}
@@ -174,7 +191,7 @@ const RhythmWorkoutPractice = ({
         <Button
           variant='contained'
           sx={{ color: 'white', width: 240 }}
-          disabled={!selectedId}
+          disabled={!selectedKana}
           onClick={handleNext}
         >
           {isLast ? '選好了' : '下一題'}
@@ -184,4 +201,4 @@ const RhythmWorkoutPractice = ({
   );
 };
 
-export default RhythmWorkoutPractice;
+export default KanaWorkoutPractice;

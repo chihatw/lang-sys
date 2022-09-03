@@ -3,26 +3,26 @@ import { Button } from '@mui/material';
 import { nanoid } from 'nanoid';
 import React, { useContext } from 'react';
 
+import { KanaWorkoutState } from '../../Model';
 import { AppContext } from '../../../../../App';
-import { ActionTypes } from '../../../../../Update';
-import { setRhythmWorkout } from '../../../../../services/rhythmWorkout';
-import { RhythmWorkoutState } from '../../Model';
-import RhythmWorkoutResultTable from './RhythmWorkoutResultTable';
 import { createSourceNode, shuffle } from '../../../../../services/utils';
-import RhythmWorkoutResultCorrectRatio from './RhythmWorkoutResultCorrectRatio';
 import {
+  INITIAL_KANA_WORKOUT_LOG,
+  KanaWorkout,
+  KanaWorkoutLog,
   State,
-  RhythmWorkout,
-  RhythmWorkoutLog,
-  INITIAL_RHYTHM_WORKOUT_LOG,
 } from '../../../../../Model';
+import { ActionTypes } from '../../../../../Update';
+import { setKanaWorkout } from '../../../../../services/kanaWorkout';
+import KanaWorkoutResultCorrectRatio from './KanaWorkoutResultCorrectRatio';
+import KanaWorkoutResultTable from './KanaWorkoutResultTable';
 
-const RhythmWorkoutResult = ({
+const KanaWorkoutResult = ({
   state,
   dispatch,
 }: {
-  state: RhythmWorkoutState;
-  dispatch: React.Dispatch<RhythmWorkoutState>;
+  state: KanaWorkoutState;
+  dispatch: React.Dispatch<KanaWorkoutState>;
 }) => {
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
@@ -36,64 +36,64 @@ const RhythmWorkoutResult = ({
       updatedTapped = [...state.log.result.tapped];
     }
     updatedTapped.push(type);
-    const updatedState = R.assocPath<string[], RhythmWorkoutState>(
+    const updatedState = R.assocPath<string[], KanaWorkoutState>(
       ['log', 'result', 'tapped'],
       updatedTapped
     )(state);
     dispatch(updatedState);
 
-    const updatedRhythmWorkout = R.assocPath<RhythmWorkoutLog, RhythmWorkout>(
+    const updatedKanaWorkout = R.assocPath<KanaWorkoutLog, KanaWorkout>(
       ['logs', updatedState.log.id],
       updatedState.log
-    )(appState.rhythmWorkouts[state.id]);
+    )(appState.kanaWorkouts[state.id]);
 
-    const updatedAppState = R.assocPath<RhythmWorkout, State>(
-      ['rhythmWorkouts', updatedRhythmWorkout.id],
-      updatedRhythmWorkout
+    const updatedAppState = R.assocPath<KanaWorkout, State>(
+      ['rhythmWorkouts', updatedKanaWorkout.id],
+      updatedKanaWorkout
     )(appState);
     appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
-    setRhythmWorkout(updatedRhythmWorkout);
+    setKanaWorkout(updatedKanaWorkout);
   };
 
   const handleRetry = () => {
-    const updatedLog: RhythmWorkoutLog = {
+    const updatedLog: KanaWorkoutLog = {
       ...state.log,
       removedAt: new Date().getTime(),
     };
-    const updatedRhythmWorkout = R.assocPath<RhythmWorkoutLog, RhythmWorkout>(
+
+    const updatedKanaWorkout = R.assocPath<KanaWorkoutLog, KanaWorkout>(
       ['logs', updatedLog.id],
       updatedLog
-    )(appState.rhythmWorkouts[state.id]);
+    )(appState.kanaWorkouts[state.id]);
 
-    const updatedAppState = R.assocPath<RhythmWorkout, State>(
-      ['rhythmWorkouts', updatedRhythmWorkout.id],
-      updatedRhythmWorkout
+    const updatedAppState = R.assocPath<KanaWorkout, State>(
+      ['rhythmWorkouts', updatedKanaWorkout.id],
+      updatedKanaWorkout
     )(appState);
     appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
-    setRhythmWorkout(updatedRhythmWorkout);
+    setKanaWorkout(updatedKanaWorkout);
 
-    const cueIds = shuffle(state.cueIds);
-
-    const updatedState: RhythmWorkoutState = {
+    const kanas = shuffle(state.kanas);
+    const updatedState: KanaWorkoutState = {
       ...state,
       pane: 'opening',
-      cueIds,
+      kanas,
       currentIndex: 0,
       log: {
-        ...INITIAL_RHYTHM_WORKOUT_LOG,
+        ...INITIAL_KANA_WORKOUT_LOG,
         id: nanoid(8),
         createdAt: new Date().getTime(),
-        cueIds,
+        kanas,
       },
     };
     dispatch(updatedState);
   };
-
   if (!Object.values(state.log.practice.answers).length) return <></>;
+
   return (
     <div style={{ display: 'grid', rowGap: 16 }}>
-      <RhythmWorkoutResultCorrectRatio state={state} />
-      <RhythmWorkoutResultTable state={state} handleClick={handleClick} />
+      <KanaWorkoutResultCorrectRatio state={state} />
+      <KanaWorkoutResultTable state={state} handleClick={handleClick} />
       <div style={{ height: 16 }} />
       <Button variant='contained' sx={{ color: 'white' }} onClick={handleRetry}>
         再一次練習
@@ -102,4 +102,4 @@ const RhythmWorkoutResult = ({
   );
 };
 
-export default RhythmWorkoutResult;
+export default KanaWorkoutResult;

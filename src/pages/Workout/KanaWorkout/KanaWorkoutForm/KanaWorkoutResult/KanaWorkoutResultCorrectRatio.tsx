@@ -1,23 +1,22 @@
 import { useTheme } from '@mui/material';
 import React from 'react';
-import { RhythmWorkoutState } from '../../Model';
+import { KanaWorkoutState } from '../../Model';
 
-const RhythmWorkoutResultCorrectRatio = ({
+const KanaWorkoutResultCorrectRatio = ({
   state,
 }: {
-  state: RhythmWorkoutState;
+  state: KanaWorkoutState;
 }) => {
   const theme = useTheme();
 
   let correctCount = 0;
   Object.values(state.log.practice.answers).forEach((answer, index) => {
-    const cueId = state.cueIds[index];
-    if (answer.selected === cueId) {
+    const kana = state.kanas[index];
+    if (answer.selected === kana) {
       correctCount++;
     }
   });
-  const correctRatio = Math.round((correctCount / state.cueIds.length) * 100);
-
+  const correctRatio = Math.round((correctCount / state.kanas.length) * 100);
   return (
     <div
       style={{
@@ -30,4 +29,4 @@ const RhythmWorkoutResultCorrectRatio = ({
   );
 };
 
-export default RhythmWorkoutResultCorrectRatio;
+export default KanaWorkoutResultCorrectRatio;

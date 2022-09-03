@@ -1,28 +1,31 @@
 import * as R from 'ramda';
-import string2PitchesArray from 'string2pitches-array';
 import React, { useContext } from 'react';
-import { SentencePitchLine } from '@chihatw/lang-gym-h.ui.sentence-pitch-line';
-import { Button, Card, CardContent } from '@mui/material';
+import { Button, Card, CardContent, useTheme } from '@mui/material';
 
-import { PITCHES } from '../../../../../assets/pitches';
+import { KanaWorkoutState } from '../../Model';
 import { AppContext } from '../../../../../App';
-import { ActionTypes } from '../../../../../Update';
+import { KANAS } from '../../../../../assets/kanas';
 import { createSourceNode } from '../../../../../services/utils';
-import { setRhythmWorkout } from '../../../../../services/rhythmWorkout';
-import { RhythmWorkoutState } from '../../Model';
-import { RhythmWorkout, RhythmWorkoutLog, State } from '../../../../../Model';
+import { KanaWorkout, KanaWorkoutLog, State } from '../../../../../Model';
+import { ActionTypes } from '../../../../../Update';
+import { setKanaWorkout } from '../../../../../services/kanaWorkout';
 
-const RhythmWorkoutOpening = ({
+const KanaWorkoutOpening = ({
   state,
   dispatch,
 }: {
-  state: RhythmWorkoutState;
-  dispatch: React.Dispatch<RhythmWorkoutState>;
+  state: KanaWorkoutState;
+  dispatch: React.Dispatch<KanaWorkoutState>;
 }) => {
+  const theme = useTheme();
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
-  const cues = Object.values(PITCHES).filter((item) =>
-    state.cueIds.includes(item.id)
-  );
+
+  const orderedKanas = Object.values(KANAS)
+    .filter(
+      (item) =>
+        state.kanas.includes(item.hira) || state.kanas.includes(item.kata)
+    )
+    .map((item) => (state.kanas.includes(item.hira) ? item.hira : item.kata));
 
   const play = async (
     start: number,
@@ -34,14 +37,17 @@ const RhythmWorkoutOpening = ({
     sourceNode.start(0, start, end - start);
   };
 
-  const handleClick = (cueId: string) => {
+  const handleClick = (kana: string) => {
     if (!state.blob || !state.audioContext) return;
-    const cue = PITCHES[cueId];
-    play(cue.start, cue.end, state.blob, state.audioContext);
+    const _kana = Object.values(KANAS).find((item) =>
+      [item.hira, item.kata].includes(kana)
+    );
+    if (!_kana) return;
+    play(_kana.start, _kana.end, state.blob, state.audioContext);
 
     const updatedTapped = [...state.log.opening.tapped];
-    updatedTapped.push(cueId);
-    const updatedState = R.assocPath<string[], RhythmWorkoutState>(
+    updatedTapped.push(kana);
+    const updatedState = R.assocPath<string[], KanaWorkoutState>(
       ['log', 'opening', 'tapped'],
       updatedTapped
     )(state);
@@ -50,25 +56,25 @@ const RhythmWorkoutOpening = ({
 
   const handleNext = () => {
     const updatedState = R.compose(
-      R.assocPath<string, RhythmWorkoutState>(['pane'], 'practice'),
-      R.assocPath<number, RhythmWorkoutState>(
+      R.assocPath<string, KanaWorkoutState>(['pane'], 'practice'),
+      R.assocPath<number, KanaWorkoutState>(
         ['log', 'practice', 'answers', 0, 'createdAt'],
         new Date().getTime()
       )
     )(state);
     dispatch(updatedState);
 
-    const updatedRhythmWorkout = R.assocPath<RhythmWorkoutLog, RhythmWorkout>(
+    const updatedKanaWorkout = R.assocPath<KanaWorkoutLog, KanaWorkout>(
       ['logs', updatedState.log.id],
       updatedState.log
-    )(appState.rhythmWorkouts[state.id]);
+    )(appState.kanaWorkouts[state.id]);
 
-    const updatedAppState = R.assocPath<RhythmWorkout, State>(
-      ['rhythmWorkouts', updatedRhythmWorkout.id],
-      updatedRhythmWorkout
+    const updatedAppState = R.assocPath<KanaWorkout, State>(
+      ['kanaWorkouts', updatedKanaWorkout.id],
+      updatedKanaWorkout
     )(appState);
     appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
-    setRhythmWorkout(updatedRhythmWorkout);
+    setKanaWorkout(updatedKanaWorkout);
   };
 
   return (
@@ -77,10 +83,10 @@ const RhythmWorkoutOpening = ({
         請點觸各個聲音，確認有什麼差異
       </div>
       <div style={{ display: 'grid', rowGap: 16 }}>
-        {cues.map((cue, index) => (
+        {orderedKanas.map((kana, index) => (
           <div key={index}>
             <Card
-              onClick={() => handleClick(cue.id)}
+              onClick={() => handleClick(kana)}
               sx={{
                 cursor: 'pointer',
                 WebkitTapHighlightColor: 'transparent',
@@ -94,9 +100,15 @@ const RhythmWorkoutOpening = ({
                   marginBottom: -1,
                 }}
               >
-                <SentencePitchLine
-                  pitchesArray={string2PitchesArray(cue.pitchStr)}
-                />
+                <div
+                  style={{
+                    ...(theme.typography as any).notoSerifJP,
+                    fontSize: 24,
+                    color: '#555',
+                  }}
+                >
+                  {kana}
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -110,4 +122,4 @@ const RhythmWorkoutOpening = ({
   );
 };
 
-export default RhythmWorkoutOpening;
+export default KanaWorkoutOpening;

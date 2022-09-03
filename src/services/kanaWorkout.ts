@@ -1,4 +1,4 @@
-import { RhythmWorkout } from '../Model';
+import { KanaWorkout, RhythmWorkout } from '../Model';
 import {
   query,
   where,
@@ -11,38 +11,38 @@ import {
 } from 'firebase/firestore';
 import { db } from '../repositories/firebase';
 
-const COLLECTION = 'rhythmWorkouts';
+const COLLECTION = 'kanaWorkouts';
 
-export const getRhythmWorkouts = async (uid: string) => {
-  const rhythmWorkouts: { [id: string]: RhythmWorkout } = {};
+export const getKanaWorkouts = async (uid: string) => {
+  const kanaWorkouts: { [id: string]: KanaWorkout } = {};
   const q = query(
     collection(db, COLLECTION),
     where('uid', '==', uid),
     where('isActive', '==', true),
     orderBy('createdAt')
   );
-  console.log('get rhythmWorkouts');
+  console.log('get kanaWorkouts');
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
-    rhythmWorkouts[doc.id] = buildRhythmWorkout(doc);
+    kanaWorkouts[doc.id] = buildKanaWorkout(doc);
   });
-  return rhythmWorkouts;
+  return kanaWorkouts;
 };
 
-export const setRhythmWorkout = (workout: RhythmWorkout) => {
-  console.log('set rhythmWorkout');
+export const setKanaWorkout = (workout: KanaWorkout) => {
+  console.log('set kanaWorkout');
   const { id, ...omitted } = workout;
   setDoc(doc(db, COLLECTION, id), { ...omitted });
 };
 
-const buildRhythmWorkout = (doc: DocumentData): RhythmWorkout => {
-  const { uid, cueIds, title, logs, isActive, createdAt, storagePath } =
+const buildKanaWorkout = (doc: DocumentData): KanaWorkout => {
+  const { uid, kanas, title, logs, isActive, createdAt, storagePath } =
     doc.data();
   return {
     id: doc.id,
     uid: uid || '',
     title: title || '',
-    cueIds: cueIds || [],
+    kanas: kanas || [],
     logs: logs || {},
     isActive: isActive || false,
     createdAt: createdAt || 0,
