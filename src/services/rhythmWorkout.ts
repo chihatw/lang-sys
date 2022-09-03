@@ -6,6 +6,8 @@ import {
   orderBy,
   collection,
   DocumentData,
+  setDoc,
+  doc,
 } from 'firebase/firestore';
 import { db } from '../repositories/firebase';
 
@@ -26,15 +28,21 @@ export const getRhythmWorkouts = async (uid: string) => {
   return rhythmWorkouts;
 };
 
+export const setRhythmWorkout = (workout: RhythmWorkout) => {
+  console.log('set rhythmWorkout');
+  const { id, ...omitted } = workout;
+  setDoc(doc(db, COLLECTION, id), { ...omitted });
+};
+
 const buildRhythmWorkout = (doc: DocumentData): RhythmWorkout => {
-  const { uid, cues, title, answers, isActive, createdAt, storagePath } =
+  const { uid, cueIds, title, logs, isActive, createdAt, storagePath } =
     doc.data();
   return {
     id: doc.id,
     uid: uid || '',
-    cues: cues || {},
     title: title || '',
-    answers: answers || {},
+    cueIds: cueIds || [],
+    logs: logs || {},
     isActive: isActive || false,
     createdAt: createdAt || 0,
     storagePath: storagePath || '',

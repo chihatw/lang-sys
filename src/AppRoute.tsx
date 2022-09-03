@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import SignInPage from './pages/SignInPage';
 import TopPage from './pages/TopPage';
+import RhythmWorkout from './pages/Workout/RhythmWorkout';
 import WorkoutList from './pages/Workout/WorkoutList';
 
 const AppRoute = () => {
@@ -11,7 +12,7 @@ const AppRoute = () => {
 
       <Route path='/workout'>
         <Route path='list/:type' element={<WorkoutList />} />
-        <Route path='rhythm/:workoutId' element={<div>rhythm</div>} />
+        <Route path='listening/:workoutId' element={<RhythmWorkout />} />
       </Route>
 
       <Route path='/signIn' element={<SignInPage />} />

@@ -1,5 +1,5 @@
-import headphoneURL from './images/headphone.jpg';
-import lettersURL from './images/letters.jpg';
+import headphoneURL from '../../assets/images/headphone.jpg';
+import lettersURL from '../../assets/images/letters.jpg';
 
 import React, { useContext } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';

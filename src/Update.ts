@@ -5,12 +5,12 @@ import { State } from './Model';
 export const ActionTypes = {
   setUser: 'setUser',
   setState: 'setState',
-  setWhiteBoardText: 'setWhiteBoardText',
+  setAudioContext: 'setAudioContext',
 };
 
 export type Action = {
   type: string;
-  payload?: State | null | User | string;
+  payload?: State | null | User | string | AudioContext;
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -18,9 +18,12 @@ export const reducer = (state: State, action: Action): State => {
   switch (type) {
     case ActionTypes.setState:
       return payload as State;
-    case ActionTypes.setWhiteBoardText:
-      const text = payload as string;
-      return R.assocPath<string, State>(['whiteBoardText'], text)(state);
+    case ActionTypes.setAudioContext:
+      const audioContext = payload as AudioContext | null;
+      return R.assocPath<AudioContext | null, State>(
+        ['audioContext'],
+        audioContext
+      )(state);
     case ActionTypes.setUser:
       const user = payload as User | null;
       return R.compose(

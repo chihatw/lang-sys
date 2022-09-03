@@ -4,7 +4,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../../App';
 import CustomLabel from '../../../ui/CustomLabel';
 import { buildWorkoutListItems, WorkoutListItem } from './Model';
-import WorkoutRow from './WorkoutRow';
+import WorkoutListRow from './WorkoutListRow';
 
 const reducer = (state: WorkoutListItem[], action: WorkoutListItem[]) => action;
 
@@ -32,7 +32,7 @@ const WorkoutList = () => {
       <div style={{ display: 'grid', rowGap: 24 }}>
         <CustomLabel label='練習' />
         {listItems.map((listItem, index) => (
-          <WorkoutRow key={index} listItem={listItem} />
+          <WorkoutListRow key={index} listItem={listItem} />
         ))}
       </div>
     </Container>
