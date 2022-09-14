@@ -15,16 +15,10 @@ export type PitchCue = {
   pitchStr: string;
 };
 
-export type TapLog = {
-  tapped: { [index: number]: string };
-  duration: number;
-};
-
 export type RhythmWorkoutLog = {
   id: string;
   cueIds: string[];
   createdAt: number;
-  removedAt: number;
   opening: {
     tapped: string[];
   };
@@ -47,7 +41,6 @@ export type KanaWorkoutLog = {
   id: string;
   kanas: string[];
   createdAt: number;
-  removedAt: number;
   opening: {
     tapped: string[];
   };
@@ -70,7 +63,6 @@ export const INITIAL_KANA_WORKOUT_LOG: KanaWorkoutLog = {
   id: '',
   kanas: [],
   createdAt: 0,
-  removedAt: 0,
   opening: {
     tapped: [],
   },
@@ -87,7 +79,6 @@ export const INITIAL_RHYTHM_WORKOUT_LOG: RhythmWorkoutLog = {
   id: '',
   cueIds: [],
   createdAt: 0,
-  removedAt: 0,
   opening: {
     tapped: [],
   },

@@ -56,22 +56,6 @@ const RhythmWorkoutResult = ({
   };
 
   const handleRetry = () => {
-    const updatedLog: RhythmWorkoutLog = {
-      ...state.log,
-      removedAt: new Date().getTime(),
-    };
-    const updatedRhythmWorkout = R.assocPath<RhythmWorkoutLog, RhythmWorkout>(
-      ['logs', updatedLog.id],
-      updatedLog
-    )(appState.rhythmWorkouts[state.id]);
-
-    const updatedAppState = R.assocPath<RhythmWorkout, State>(
-      ['rhythmWorkouts', updatedRhythmWorkout.id],
-      updatedRhythmWorkout
-    )(appState);
-    appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
-    setRhythmWorkout(updatedRhythmWorkout);
-
     const cueIds = shuffle(state.cueIds);
 
     const updatedState: RhythmWorkoutState = {

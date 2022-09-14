@@ -56,23 +56,6 @@ const KanaWorkoutResult = ({
   };
 
   const handleRetry = () => {
-    const updatedLog: KanaWorkoutLog = {
-      ...state.log,
-      removedAt: new Date().getTime(),
-    };
-
-    const updatedKanaWorkout = R.assocPath<KanaWorkoutLog, KanaWorkout>(
-      ['logs', updatedLog.id],
-      updatedLog
-    )(appState.kanaWorkouts[state.id]);
-
-    const updatedAppState = R.assocPath<KanaWorkout, State>(
-      ['rhythmWorkouts', updatedKanaWorkout.id],
-      updatedKanaWorkout
-    )(appState);
-    appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
-    setKanaWorkout(updatedKanaWorkout);
-
     const kanas = shuffle(state.kanas);
     const updatedState: KanaWorkoutState = {
       ...state,

@@ -22,21 +22,7 @@ const RhythmWorkoutForm = ({
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
   const navigate = useNavigate();
 
-  const handleRemove = () => {
-    const updatedLog: RhythmWorkoutLog = {
-      ...state.log,
-      removedAt: new Date().getTime(),
-    };
-    const updatedRhythmWorkout = R.assocPath<RhythmWorkoutLog, RhythmWorkout>(
-      ['logs', updatedLog.id],
-      updatedLog
-    )(appState.rhythmWorkouts[state.id]);
-    const updatedAppState = R.assocPath<RhythmWorkout, State>(
-      ['rhythmWorkouts', updatedRhythmWorkout.id],
-      updatedRhythmWorkout
-    )(appState);
-    appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
-    setRhythmWorkout(updatedRhythmWorkout);
+  const handleBack = () => {
     navigate('/workout/list/listening');
   };
 
@@ -57,7 +43,7 @@ const RhythmWorkoutForm = ({
               return <></>;
           }
         })()}
-        <Button variant='outlined' onClick={handleRemove}>
+        <Button variant='outlined' onClick={handleBack}>
           練習結束
         </Button>
       </div>

@@ -105,6 +105,7 @@ const KanaWorkoutOpening = ({
                     ...(theme.typography as any).notoSerifJP,
                     fontSize: 24,
                     color: '#555',
+                    userSelect: 'none',
                   }}
                 >
                   {kana}

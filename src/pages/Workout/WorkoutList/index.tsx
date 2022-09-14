@@ -1,6 +1,6 @@
-import { Container } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import React, { useContext, useEffect, useReducer, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../../App';
 import CustomLabel from '../../../ui/CustomLabel';
 import { buildWorkoutListItems, WorkoutListItem } from './Model';
@@ -9,6 +9,7 @@ import WorkoutListRow from './WorkoutListRow';
 const reducer = (state: WorkoutListItem[], action: WorkoutListItem[]) => action;
 
 const WorkoutList = () => {
+  const navigate = useNavigate();
   const { type } = useParams();
   const { state, dispatch } = useContext(AppContext);
   const [listItems, listDispatch] = useReducer(reducer, []);
@@ -27,13 +28,26 @@ const WorkoutList = () => {
   if (state.authInitializing) return <></>;
   if (!state.user) return <Navigate to='/' />;
 
+  const handleBack = () => {
+    navigate('/');
+  };
+
   return (
     <Container maxWidth='sm' sx={{ paddingTop: 2 }}>
-      <div style={{ display: 'grid', rowGap: 24 }}>
-        <CustomLabel label='練習' />
-        {listItems.map((listItem, index) => (
-          <WorkoutListRow key={index} listItem={listItem} />
-        ))}
+      <div style={{ display: 'grid', rowGap: 180 }}>
+        <div style={{ display: 'grid', rowGap: 24 }}>
+          <CustomLabel label='練習' />
+          {listItems.map((listItem, index) => (
+            <WorkoutListRow key={index} listItem={listItem} />
+          ))}
+        </div>
+        <Button
+          sx={{ color: 'white' }}
+          variant='contained'
+          onClick={handleBack}
+        >
+          回到主頁
+        </Button>
       </div>
     </Container>
   );
