@@ -36,16 +36,16 @@ export const setRhythmWorkout = (workout: RhythmWorkout) => {
 };
 
 const buildRhythmWorkout = (doc: DocumentData): RhythmWorkout => {
-  const { uid, cueIds, title, logs, isActive, createdAt, storagePath } =
+  const { uid, cueIds, title, logs, isActive, createdAt, isLocked } =
     doc.data();
   return {
     id: doc.id,
     uid: uid || '',
+    logs: logs || {},
     title: title || '',
     cueIds: cueIds || [],
-    logs: logs || {},
     isActive: isActive || false,
+    isLocked: isLocked ?? true,
     createdAt: createdAt || 0,
-    storagePath: storagePath || '',
   };
 };

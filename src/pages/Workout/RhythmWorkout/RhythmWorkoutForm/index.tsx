@@ -1,16 +1,11 @@
-import * as R from 'ramda';
 import { Button, Container } from '@mui/material';
-import React, { useContext } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { RhythmWorkoutState } from '../Model';
 import RhythmWorkoutOpening from './RhythmWorkoutOpening';
 import RhythmWorkoutPractice from './RhythmWorkoutPractice';
 import RhythmWorkoutResult from './RhythmWorkoutResult';
-import { AppContext } from '../../../../App';
-import { RhythmWorkout, RhythmWorkoutLog, State } from '../../../../Model';
-import { ActionTypes } from '../../../../Update';
-import { setRhythmWorkout } from '../../../../services/rhythmWorkout';
 
 const RhythmWorkoutForm = ({
   state,
@@ -19,7 +14,6 @@ const RhythmWorkoutForm = ({
   state: RhythmWorkoutState;
   dispatch: React.Dispatch<RhythmWorkoutState>;
 }) => {
-  const { state: appState, dispatch: appDispatch } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleBack = () => {

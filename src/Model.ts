@@ -99,7 +99,7 @@ export type RhythmWorkout = {
   logs: { [id: string]: RhythmWorkoutLog };
   isActive: boolean;
   createdAt: number;
-  storagePath: string;
+  isLocked: boolean;
 };
 
 export type KanaWorkout = {
@@ -110,7 +110,7 @@ export type KanaWorkout = {
   logs: { [id: string]: KanaWorkoutLog };
   isActive: boolean;
   createdAt: number;
-  storagePath: string;
+  isLocked: boolean;
 };
 
 export type State = {

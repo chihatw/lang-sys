@@ -1,3 +1,4 @@
+import { Lock } from '@mui/icons-material';
 import { Card, CardContent, useTheme } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,17 +11,20 @@ const WorkoutListRow = ({ listItem }: { listItem: WorkoutListItem }) => {
   const handleClick = () => {
     navigate(`/workout/${listItem.type}/${listItem.id}`);
   };
+  const backgroundColor = listItem.isLocked ? 'translate' : '#EAF4F5';
   return (
     <Card
       sx={{
-        cursor: 'pointer',
-        WebkitTapHighlightColor: '#EAF4F5',
-        '&:active,&:focus': { background: '#EAF4F5' },
+        cursor: listItem.isLocked ? 'auto' : 'pointer',
+        WebkitTapHighlightColor: backgroundColor,
+        '&:active,&:focus': { backgroundColor },
       }}
-      onClick={handleClick}
+      onClick={() => {
+        !listItem.isLocked && handleClick();
+      }}
       elevation={1}
     >
-      <CardContent>
+      <CardContent sx={{ position: 'relative' }}>
         <div
           style={{
             ...(theme.typography as any).mPlusRounded300,
@@ -54,6 +58,25 @@ const WorkoutListRow = ({ listItem }: { listItem: WorkoutListItem }) => {
             </div>
           )}
         </div>
+        {listItem.isLocked && (
+          <div
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              top: 0,
+              left: 0,
+              background: 'rgba(0,0,0,0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              paddingLeft: '1em',
+            }}
+          >
+            <div style={{ width: 240 }}>
+              <Lock sx={{ fontSize: 40, color: '#52a2aa' }} />
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

@@ -33,8 +33,8 @@ const WorkoutList = () => {
   };
 
   return (
-    <Container maxWidth='sm' sx={{ paddingTop: 2 }}>
-      <div style={{ display: 'grid', rowGap: 180 }}>
+    <Container maxWidth='sm' sx={{ paddingTop: 2, paddingBottom: 20 }}>
+      <div style={{ display: 'grid', rowGap: 80 }}>
         <div style={{ display: 'grid', rowGap: 24 }}>
           <CustomLabel label='練習' />
           {listItems.map((listItem, index) => (

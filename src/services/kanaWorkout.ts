@@ -36,16 +36,15 @@ export const setKanaWorkout = (workout: KanaWorkout) => {
 };
 
 const buildKanaWorkout = (doc: DocumentData): KanaWorkout => {
-  const { uid, kanas, title, logs, isActive, createdAt, storagePath } =
-    doc.data();
+  const { uid, kanas, title, logs, isActive, createdAt, isLocked } = doc.data();
   return {
     id: doc.id,
     uid: uid || '',
+    logs: logs || {},
     title: title || '',
     kanas: kanas || [],
-    logs: logs || {},
     isActive: isActive || false,
+    isLocked: isLocked ?? true,
     createdAt: createdAt || 0,
-    storagePath: storagePath || '',
   };
 };

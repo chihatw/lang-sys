@@ -73,11 +73,13 @@ const RhythmWorkoutPractice = ({
   };
 
   const handleNext = () => {
+    let isPerfect = false;
     let updatedState = R.assocPath<string, RhythmWorkoutState>(
       ['log', 'practice', 'answers', state.currentIndex, 'selected'],
       selectedId
     )(state);
 
+    // 最終以外
     if (!isLast) {
       updatedState = R.compose(
         R.assocPath<number, RhythmWorkoutState>(
@@ -89,14 +91,27 @@ const RhythmWorkoutPractice = ({
           new Date().getTime()
         )
       )(updatedState);
-    } else {
+    }
+    // 最終解答
+    else {
+      isPerfect = true;
       updatedState = R.compose(
+        // シーンの更新
         R.assocPath<string, RhythmWorkoutState>(['pane'], 'result'),
+        // ログの更新
         R.assocPath<number, RhythmWorkoutState>(
           ['log', 'result', 'createdAt'],
           new Date().getTime()
         )
       )(updatedState);
+
+      Object.values(updatedState.log.practice.answers).forEach(
+        (answer, index) => {
+          if (answer.selected !== state.cueIds[index]) {
+            isPerfect = false;
+          }
+        }
+      );
     }
 
     dispatch(updatedState);
@@ -107,13 +122,38 @@ const RhythmWorkoutPractice = ({
       ['logs', updatedState.log.id],
       updatedState.log
     )(appState.rhythmWorkouts[state.id]);
+    setRhythmWorkout(updatedRhythmWorkout);
 
-    const updatedAppState = R.assocPath<RhythmWorkout, State>(
+    let updatedAppState = R.assocPath<RhythmWorkout, State>(
       ['rhythmWorkouts', updatedRhythmWorkout.id],
       updatedRhythmWorkout
     )(appState);
+
+    // 全問正解の場合
+    if (isPerfect) {
+      const workoutListIds = Object.values(appState.rhythmWorkouts)
+        .sort((a, b) => a.createdAt - b.createdAt)
+        .map((item) => item.id);
+      const targetWorkoutIndex = workoutListIds.indexOf(state.id);
+      const nextWorkoutId = workoutListIds[targetWorkoutIndex + 1];
+
+      // rhythmWorkouts の createdAt 順で後ろがいれば、
+      if (!!nextWorkoutId) {
+        // isLocked を false にする
+        const updatedNextWorkout = R.assocPath<boolean, RhythmWorkout>(
+          ['isLocked'],
+          false
+        )(appState.rhythmWorkouts[nextWorkoutId]);
+        setRhythmWorkout(updatedNextWorkout);
+
+        updatedAppState = R.assocPath<RhythmWorkout, State>(
+          ['rhythmWorkouts', updatedNextWorkout.id],
+          updatedNextWorkout
+        )(updatedAppState);
+      }
+    }
+
     appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
-    setRhythmWorkout(updatedRhythmWorkout);
   };
   return (
     <div style={{ display: 'grid', rowGap: 8 }}>

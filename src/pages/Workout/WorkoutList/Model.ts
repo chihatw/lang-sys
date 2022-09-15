@@ -10,6 +10,7 @@ export type WorkoutListItem = {
   type: string;
   title: string;
   logs: { createdAt: number; correctRatio: number }[];
+  isLocked: boolean;
 };
 
 export const buildWorkoutListItems = async (
@@ -65,9 +66,10 @@ export const buildWorkoutListItems = async (
 
           return {
             id: rhythmWorkout.id,
-            title: rhythmWorkout.title,
-            type,
             logs,
+            type,
+            title: rhythmWorkout.title,
+            isLocked: rhythmWorkout.isLocked,
           };
         });
       break;
@@ -114,9 +116,10 @@ export const buildWorkoutListItems = async (
 
           return {
             id: kanaWorkout.id,
-            title: kanaWorkout.title,
-            type,
             logs,
+            type,
+            title: kanaWorkout.title,
+            isLocked: kanaWorkout.isLocked,
           };
         });
       break;

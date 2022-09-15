@@ -81,11 +81,13 @@ const KanaWorkoutPractice = ({
   };
 
   const handleNext = () => {
+    let isPerfect = false;
     let updatedState = R.assocPath<string, KanaWorkoutState>(
       ['log', 'practice', 'answers', state.currentIndex, 'selected'],
       selectedKana
     )(state);
 
+    // 最終以外
     if (!isLast) {
       updatedState = R.compose(
         R.assocPath<number, KanaWorkoutState>(
@@ -97,14 +99,27 @@ const KanaWorkoutPractice = ({
           new Date().getTime()
         )
       )(updatedState);
-    } else {
+    }
+    // 最終解答
+    else {
+      isPerfect = true;
       updatedState = R.compose(
+        // シーンの更新
         R.assocPath<string, KanaWorkoutState>(['pane'], 'result'),
+        // ログの更新
         R.assocPath<number, KanaWorkoutState>(
           ['log', 'result', 'createdAt'],
           new Date().getTime()
         )
       )(updatedState);
+
+      Object.values(updatedState.log.practice.answers).forEach(
+        (answer, index) => {
+          if (answer.selected !== state.kanas[index]) {
+            isPerfect = false;
+          }
+        }
+      );
     }
 
     dispatch(updatedState);
@@ -115,13 +130,38 @@ const KanaWorkoutPractice = ({
       ['logs', updatedState.log.id],
       updatedState.log
     )(appState.kanaWorkouts[state.id]);
+    setKanaWorkout(updatedKanaWorkout);
 
-    const updatedAppState = R.assocPath<KanaWorkout, State>(
+    let updatedAppState = R.assocPath<KanaWorkout, State>(
       ['kanaWorkouts', updatedKanaWorkout.id],
       updatedKanaWorkout
     )(appState);
+
+    // 全問正解の場合
+    if (isPerfect) {
+      const workoutListIds = Object.values(appState.kanaWorkouts)
+        .sort((a, b) => a.createdAt - b.createdAt)
+        .map((item) => item.id);
+      const targetWorkoutIndex = workoutListIds.indexOf(state.id);
+      const nextWorkoutId = workoutListIds[targetWorkoutIndex + 1];
+
+      // kanaWorkouts の createdAt 順で後ろがいれば、
+      if (!!nextWorkoutId) {
+        // isLocked を false にする
+        const updatedNextWorkout = R.assocPath<boolean, KanaWorkout>(
+          ['isLocked'],
+          false
+        )(appState.kanaWorkouts[nextWorkoutId]);
+        setKanaWorkout(updatedNextWorkout);
+
+        updatedAppState = R.assocPath<KanaWorkout, State>(
+          ['kanaWorkouts', updatedNextWorkout.id],
+          updatedNextWorkout
+        )(updatedAppState);
+      }
+    }
+
     appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
-    setKanaWorkout(updatedKanaWorkout);
   };
 
   return (
