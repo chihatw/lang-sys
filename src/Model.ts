@@ -120,6 +120,10 @@ export type State = {
   authInitializing: boolean;
   audioContext: AudioContext | null;
   blobs: { [downloadURL: string]: Blob };
+  admin: {
+    rhythmWorkouts: { [id: string]: RhythmWorkout };
+    kanaWorkouts: { [id: string]: KanaWorkout };
+  };
 };
 
 export const INITIAL_STATE: State = {
@@ -129,4 +133,5 @@ export const INITIAL_STATE: State = {
   kanaWorkouts: {},
   rhythmWorkouts: {},
   authInitializing: true,
+  admin: { rhythmWorkouts: {}, kanaWorkouts: {} },
 };
