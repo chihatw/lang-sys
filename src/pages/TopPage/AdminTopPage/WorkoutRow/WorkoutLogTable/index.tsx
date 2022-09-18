@@ -1,8 +1,8 @@
 import React from 'react';
-import { KanaWorkout, RhythmWorkout } from '../../../Model';
+import { KanaWorkout, RhythmWorkout } from '../../../../../Model';
 import WorkoutLogRow from './WorkoutLogRow';
 
-const WorkoutRow = ({
+const WorkoutLogTable = ({
   workout,
   type,
 }: {
@@ -10,10 +10,9 @@ const WorkoutRow = ({
   type: string;
 }) => {
   return (
-    <div style={{ display: 'grid', rowGap: 8 }}>
-      <div>{workout.title}</div>
+    <div>
       {Object.values(workout.logs)
-        .sort((a, b) => a.createdAt - b.createdAt)
+        .sort((a, b) => b.createdAt - a.createdAt)
         .map((log, index) => (
           <WorkoutLogRow
             key={index}
@@ -25,4 +24,4 @@ const WorkoutRow = ({
   );
 };
 
-export default WorkoutRow;
+export default WorkoutLogTable;

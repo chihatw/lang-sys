@@ -1,4 +1,4 @@
-import { KanaWorkout, RhythmWorkout } from '../Model';
+import { KanaWorkout, State } from '../Model';
 import {
   query,
   where,
@@ -10,17 +10,20 @@ import {
   doc,
 } from 'firebase/firestore';
 import { db } from '../repositories/firebase';
+import { RhythmKanaFormState } from '../pages/Workout/RhythmKanaEditPage/Model';
 
 const COLLECTION = 'kanaWorkouts';
 
-export const getKanaWorkouts = async (uid: string) => {
+export const getKanaWorkouts = async (uid?: string) => {
   const kanaWorkouts: { [id: string]: KanaWorkout } = {};
-  const q = query(
-    collection(db, COLLECTION),
-    where('uid', '==', uid),
-    where('isActive', '==', true),
-    orderBy('createdAt')
-  );
+  let q = query(collection(db, COLLECTION), where('isActive', '==', true));
+
+  if (!!uid) {
+    q = query(q, where('uid', '==', uid));
+  }
+
+  q = query(q, orderBy('createdAt', 'desc'));
+
   console.log('get kanaWorkouts');
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
@@ -33,6 +36,18 @@ export const setKanaWorkout = (workout: KanaWorkout) => {
   console.log('set kanaWorkout');
   const { id, ...omitted } = workout;
   setDoc(doc(db, COLLECTION, id), { ...omitted });
+};
+
+export const buildRhythmKanaFormKanaWorkout = (
+  workout: KanaWorkout
+): RhythmKanaFormState => {
+  return {
+    uid: workout.uid,
+    title: workout.title,
+    isActive: workout.isActive,
+    isLocked: workout.isLocked,
+    cueIdsStr: workout.kanas.join('\n'),
+  };
 };
 
 const buildKanaWorkout = (doc: DocumentData): KanaWorkout => {

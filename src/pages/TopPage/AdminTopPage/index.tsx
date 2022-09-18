@@ -1,24 +1,17 @@
 import * as R from 'ramda';
-import { Container } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  KanaWorkout,
-  KanaWorkoutLog,
-  RhythmWorkout,
-  RhythmWorkoutLog,
-  State,
-} from '../../../Model';
+import { KanaWorkout, RhythmWorkout, State } from '../../../Model';
 import { AppContext } from '../../../App';
 import { getRhythmWorkouts } from '../../../services/rhythmWorkout';
 import { getKanaWorkouts } from '../../../services/kanaWorkout';
 import { ActionTypes } from '../../../Update';
 import CustomLabel from '../../../ui/CustomLabel';
-import WorkoutLogRow from './WorkoutLogRow';
 import WorkoutRow from './WorkoutRow';
-
-const userUid = import.meta.env.VITE_USER_CHEN_UID;
+import { useNavigate } from 'react-router-dom';
 
 const AdminTopPage = () => {
+  const navigate = useNavigate();
   const { state, dispatch } = useContext(AppContext);
   const [initializing, setInitializing] = useState(true);
 
@@ -32,13 +25,13 @@ const AdminTopPage = () => {
       if (Object.keys(state.admin.rhythmWorkouts).length) {
         rhythmWorkouts = state.admin.rhythmWorkouts;
       } else {
-        rhythmWorkouts = await getRhythmWorkouts(userUid);
+        rhythmWorkouts = await getRhythmWorkouts();
       }
 
       if (Object.keys(state.admin.kanaWorkouts).length) {
         kanaWorkouts = state.admin.kanaWorkouts;
       } else {
-        kanaWorkouts = await getKanaWorkouts(userUid);
+        kanaWorkouts = await getKanaWorkouts();
       }
 
       const updatedState = R.compose(
@@ -60,14 +53,32 @@ const AdminTopPage = () => {
     <Container maxWidth='sm' sx={{ paddingTop: 2, paddingBottom: 20 }}>
       <div style={{ display: 'grid', rowGap: 16 }}>
         <CustomLabel label='聽力' />
+        <div>
+          <Button
+            variant='contained'
+            sx={{ color: 'white' }}
+            onClick={() => navigate('/workout/rhythm/new/rhythm')}
+          >
+            新規作成
+          </Button>
+        </div>
         {Object.values(state.admin.rhythmWorkouts)
-          .sort((a, b) => a.createdAt - b.createdAt)
+          .sort((a, b) => b.createdAt - a.createdAt)
           .map((workout, index) => (
             <WorkoutRow key={index} workout={workout} type='rhythm' />
           ))}
         <CustomLabel label='認字' />
+        <div>
+          <Button
+            variant='contained'
+            sx={{ color: 'white' }}
+            onClick={() => navigate('/workout/kana/new/kana')}
+          >
+            新規作成
+          </Button>
+        </div>
         {Object.values(state.admin.kanaWorkouts)
-          .sort((a, b) => a.createdAt - b.createdAt)
+          .sort((a, b) => b.createdAt - a.createdAt)
           .map((workout, index) => (
             <WorkoutRow key={index} workout={workout} type='kana' />
           ))}

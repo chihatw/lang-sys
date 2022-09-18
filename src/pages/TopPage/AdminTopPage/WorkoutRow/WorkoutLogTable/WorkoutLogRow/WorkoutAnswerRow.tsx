@@ -1,5 +1,6 @@
 import React from 'react';
-import { KanaWorkoutLog, RhythmWorkoutLog } from '../../../Model';
+import { PITCHES } from '../../../../../../assets/pitches';
+import { KanaWorkoutLog, RhythmWorkoutLog } from '../../../../../../Model';
 
 const WorkoutAnswerRow = ({
   log,
@@ -23,12 +24,13 @@ const WorkoutAnswerRow = ({
   duration = Math.round(duration / 100) / 10;
 
   const isIncorrect = correctAnswer !== answer.selected;
+
   return (
     <div style={{ display: 'flex' }}>
-      <div style={{ flexBasis: 40 }}>{correctAnswer}</div>
-      <div style={{ flexBasis: 40, color: isIncorrect ? 'red' : 'inherit' }}>
-        {answer.selected}
+      <div style={{ flexBasis: 60, color: isIncorrect ? 'red' : 'inherit' }}>
+        {getKana(correctAnswer)}
       </div>
+      <div style={{ flexBasis: 60 }}>{getKana(answer.selected)}</div>
       <div style={{ flexBasis: 40, textAlign: 'right' }}>
         {`${duration.toFixed(1)}秒`}
       </div>
@@ -37,3 +39,6 @@ const WorkoutAnswerRow = ({
 };
 
 export default WorkoutAnswerRow;
+
+const getKana = (key: string): string =>
+  !!PITCHES[key] ? PITCHES[key].pitchStr.replace('＼', '') : key;

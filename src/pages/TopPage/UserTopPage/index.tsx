@@ -17,7 +17,7 @@ const UserTopPage = () => {
         <TopPageCard
           label='聽力'
           imageURL={headphoneURL}
-          handleClick={() => handleClick('/workout/list/listening')}
+          handleClick={() => handleClick('/workout/list/rhythm')}
         />
         <TopPageCard
           label='認字'

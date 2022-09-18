@@ -102,6 +102,17 @@ export type RhythmWorkout = {
   isLocked: boolean;
 };
 
+export const INITIAL_RHYTHM_WORKOUT: RhythmWorkout = {
+  id: '',
+  uid: '',
+  cueIds: [],
+  title: '',
+  logs: {},
+  isActive: false,
+  createdAt: 0,
+  isLocked: false,
+};
+
 export type KanaWorkout = {
   id: string;
   uid: string;
@@ -111,6 +122,17 @@ export type KanaWorkout = {
   isActive: boolean;
   createdAt: number;
   isLocked: boolean;
+};
+
+export const INITIAL_KANA_WORKOUT: KanaWorkout = {
+  id: '',
+  uid: '',
+  kanas: [],
+  title: '',
+  logs: {},
+  isActive: false,
+  createdAt: 0,
+  isLocked: false,
 };
 
 export type State = {

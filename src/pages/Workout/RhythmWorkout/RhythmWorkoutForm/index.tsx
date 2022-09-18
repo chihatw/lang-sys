@@ -17,7 +17,7 @@ const RhythmWorkoutForm = ({
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate('/workout/list/listening');
+    navigate('/workout/list/rhythm');
   };
 
   return (

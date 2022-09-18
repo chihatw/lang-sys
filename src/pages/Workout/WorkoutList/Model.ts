@@ -20,7 +20,7 @@ export const buildWorkoutListItems = async (
 ): Promise<WorkoutListItem[]> => {
   let workoutListItems: WorkoutListItem[] = [];
   switch (type) {
-    case 'listening':
+    case 'rhythm':
       let rhythmWorkouts: { [id: string]: RhythmWorkout } = {};
       if (Object.keys(state.rhythmWorkouts).length) {
         rhythmWorkouts = state.rhythmWorkouts;

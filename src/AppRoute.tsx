@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import SignInPage from './pages/SignInPage';
 import TopPage from './pages/TopPage';
 import KanaWorkout from './pages/Workout/KanaWorkout';
+import RhythmKanaEditPage from './pages/Workout/RhythmKanaEditPage';
 import RhythmWorkout from './pages/Workout/RhythmWorkout';
 import WorkoutList from './pages/Workout/WorkoutList';
 
@@ -13,8 +14,26 @@ const AppRoute = () => {
 
       <Route path='/workout'>
         <Route path='list/:type' element={<WorkoutList />} />
-        <Route path='kana/:workoutId' element={<KanaWorkout />} />
-        <Route path='listening/:workoutId' element={<RhythmWorkout />} />
+
+        {/* 認字 */}
+        <Route path='kana'>
+          <Route path='new/:type' element={<RhythmKanaEditPage />} />
+          <Route path=':workoutId' element={<KanaWorkout />} />
+          <Route
+            path=':workoutId/edit/:type'
+            element={<RhythmKanaEditPage />}
+          />
+        </Route>
+
+        {/* 聽力 */}
+        <Route path='rhythm'>
+          <Route path='new/:type' element={<RhythmKanaEditPage />} />
+          <Route path=':workoutId' element={<RhythmWorkout />} />
+          <Route
+            path=':workoutId/edit/:type'
+            element={<RhythmKanaEditPage />}
+          />
+        </Route>
       </Route>
 
       <Route path='/signIn' element={<SignInPage />} />
