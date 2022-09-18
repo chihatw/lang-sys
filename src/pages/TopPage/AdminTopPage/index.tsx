@@ -25,13 +25,13 @@ const AdminTopPage = () => {
       if (Object.keys(state.admin.rhythmWorkouts).length) {
         rhythmWorkouts = state.admin.rhythmWorkouts;
       } else {
-        rhythmWorkouts = await getRhythmWorkouts();
+        rhythmWorkouts = await getRhythmWorkouts({ isActiveOnly: false });
       }
 
       if (Object.keys(state.admin.kanaWorkouts).length) {
         kanaWorkouts = state.admin.kanaWorkouts;
       } else {
-        kanaWorkouts = await getKanaWorkouts();
+        kanaWorkouts = await getKanaWorkouts({ isActiveOnly: false });
       }
 
       const updatedState = R.compose(

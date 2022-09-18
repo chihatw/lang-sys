@@ -25,7 +25,7 @@ export const buildWorkoutListItems = async (
       if (Object.keys(state.rhythmWorkouts).length) {
         rhythmWorkouts = state.rhythmWorkouts;
       } else {
-        rhythmWorkouts = await getRhythmWorkouts(state.user!.uid);
+        rhythmWorkouts = await getRhythmWorkouts({ uid: state.user!.uid });
         const updatedState = R.assocPath<
           { [id: string]: RhythmWorkout },
           State
@@ -78,7 +78,7 @@ export const buildWorkoutListItems = async (
       if (Object.keys(state.kanaWorkouts).length) {
         kanaWorkouts = state.kanaWorkouts;
       } else {
-        kanaWorkouts = await getKanaWorkouts(state.user!.uid);
+        kanaWorkouts = await getKanaWorkouts({ uid: state.user!.uid });
         const updatedState = R.assocPath<{ [id: string]: KanaWorkout }, State>(
           ['kanaWorkouts'],
           kanaWorkouts

@@ -8,21 +8,31 @@ import {
   DocumentData,
   setDoc,
   doc,
+  limit,
 } from 'firebase/firestore';
 import { db } from '../repositories/firebase';
 import { RhythmKanaFormState } from '../pages/Workout/RhythmKanaEditPage/Model';
 
 const COLLECTION = 'kanaWorkouts';
 
-export const getKanaWorkouts = async (uid?: string) => {
+export const getKanaWorkouts = async (
+  {
+    uid,
+    max,
+    isActiveOnly,
+  }: {
+    uid?: string;
+    max?: number;
+    isActiveOnly?: boolean;
+  } = { uid: '', max: 0, isActiveOnly: true }
+) => {
   const kanaWorkouts: { [id: string]: KanaWorkout } = {};
-  let q = query(collection(db, COLLECTION), where('isActive', '==', true));
-
-  if (!!uid) {
-    q = query(q, where('uid', '==', uid));
-  }
-
+  let q = query(collection(db, COLLECTION));
   q = query(q, orderBy('createdAt', 'desc'));
+
+  !!max && (q = query(q, limit(max)));
+  !!uid && (q = query(q, where('uid', '==', uid)));
+  !!isActiveOnly && (q = query(q, where('isActive', '==', true)));
 
   console.log('get kanaWorkouts');
   const querySnapshot = await getDocs(q);
