@@ -15,17 +15,16 @@ import { RhythmKanaFormState } from '../pages/Workout/RhythmKanaEditPage/Model';
 
 const COLLECTION = 'kanaWorkouts';
 
-export const getKanaWorkouts = async (
-  {
-    uid,
-    max,
-    isActiveOnly,
-  }: {
-    uid?: string;
-    max?: number;
-    isActiveOnly?: boolean;
-  } = { uid: '', max: 0, isActiveOnly: true }
-) => {
+export const getKanaWorkouts = async ({
+  uid,
+  max,
+  isActiveOnly,
+}: {
+  uid?: string;
+  max?: number;
+  isActiveOnly?: boolean;
+}) => {
+  typeof isActiveOnly === 'undefined' && (isActiveOnly = true);
   const kanaWorkouts: { [id: string]: KanaWorkout } = {};
   let q = query(collection(db, COLLECTION));
   q = query(q, orderBy('createdAt', 'desc'));
