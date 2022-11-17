@@ -9,6 +9,7 @@ import { ActionTypes } from '../../../Update';
 import CustomLabel from '../../../ui/CustomLabel';
 import WorkoutRow from './WorkoutRow';
 import { useNavigate } from 'react-router-dom';
+import { getPitchWorkouts } from '../../../services/pitchWorkout';
 
 const AdminTopPage = () => {
   const navigate = useNavigate();
@@ -19,13 +20,20 @@ const AdminTopPage = () => {
     if (!initializing) return;
 
     const fetchData = async () => {
-      let rhythmWorkouts: { [id: string]: RhythmWorkout } = {};
       let kanaWorkouts: { [id: string]: KanaWorkout } = {};
+      let pitchWorkouts: { [id: string]: RhythmWorkout } = {};
+      let rhythmWorkouts: { [id: string]: RhythmWorkout } = {};
 
       if (Object.keys(state.admin.rhythmWorkouts).length) {
         rhythmWorkouts = state.admin.rhythmWorkouts;
       } else {
         rhythmWorkouts = await getRhythmWorkouts({ isActiveOnly: false });
+      }
+
+      if (Object.keys(state.admin.pitchWorkouts).length) {
+        pitchWorkouts = state.admin.pitchWorkouts;
+      } else {
+        pitchWorkouts = await getPitchWorkouts({ isActiveOnly: false });
       }
 
       if (Object.keys(state.admin.kanaWorkouts).length) {
@@ -38,6 +46,10 @@ const AdminTopPage = () => {
         R.assocPath<{ [id: string]: RhythmWorkout }, State>(
           ['admin', 'rhythmWorkouts'],
           rhythmWorkouts
+        ),
+        R.assocPath<{ [id: string]: RhythmWorkout }, State>(
+          ['admin', 'pitchWorkouts'],
+          pitchWorkouts
         ),
         R.assocPath<{ [id: string]: KanaWorkout }, State>(
           ['admin', 'kanaWorkouts'],
@@ -52,7 +64,13 @@ const AdminTopPage = () => {
   return (
     <Container maxWidth='sm' sx={{ paddingTop: 2, paddingBottom: 20 }}>
       <div style={{ display: 'grid', rowGap: 16 }}>
-        <CustomLabel label='聽力' />
+        <CustomLabel label='聽力（ピッチ）' />
+        {Object.values(state.admin.pitchWorkouts)
+          .sort((a, b) => b.createdAt - a.createdAt)
+          .map((workout, index) => (
+            <WorkoutRow key={index} workout={workout} type='rhythm' />
+          ))}
+        <CustomLabel label='聽力（リズム）' />
         <div>
           <Button
             variant='contained'

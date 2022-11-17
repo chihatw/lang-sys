@@ -18,6 +18,7 @@ const WorkoutList = () => {
   useEffect(() => {
     if (!state.user || !initializing || !type) return;
     const fetchData = async () => {
+      /** リストの抽出 */
       const listItems = await buildWorkoutListItems(state, type, dispatch);
       listDispatch(listItems);
       setIsInitializing(false);

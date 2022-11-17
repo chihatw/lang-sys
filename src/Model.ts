@@ -137,14 +137,16 @@ export const INITIAL_KANA_WORKOUT: KanaWorkout = {
 
 export type State = {
   user: User | null;
-  rhythmWorkouts: { [id: string]: RhythmWorkout };
   kanaWorkouts: { [id: string]: KanaWorkout };
+  pitchWorkouts: { [id: string]: RhythmWorkout };
+  rhythmWorkouts: { [id: string]: RhythmWorkout };
   authInitializing: boolean;
   audioContext: AudioContext | null;
   blobs: { [downloadURL: string]: Blob };
   admin: {
-    rhythmWorkouts: { [id: string]: RhythmWorkout };
     kanaWorkouts: { [id: string]: KanaWorkout };
+    pitchWorkouts: { [id: string]: RhythmWorkout };
+    rhythmWorkouts: { [id: string]: RhythmWorkout };
   };
 };
 
@@ -153,7 +155,12 @@ export const INITIAL_STATE: State = {
   blobs: {},
   audioContext: null,
   kanaWorkouts: {},
+  pitchWorkouts: {},
   rhythmWorkouts: {},
   authInitializing: true,
-  admin: { rhythmWorkouts: {}, kanaWorkouts: {} },
+  admin: {
+    kanaWorkouts: {},
+    pitchWorkouts: {},
+    rhythmWorkouts: {},
+  },
 };

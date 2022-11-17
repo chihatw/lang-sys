@@ -58,7 +58,7 @@ export const buildRhythmKanaFormRhythmWorkout = (
   };
 };
 
-const buildRhythmWorkout = (doc: DocumentData): RhythmWorkout => {
+export const buildRhythmWorkout = (doc: DocumentData): RhythmWorkout => {
   const { uid, cueIds, title, logs, isActive, createdAt, isLocked } =
     doc.data();
   return {
