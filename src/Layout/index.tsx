@@ -14,7 +14,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <div>
       <AppBar
         elevation={0}
-        position='relative'
+        position='sticky'
         sx={{
           backgroundColor: '#52a2aa',
           backgroundImage:

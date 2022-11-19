@@ -1,17 +1,11 @@
 import { Card, CardContent } from '@mui/material';
 import React, { useState } from 'react';
-import { KanaWorkout, RhythmWorkout } from '../../../../Model';
+import { Workout } from '../../../../Model';
 import WorkoutLogTable from './WorkoutLogTable';
 import WorkoutLogSummary from './WorkoutLogSummary';
 import WorkoutRowHeader from './WorkoutRowHeader';
 
-const WorkoutRow = ({
-  workout,
-  type,
-}: {
-  workout: RhythmWorkout | KanaWorkout;
-  type: string;
-}) => {
+const WorkoutRow = ({ workout, type }: { workout: Workout; type: string }) => {
   const [open, setOpen] = useState(false);
 
   return (

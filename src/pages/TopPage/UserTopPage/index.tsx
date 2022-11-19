@@ -13,16 +13,28 @@ const UserTopPage = () => {
 
   return (
     <Container maxWidth='sm'>
-      <div style={{ display: 'grid', paddingTop: 120, rowGap: 80 }}>
+      <div
+        style={{
+          display: 'grid',
+          rowGap: 80,
+          paddingTop: 120,
+          paddingBottom: 300,
+        }}
+      >
         <TopPageCard
-          label='聽力'
+          label='聽力（節奏）'
           imageURL={headphoneURL}
-          handleClick={() => handleClick('/workout/list/rhythm')}
+          handleClick={() => handleClick('/list/rhythm')}
+        />
+        <TopPageCard
+          label='聽力（聲調）'
+          imageURL={headphoneURL}
+          handleClick={() => handleClick('/list/pitch')}
         />
         <TopPageCard
           label='認字'
           imageURL={lettersURL}
-          handleClick={() => handleClick('/workout/list/kana')}
+          handleClick={() => handleClick('/list/kana')}
         />
       </div>
     </Container>

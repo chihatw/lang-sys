@@ -1,19 +1,9 @@
 import React from 'react';
-import { KanaWorkoutLog, RhythmWorkoutLog } from '../../../../../Model';
+import { WorkoutLog } from '../../../../../Model';
 
-const LastLog = ({
-  logs,
-}: {
-  logs:
-    | {
-        [id: string]: RhythmWorkoutLog;
-      }
-    | {
-        [id: string]: KanaWorkoutLog;
-      };
-}) => {
+const LastLog = ({ logs }: { logs: { [id: string]: WorkoutLog } }) => {
   if (!Object.keys(logs).length) return <></>;
-  const lastLog: RhythmWorkoutLog | KanaWorkoutLog = Object.values(logs).sort(
+  const lastLog: WorkoutLog = Object.values(logs).sort(
     (a, b) => b.createdAt - a.createdAt
   )[0];
   const date = new Date(lastLog.createdAt);
@@ -23,8 +13,8 @@ const LastLog = ({
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
   let correctCount = 0;
-  const correctAnswers =
-    (lastLog as RhythmWorkoutLog).cueIds || (lastLog as KanaWorkoutLog).kanas;
+  // todo type による分岐
+  const correctAnswers = lastLog.cueIds || lastLog.kanas;
   Object.values(lastLog.practice.answers).forEach((answer, index) => {
     if (answer.selected === correctAnswers[index]) {
       correctCount++;

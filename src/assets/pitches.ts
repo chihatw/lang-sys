@@ -1,4 +1,6 @@
 import { PitchCue } from '../Model';
+import { TYPE } from '../pages/Workout/commons';
+import { createSourceNode } from '../services/utils';
 
 export const PITCHES: { [id: string]: PitchCue } = {
   ta: { id: 'ta', start: 0.6, end: 1.3, pitchStr: 'タ＼ッ' },
@@ -118,4 +120,165 @@ export const PITCHES: { [id: string]: PitchCue } = {
     end: 40.3,
     pitchStr: 'タ＼ンタン',
   },
+};
+
+export const playRhythm = async (
+  cueId: string,
+  blob: Blob,
+  audioContext: AudioContext
+) => {
+  const cue = PITCHES[cueId];
+  const sourceNode = await createSourceNode(blob, audioContext);
+  sourceNode.start(0, cue.start, cue.end - cue.start);
+};
+
+export type Schedule = { offset: number; start: number; stop: number };
+
+const GAP = {
+  s: 0.05,
+  m: 0.06,
+  l: 0.12,
+};
+
+const GAPS: { [key: string]: number[] } = {
+  hl: [GAP.l],
+  lh: [GAP.l],
+  hll: [GAP.l, GAP.m],
+  lhl: [GAP.l, GAP.s],
+  lhh: [GAP.l, GAP.s],
+  hlll: [GAP.l, GAP.m, GAP.m],
+  lhll: [GAP.l, GAP.s, GAP.s],
+  lhhl: [GAP.l, GAP.s, GAP.s],
+  lhhh: [GAP.l, GAP.s, GAP.s],
+};
+
+const START_AT: { [key: string]: number } = {
+  h: 0.75,
+  l: 1.26,
+};
+const DURATION: { [key: string]: number } = {
+  h: 0.4,
+  l: 0.35,
+};
+
+/**
+ * input は低音をl, 高音をhで表す 'lhhh'
+ */
+
+const buildSchedules = (input: string): Schedule[] => {
+  const schedules: Schedule[] = [];
+
+  const pitches = input.split('');
+
+  if (!pitches.every((char) => ['l', 'h'].includes(char))) {
+    console.error('inputs only accepts "l" or "h" ');
+    return [];
+  }
+
+  let offset = 0;
+
+  pitches.forEach((pitch, index) => {
+    const start = START_AT[pitch];
+    const stop = offset + DURATION[pitch];
+    const schedule = { offset, start, stop };
+    schedules.push(schedule);
+    offset = stop + GAPS[input][index];
+  });
+
+  return schedules;
+};
+
+export const PITCH_WORKOUT_ITEMS: {
+  [key: string]: { id: string; pitchStr: string; schedules: Schedule[] };
+} = {
+  hl: {
+    id: 'hl',
+    pitchStr: 'タ＼タ',
+    schedules: buildSchedules('hl'),
+  },
+  lh: {
+    id: 'lh',
+    pitchStr: 'タタ',
+    schedules: buildSchedules('lh'),
+  },
+  hll: {
+    id: 'hll',
+    pitchStr: 'タ＼タタ',
+    schedules: buildSchedules('hll'),
+  },
+  lhl: {
+    id: 'lhl',
+    pitchStr: 'タタ＼タ',
+    schedules: buildSchedules('lhl'),
+  },
+  lhh: {
+    id: 'lhh',
+    pitchStr: 'タタタ',
+    schedules: buildSchedules('lhh'),
+  },
+  hlll: {
+    id: 'hlll',
+    pitchStr: 'タ＼タタタ',
+    schedules: buildSchedules('hlll'),
+  },
+  lhll: {
+    id: 'lhll',
+    pitchStr: 'タタ＼タタ',
+    schedules: buildSchedules('lhll'),
+  },
+  lhhl: {
+    id: 'lhhl',
+    pitchStr: 'タタタ＼タ',
+    schedules: buildSchedules('lhhl'),
+  },
+  lhhh: {
+    id: 'lhhh',
+    pitchStr: 'タタタタ',
+    schedules: buildSchedules('lhhh'),
+  },
+};
+
+export const buildPitchCues = (type: string, cueIds: string[]) => {
+  let pitchCues: {
+    id: string;
+    pitchStr: string;
+  }[] = [];
+
+  if (!cueIds.length) return pitchCues;
+
+  const PITCHSTRS: {
+    [key: string]: { [key: string]: { id: string; pitchStr: string } };
+  } = {
+    [TYPE.pitch]: PITCH_WORKOUT_ITEMS,
+    [TYPE.rhythm]: PITCHES,
+  };
+
+  pitchCues = Object.values(PITCHSTRS[type])
+    // PITCHES の中で、cueIds に含まれているものを抽出
+    .filter((item) => cueIds.includes(item.id))
+    // PITCHES のプロパティから id と pitchStr のみを抽出
+    .map(({ id, pitchStr }) => ({ id, pitchStr }));
+
+  return pitchCues;
+};
+
+export const playPitch = async (
+  cueId: string,
+  blob: Blob,
+  audioContext: AudioContext
+) => {
+  const cue = PITCH_WORKOUT_ITEMS[cueId];
+  const currentTime = audioContext.currentTime;
+  const sourceNodes: AudioBufferSourceNode[] = [];
+  await Promise.all(
+    cue.schedules.map(async (_) => {
+      const sourceNode = await createSourceNode(blob, audioContext!);
+      sourceNodes.push(sourceNode);
+    })
+  );
+  cue.schedules.forEach((item, index) => {
+    const sourceNode = sourceNodes[index];
+    sourceNode.start(currentTime + item.offset, item.start);
+    sourceNode.stop(currentTime + item.stop);
+  });
 };

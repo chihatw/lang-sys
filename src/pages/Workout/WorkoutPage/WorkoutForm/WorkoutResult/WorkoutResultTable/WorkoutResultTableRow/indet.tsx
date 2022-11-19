@@ -1,25 +1,34 @@
 import { Check, Clear } from '@mui/icons-material';
 import { useTheme } from '@mui/material';
 import React from 'react';
-import { PITCHES } from '../../../../../../../assets/pitches';
-import { RhythmWorkoutState } from '../../../../Model';
-import RhythmWorkoutResultTableCell from './RhythmWorkoutResultTableCell';
+import { getCueIds, getCues, getInput } from '../../../../../commons';
+import { WorkoutState } from '../../../../Model';
+import WorkoutResultTableCell from './WorkoutResultTableCell';
 
-const RhythmWorkoutResultTableRow = ({
+const WorkoutResultTableRow = ({
+  type,
   index,
   state,
   handleClick,
 }: {
+  type: string;
   index: number;
-  state: RhythmWorkoutState;
-  handleClick: (start: number, end: number, type: string) => void;
+  state: WorkoutState;
+  handleClick: (cueId: string) => void;
 }) => {
   const theme = useTheme();
-  const cueId = state.cueIds[index];
-  const cue = PITCHES[cueId];
+  const cues = getCues(type, state);
+  const cueIds = getCueIds(type, state);
+
+  const cueId = cueIds[index];
   const answerId = state.log.practice.answers[index].selected;
-  const answer = PITCHES[answerId];
   const isCorrect = cueId == answerId;
+
+  const cue = cues.find((item) => item.id === cueId);
+  if (!cue) return <></>;
+
+  const answer = cues.find((item) => item.id === answerId);
+  if (!answer) return <></>;
 
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -47,19 +56,19 @@ const RhythmWorkoutResultTableRow = ({
       >
         {isCorrect ? <Check /> : <Clear />}
       </div>
-      <RhythmWorkoutResultTableCell
-        pitchStr={cue.pitchStr}
-        handleClick={() => handleClick(cue.start, cue.end, `cue_${cue.id}`)}
+      <WorkoutResultTableCell
+        type={type}
+        input={getInput(type, cue)}
+        handleClick={() => handleClick(cue.id)}
       />
-      <RhythmWorkoutResultTableCell
-        pitchStr={answer.pitchStr}
+      <WorkoutResultTableCell
+        type={type}
+        input={getInput(type, answer)}
         isIncorrect={!isCorrect}
-        handleClick={() =>
-          handleClick(answer.start, answer.end, `answer_${answer.id}`)
-        }
+        handleClick={() => handleClick(answer.id)}
       />
     </div>
   );
 };
 
-export default RhythmWorkoutResultTableRow;
+export default WorkoutResultTableRow;

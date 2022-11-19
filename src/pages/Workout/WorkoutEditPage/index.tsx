@@ -12,33 +12,31 @@ import { Container } from '@mui/system';
 import { nanoid } from 'nanoid';
 import * as R from 'ramda';
 import React, { useContext, useEffect, useReducer } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { AppContext } from '../../../App';
 import { USERS } from '../../../assets/user';
+import { INITIAL_WORKOUT, INITIAL_STATE, Workout, State } from '../../../Model';
 import {
-  INITIAL_KANA_WORKOUT,
-  INITIAL_RHYTHM_WORKOUT,
-  INITIAL_STATE,
-  KanaWorkout,
-  RhythmWorkout,
-  State,
-} from '../../../Model';
-import {
-  buildRhythmKanaFormKanaWorkout,
-  setKanaWorkout,
-} from '../../../services/kanaWorkout';
-import {
-  buildRhythmKanaFormRhythmWorkout,
-  setRhythmWorkout,
+  buildRhythmKanaForm,
+  setWorkout,
 } from '../../../services/rhythmWorkout';
 import { ActionTypes } from '../../../Update';
+import { TYPE } from '../commons';
 import { INITIAL_RHYTHM_KANA_FORM_STATE, RhythmKanaFormState } from './Model';
 
 const reduce = (state: RhythmKanaFormState, action: RhythmKanaFormState) =>
   action;
 
-const RhythmKanaEditPage = () => {
-  const { workoutId, type } = useParams();
+const WorkoutEditPage = () => {
+  const { workoutId } = useParams();
+
+  const { pathname } = useLocation();
+  const type = pathname.split('/')[1];
 
   const { state } = useContext(AppContext);
   const [formState, formDispatch] = useReducer(reduce, {
@@ -50,14 +48,27 @@ const RhythmKanaEditPage = () => {
     if (!workoutId || !type) return;
 
     let formState = INITIAL_RHYTHM_KANA_FORM_STATE;
-    if (type === 'rhythm') {
-      formState = buildRhythmKanaFormRhythmWorkout(
-        state.admin.rhythmWorkouts[workoutId]
-      );
-    } else {
-      formState = buildRhythmKanaFormKanaWorkout(
-        state.admin.kanaWorkouts[workoutId]
-      );
+
+    const CUEIDS = {
+      [TYPE.pitch]: state.admin.rhythmWorkouts[workoutId].cueIds,
+      [TYPE.rhythm]: state.admin.rhythmWorkouts[workoutId].cueIds,
+      [TYPE.kana]: state.admin.kanaWorkouts[workoutId].kanas,
+    };
+    switch (type) {
+      case TYPE.pitch:
+      case TYPE.rhythm:
+        formState = buildRhythmKanaForm(
+          state.admin.rhythmWorkouts[workoutId],
+          CUEIDS[type].join('\n')
+        );
+        break;
+      case TYPE.kana:
+        formState = buildRhythmKanaForm(
+          state.admin.kanaWorkouts[workoutId],
+          CUEIDS[type].join('\n')
+        );
+        break;
+      default:
     }
     formDispatch(formState);
   }, []);
@@ -66,7 +77,7 @@ const RhythmKanaEditPage = () => {
   return <RhythmKanaEditForm state={formState} dispatch={formDispatch} />;
 };
 
-export default RhythmKanaEditPage;
+export default WorkoutEditPage;
 
 const RhythmKanaEditForm = ({
   state,
@@ -105,16 +116,17 @@ const RhythmKanaEditForm = ({
   const handleSubmit = () => {
     let updatedAppState = INITIAL_STATE;
     switch (type) {
-      case 'rhythm':
+      case TYPE.rhythm:
         const originalRhythmWorkout = workoutId
           ? appState.admin.rhythmWorkouts[workoutId]
-          : INITIAL_RHYTHM_WORKOUT;
+          : INITIAL_WORKOUT;
 
-        const updatedRhythmWorkout: RhythmWorkout = {
+        const updatedRhythmWorkout: Workout = {
           id: originalRhythmWorkout.id || nanoid(8),
           uid: state.uid,
           logs: originalRhythmWorkout.logs,
           title: state.title,
+          kanas: [],
           cueIds: state.cueIdsStr.split('\n'),
           isActive: state.isActive,
           createdAt: originalRhythmWorkout.createdAt || Date.now(),
@@ -122,34 +134,35 @@ const RhythmKanaEditForm = ({
         };
 
         // remote
-        setRhythmWorkout(updatedRhythmWorkout);
+        setWorkout(type, updatedRhythmWorkout);
         // local
-        updatedAppState = R.assocPath<RhythmWorkout, State>(
+        updatedAppState = R.assocPath<Workout, State>(
           ['admin', 'rhythmWorkouts', updatedRhythmWorkout.id],
           updatedRhythmWorkout
         )(appState);
         appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
         break;
-      case 'kana':
+      case TYPE.kana:
         const originalKanaWorkout = workoutId
           ? appState.admin.kanaWorkouts[workoutId]
-          : INITIAL_KANA_WORKOUT;
+          : INITIAL_WORKOUT;
 
-        const updatedKanaWorkout: KanaWorkout = {
+        const updatedKanaWorkout: Workout = {
           id: originalKanaWorkout.id || nanoid(8),
           uid: state.uid,
           logs: originalKanaWorkout.logs,
           title: state.title,
           kanas: state.cueIdsStr.split('\n'),
+          cueIds: [],
           isActive: state.isActive,
           createdAt: originalKanaWorkout.createdAt || Date.now(),
           isLocked: state.isLocked,
         };
 
         // remote
-        setKanaWorkout(updatedKanaWorkout);
+        setWorkout(type, updatedKanaWorkout);
         // local
-        updatedAppState = R.assocPath<KanaWorkout, State>(
+        updatedAppState = R.assocPath<Workout, State>(
           ['admin', 'kanaWorkouts', updatedKanaWorkout.id],
           updatedKanaWorkout
         )(appState);

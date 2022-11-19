@@ -1,12 +1,12 @@
 import React from 'react';
-import { KanaWorkout, RhythmWorkout } from '../../../../../Model';
+import { Workout } from '../../../../../Model';
 import WorkoutLogRow from './WorkoutLogRow';
 
 const WorkoutLogTable = ({
   workout,
   type,
 }: {
-  workout: RhythmWorkout | KanaWorkout;
+  workout: Workout;
   type: string;
 }) => {
   return (

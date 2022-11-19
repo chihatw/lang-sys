@@ -1,15 +1,9 @@
 import * as R from 'ramda';
 import React from 'react';
-import {
-  KanaWorkout,
-  KanaWorkoutLog,
-  RhythmWorkout,
-  RhythmWorkoutLog,
-  State,
-} from '../../../Model';
-import { getKanaWorkouts } from '../../../services/kanaWorkout';
-import { getRhythmWorkouts } from '../../../services/rhythmWorkout';
+import { State, Workout, WorkoutLog } from '../../../Model';
+import { getWorkouts } from '../../../services/rhythmWorkout';
 import { Action, ActionTypes } from '../../../Update';
+import { getCueIdsFromLog, PROP, TYPE } from '../commons';
 
 export type WorkoutListItem = {
   id: string;
@@ -24,126 +18,87 @@ export const buildWorkoutListItems = async (
   type: string,
   dispatch: React.Dispatch<Action>
 ): Promise<WorkoutListItem[]> => {
-  let workoutListItems: WorkoutListItem[] = [];
-  switch (type) {
-    case 'rhythm':
-      const rhythmWorkouts = await buildRhythmWorkouts(state, dispatch);
-      workoutListItems = Object.values(rhythmWorkouts)
-        /** リストの並べ替え */
-        .sort((a, b) => a.createdAt - b.createdAt)
-        /** ログの整形 */
-        .map((rhythmWorkout) => ({
-          id: rhythmWorkout.id,
-          logs: buildRhythmWorkoutLogs(rhythmWorkout),
-          type,
-          title: rhythmWorkout.title,
-          isLocked: rhythmWorkout.isLocked,
-        }));
-      break;
-    case 'kana':
-      const kanaWorkouts = await buildKanaWorkouts(state, dispatch);
-      workoutListItems = Object.values(kanaWorkouts)
-        .sort((a, b) => a.createdAt - b.createdAt)
-        .map((kanaWorkout) => ({
-          id: kanaWorkout.id,
-          logs: buildKanaWorkoutLogs(kanaWorkout),
-          type,
-          title: kanaWorkout.title,
-          isLocked: kanaWorkout.isLocked,
-        }));
-      break;
-    default:
-  }
+  const workouts = await buildWorkouts(type, state, dispatch);
+  const workoutListItems = Object.values(workouts)
+    /** リストの並べ替え */
+    .sort((a, b) => a.createdAt - b.createdAt)
+    /** ログの整形 */
+    .map((workout) => {
+      const CUEIDS = {
+        [TYPE.pitch]: workout.cueIds,
+        [TYPE.rhythm]: workout.cueIds,
+        [TYPE.kana]: workout.kanas,
+      };
+
+      return {
+        id: workout.id,
+        logs: sortWorkoutLog(workout, type),
+        type,
+        title: workout.title,
+        isLocked: workout.isLocked,
+      };
+    });
+
   return workoutListItems;
 };
 
-const buildRhythmWorkouts = async (
+const buildWorkouts = async (
+  type: string,
   state: State,
   dispatch: React.Dispatch<Action>
 ) => {
-  let rhythmWorkouts: { [id: string]: RhythmWorkout } = {};
+  let workouts: { [id: string]: Workout } = {};
+
+  const WORKOUTS = {
+    [TYPE.kana]: state.kanaWorkouts,
+    [TYPE.pitch]: state.pitchWorkouts,
+    [TYPE.rhythm]: state.rhythmWorkouts,
+  };
+
   /** ローカルにある場合 */
-  if (Object.keys(state.rhythmWorkouts).length) {
-    rhythmWorkouts = state.rhythmWorkouts;
+  if (Object.keys(WORKOUTS[type]).length) {
+    workouts = WORKOUTS[type];
   } else {
     /** ローカルにない場合 */
-    rhythmWorkouts = await getRhythmWorkouts({ uid: state.user!.uid });
-    const updatedState = R.assocPath<{ [id: string]: RhythmWorkout }, State>(
-      ['rhythmWorkouts'],
-      rhythmWorkouts
+    workouts = await getWorkouts({
+      type,
+      uid: state.user!.uid,
+    });
+
+    const updatedState = R.assocPath<{ [id: string]: Workout }, State>(
+      [PROP[type]],
+      workouts
     )(state);
     dispatch({ type: ActionTypes.setState, payload: updatedState });
   }
-  return rhythmWorkouts;
+  return workouts;
 };
 
-const buildKanaWorkouts = async (
-  state: State,
-  dispatch: React.Dispatch<Action>
-) => {
-  let kanaWorkouts: { [id: string]: KanaWorkout } = {};
-  if (Object.keys(state.kanaWorkouts).length) {
-    kanaWorkouts = state.kanaWorkouts;
-  } else {
-    kanaWorkouts = await getKanaWorkouts({ uid: state.user!.uid });
-    const updatedState = R.assocPath<{ [id: string]: KanaWorkout }, State>(
-      ['kanaWorkouts'],
-      kanaWorkouts
-    )(state);
-    dispatch({ type: ActionTypes.setState, payload: updatedState });
-  }
-  return kanaWorkouts;
-};
-
-const buildRhythmWorkoutLogs = (rhythmWorkout: RhythmWorkout) => {
+const sortWorkoutLog = (workout: Workout, type: string) => {
   const logs: { createdAt: number; correctRatio: number }[] = Object.values(
-    rhythmWorkout.logs
+    workout.logs
   )
     .filter((item) => !!item.result.createdAt)
 
     /** createdAt で並べ替え */
     .sort((a, b) => a.createdAt - b.createdAt)
-    .map((item) => ({
-      createdAt: item.createdAt,
-      correctRatio: buildCorrectRatio_rhythm(item, rhythmWorkout.cueIds.length),
+    .map((log) => ({
+      createdAt: log.createdAt,
+      correctRatio: calcCorrectRatio(log, getCueIdsFromLog(type, log)),
     }));
   return logs;
 };
 
-const buildKanaWorkoutLogs = (kanaWorkout: KanaWorkout) => {
-  const logs: { createdAt: number; correctRatio: number }[] = Object.values(
-    kanaWorkout.logs
-  )
-    .filter((item) => !!item.result.createdAt)
-    /** createdAt で並べ替え */
-    .sort((a, b) => a.createdAt - b.createdAt)
-    .map((item) => ({
-      createdAt: item.createdAt,
-      correctRatio: buildCorrectRatio_kana(item, kanaWorkout.kanas.length),
-    }));
-  return logs;
-};
-
-const buildCorrectRatio_rhythm = (item: RhythmWorkoutLog, length: number) => {
+export const calcCorrectRatio = (log: WorkoutLog, correctAnswers: string[]) => {
   let correctCount = 0;
-  Object.values(item.practice.answers).forEach((answer, index) => {
-    const correct = item.cueIds[index];
-    if (answer.selected === correct) {
+
+  Object.values(log.practice.answers).forEach((answer, index) => {
+    const correctAnswer = correctAnswers[index];
+
+    if (answer.selected === correctAnswer) {
       correctCount++;
     }
   });
-  const correctRatio = Math.round((correctCount / length) * 100);
-  return correctRatio;
-};
-
-const buildCorrectRatio_kana = (item: KanaWorkoutLog, length: number) => {
-  let correctCount = 0;
-  Object.values(item.practice.answers).forEach((answer, index) => {
-    const kana = item.kanas[index];
-    if (answer.selected === kana) {
-      correctCount++;
-    }
-  });
-  const correctRatio = Math.round((correctCount / length) * 100);
+  const correctRatio = Math.round((correctCount / correctAnswers.length) * 100);
   return correctRatio;
 };

@@ -11,15 +11,10 @@ import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../../../App';
 import { USERS } from '../../../../assets/user';
-import {
-  INITIAL_STATE,
-  KanaWorkout,
-  RhythmWorkout,
-  State,
-} from '../../../../Model';
-import { setRhythmWorkout } from '../../../../services/rhythmWorkout';
+import { INITIAL_STATE, Workout, State } from '../../../../Model';
 import { Action, ActionTypes } from '../../../../Update';
-import { setKanaWorkout } from '../../../../services/kanaWorkout';
+import { setWorkout } from '../../../../services/rhythmWorkout';
+import { TYPE } from '../../../Workout/commons';
 
 const WorkoutRowHeader = ({
   open,
@@ -27,7 +22,7 @@ const WorkoutRowHeader = ({
   workout,
   setOpen,
 }: {
-  workout: RhythmWorkout | KanaWorkout;
+  workout: Workout;
   type: string;
   open: boolean;
   setOpen: (value: boolean) => void;
@@ -36,11 +31,11 @@ const WorkoutRowHeader = ({
   const { state, dispatch } = useContext(AppContext);
 
   const handleClick = () => {
-    navigate(`/workout/${type}/${workout.id}/edit/${type}`);
+    navigate(`/${type}/${workout.id}/edit/`);
   };
 
   const handleLock = () => {
-    const updatedWorkout: RhythmWorkout | KanaWorkout = {
+    const updatedWorkout: Workout = {
       ...workout,
       isLocked: !workout.isLocked,
     };
@@ -48,7 +43,7 @@ const WorkoutRowHeader = ({
   };
 
   const handleVisiblity = () => {
-    const updatedWorkout: RhythmWorkout | KanaWorkout = {
+    const updatedWorkout: Workout = {
       ...workout,
       isActive: !workout.isActive,
     };
@@ -77,30 +72,30 @@ const WorkoutRowHeader = ({
 export default WorkoutRowHeader;
 
 const updateState = (
-  updatedWorkout: RhythmWorkout | KanaWorkout,
+  updatedWorkout: Workout,
   type: string,
   state: State,
   dispatch: React.Dispatch<Action>
 ) => {
   let updatedState = INITIAL_STATE;
   switch (type) {
-    case 'rhythm':
+    case TYPE.rhythm:
       // remote
-      setRhythmWorkout(updatedWorkout as RhythmWorkout);
+      setWorkout(type, updatedWorkout);
       // local
-      updatedState = R.assocPath<RhythmWorkout, State>(
+      updatedState = R.assocPath<Workout, State>(
         ['admin', 'rhythmWorkouts', updatedWorkout.id],
-        updatedWorkout as RhythmWorkout
+        updatedWorkout
       )(state);
       dispatch({ type: ActionTypes.setState, payload: updatedState });
       break;
-    case 'kana':
+    case TYPE.kana:
       // remote
-      setKanaWorkout(updatedWorkout as KanaWorkout);
+      setWorkout(type, updatedWorkout);
       // local
-      updatedState = R.assocPath<KanaWorkout, State>(
+      updatedState = R.assocPath<Workout, State>(
         ['admin', 'kanaWorkouts', updatedWorkout.id],
-        updatedWorkout as KanaWorkout
+        updatedWorkout
       )(state);
       dispatch({ type: ActionTypes.setState, payload: updatedState });
       break;

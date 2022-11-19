@@ -15,8 +15,9 @@ export type PitchCue = {
   pitchStr: string;
 };
 
-export type RhythmWorkoutLog = {
+export type WorkoutLog = {
   id: string;
+  kanas: string[];
   cueIds: string[];
   createdAt: number;
   opening: {
@@ -37,46 +38,9 @@ export type RhythmWorkoutLog = {
   };
 };
 
-export type KanaWorkoutLog = {
-  id: string;
-  kanas: string[];
-  createdAt: number;
-  opening: {
-    tapped: string[];
-  };
-  practice: {
-    answers: {
-      [index: number]: {
-        createdAt: number;
-        playedAt: number[];
-        selected: string;
-      };
-    };
-  };
-  result: {
-    createdAt: number;
-    tapped: string[];
-  };
-};
-
-export const INITIAL_KANA_WORKOUT_LOG: KanaWorkoutLog = {
+export const INITIAL_WORKOUT_LOG: WorkoutLog = {
   id: '',
   kanas: [],
-  createdAt: 0,
-  opening: {
-    tapped: [],
-  },
-  practice: {
-    answers: {},
-  },
-  result: {
-    createdAt: 0,
-    tapped: [],
-  },
-};
-
-export const INITIAL_RHYTHM_WORKOUT_LOG: RhythmWorkoutLog = {
-  id: '',
   cueIds: [],
   createdAt: 0,
   opening: {
@@ -91,43 +55,23 @@ export const INITIAL_RHYTHM_WORKOUT_LOG: RhythmWorkoutLog = {
   },
 };
 
-export type RhythmWorkout = {
+export type Workout = {
   id: string;
   uid: string;
+  kanas: string[];
   cueIds: string[];
   title: string;
-  logs: { [id: string]: RhythmWorkoutLog };
+  logs: { [id: string]: WorkoutLog };
   isActive: boolean;
   createdAt: number;
   isLocked: boolean;
 };
 
-export const INITIAL_RHYTHM_WORKOUT: RhythmWorkout = {
-  id: '',
-  uid: '',
-  cueIds: [],
-  title: '',
-  logs: {},
-  isActive: false,
-  createdAt: 0,
-  isLocked: false,
-};
-
-export type KanaWorkout = {
-  id: string;
-  uid: string;
-  kanas: string[];
-  title: string;
-  logs: { [id: string]: KanaWorkoutLog };
-  isActive: boolean;
-  createdAt: number;
-  isLocked: boolean;
-};
-
-export const INITIAL_KANA_WORKOUT: KanaWorkout = {
+export const INITIAL_WORKOUT: Workout = {
   id: '',
   uid: '',
   kanas: [],
+  cueIds: [],
   title: '',
   logs: {},
   isActive: false,
@@ -137,16 +81,16 @@ export const INITIAL_KANA_WORKOUT: KanaWorkout = {
 
 export type State = {
   user: User | null;
-  kanaWorkouts: { [id: string]: KanaWorkout };
-  pitchWorkouts: { [id: string]: RhythmWorkout };
-  rhythmWorkouts: { [id: string]: RhythmWorkout };
+  kanaWorkouts: { [id: string]: Workout };
+  pitchWorkouts: { [id: string]: Workout };
+  rhythmWorkouts: { [id: string]: Workout };
   authInitializing: boolean;
   audioContext: AudioContext | null;
   blobs: { [downloadURL: string]: Blob };
   admin: {
-    kanaWorkouts: { [id: string]: KanaWorkout };
-    pitchWorkouts: { [id: string]: RhythmWorkout };
-    rhythmWorkouts: { [id: string]: RhythmWorkout };
+    kanaWorkouts: { [id: string]: Workout };
+    pitchWorkouts: { [id: string]: Workout };
+    rhythmWorkouts: { [id: string]: Workout };
   };
 };
 

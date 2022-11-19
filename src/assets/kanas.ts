@@ -1,4 +1,5 @@
 import { KanaCue } from '../Model';
+import { createSourceNode } from '../services/utils';
 
 export const KANAS: {
   [id: string]: KanaCue;
@@ -731,4 +732,34 @@ export const KANAS: {
     hira: 'ぴょ',
     kata: 'ピョ',
   },
+};
+
+export const buildKanaCues = (kanas: string[]) => {
+  let kanaCues: {
+    id: string;
+    pitchStr: string;
+  }[] = [];
+
+  if (!kanas.length) return kanaCues;
+
+  kanaCues = Object.values(KANAS)
+    .filter((item) => kanas.includes(item.hira) || kanas.includes(item.kata))
+    .map((item) => ({
+      id: kanas.includes(item.hira) ? item.hira : item.kata,
+      pitchStr: '',
+    }));
+  return kanaCues;
+};
+
+export const playKana = async (
+  cueId: string,
+  blob: Blob,
+  audioContext: AudioContext
+) => {
+  const cue = Object.values(KANAS).find((item) =>
+    [item.hira, item.kata].includes(cueId)
+  );
+  if (!cue) return;
+  const sourceNode = await createSourceNode(blob, audioContext);
+  sourceNode.start(0, cue.start, cue.end - cue.start);
 };

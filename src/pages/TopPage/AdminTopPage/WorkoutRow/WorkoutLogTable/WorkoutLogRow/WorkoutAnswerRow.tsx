@@ -1,6 +1,6 @@
 import React from 'react';
 import { PITCHES } from '../../../../../../assets/pitches';
-import { KanaWorkoutLog, RhythmWorkoutLog } from '../../../../../../Model';
+import { WorkoutLog } from '../../../../../../Model';
 
 const WorkoutAnswerRow = ({
   log,
@@ -8,7 +8,7 @@ const WorkoutAnswerRow = ({
   answer,
   correctAnswer,
 }: {
-  log: RhythmWorkoutLog | KanaWorkoutLog;
+  log: WorkoutLog;
   index: number;
 
   answer: {

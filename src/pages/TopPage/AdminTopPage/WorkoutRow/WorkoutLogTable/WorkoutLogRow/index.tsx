@@ -1,12 +1,12 @@
 import React from 'react';
-import { KanaWorkoutLog, RhythmWorkoutLog } from '../../../../../../Model';
+import { WorkoutLog } from '../../../../../../Model';
 import WorkoutAnswerRow from './WorkoutAnswerRow';
 
 const WorkoutLogRow = ({
   log,
   correctAnswers,
 }: {
-  log: KanaWorkoutLog | RhythmWorkoutLog;
+  log: WorkoutLog;
   correctAnswers: string[];
 }) => {
   const date = new Date(log.createdAt);

@@ -1,7 +1,7 @@
 import { useTheme } from '@mui/material';
 import React from 'react';
 
-const KanaWorkoutResultTableHeader = () => {
+const WorkoutResultTableHeader = () => {
   const theme = useTheme();
   return (
     <div style={{ display: 'flex' }}>
@@ -36,4 +36,4 @@ const KanaWorkoutResultTableHeader = () => {
   );
 };
 
-export default KanaWorkoutResultTableHeader;
+export default WorkoutResultTableHeader;

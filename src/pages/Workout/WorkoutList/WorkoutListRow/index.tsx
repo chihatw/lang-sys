@@ -9,7 +9,7 @@ const WorkoutListRow = ({ listItem }: { listItem: WorkoutListItem }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/workout/${listItem.type}/${listItem.id}`);
+    navigate(`/${listItem.type}/${listItem.id}`);
   };
   const backgroundColor = listItem.isLocked ? 'translate' : '#EAF4F5';
   return (

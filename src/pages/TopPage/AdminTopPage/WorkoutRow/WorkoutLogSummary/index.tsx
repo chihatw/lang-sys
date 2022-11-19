@@ -3,49 +3,44 @@ import { IconButton } from '@mui/material';
 import * as R from 'ramda';
 import React, { useContext } from 'react';
 import { AppContext } from '../../../../../App';
-import {
-  INITIAL_STATE,
-  KanaWorkout,
-  RhythmWorkout,
-  State,
-} from '../../../../../Model';
-import { setKanaWorkout } from '../../../../../services/kanaWorkout';
-import { setRhythmWorkout } from '../../../../../services/rhythmWorkout';
+import { INITIAL_STATE, Workout, State } from '../../../../../Model';
+import { setWorkout } from '../../../../../services/rhythmWorkout';
 import { ActionTypes } from '../../../../../Update';
+import { TYPE } from '../../../../Workout/commons';
 import LastLog from './LastLog';
 
 const WorkoutLogSummary = ({
   workout,
   type,
 }: {
-  workout: RhythmWorkout | KanaWorkout;
+  workout: Workout;
   type: string;
 }) => {
   const { state, dispatch } = useContext(AppContext);
   const handleClearLogs = () => {
-    const updatedWorkout: RhythmWorkout | KanaWorkout = {
+    const updatedWorkout: Workout = {
       ...workout,
       logs: {},
     };
     let updatedState = INITIAL_STATE;
     switch (type) {
-      case 'rhythm':
+      case TYPE.rhythm:
         // remote
-        setRhythmWorkout(updatedWorkout as RhythmWorkout);
+        setWorkout(type, updatedWorkout);
         // local
-        updatedState = R.assocPath<RhythmWorkout, State>(
+        updatedState = R.assocPath<Workout, State>(
           ['admin', 'rhythmWorkouts', updatedWorkout.id],
-          updatedWorkout as RhythmWorkout
+          updatedWorkout
         )(state);
         dispatch({ type: ActionTypes.setState, payload: updatedState });
         break;
-      case 'kana':
+      case TYPE.kana:
         // remote
-        setKanaWorkout(updatedWorkout as KanaWorkout);
+        setWorkout(type, updatedWorkout);
         // local
-        updatedState = R.assocPath<KanaWorkout, State>(
+        updatedState = R.assocPath<Workout, State>(
           ['admin', 'kanaWorkouts', updatedWorkout.id],
-          updatedWorkout as KanaWorkout
+          updatedWorkout
         )(state);
         dispatch({ type: ActionTypes.setState, payload: updatedState });
         break;

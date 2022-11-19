@@ -1,17 +1,21 @@
+import { SentencePitchLine } from '@chihatw/lang-gym-h.ui.sentence-pitch-line';
 import { Check } from '@mui/icons-material';
 import { useTheme } from '@mui/material';
 import React from 'react';
+import string2PitchesArray from 'string2pitches-array';
+import { TYPE } from '../../../commons';
 
-const KanaWorkoutPracticeRow = ({
-  kana,
+const WorkoutPracticeRow = ({
+  type,
+  input,
   isSelected,
   handleClickRow,
 }: {
-  kana: string;
+  type: string;
+  input: string;
   isSelected: boolean;
   handleClickRow: () => void;
 }) => {
-  const theme = useTheme();
   return (
     <div
       style={{
@@ -44,19 +48,38 @@ const KanaWorkoutPracticeRow = ({
         </div>
         <div
           style={{
-            ...(theme.typography as any).notoSerifJP,
             flexGrow: 1,
             display: 'flex',
             justifyContent: 'center',
-            fontSize: 24,
-            padding: 4,
           }}
         >
-          {kana}
+          <Display type={type} input={input} />
         </div>
       </div>
     </div>
   );
 };
 
-export default KanaWorkoutPracticeRow;
+export default WorkoutPracticeRow;
+
+const Display = ({ type, input }: { type: string; input: string }) => {
+  const theme = useTheme();
+  switch (type) {
+    case TYPE.kana:
+      return (
+        <div
+          style={{
+            ...(theme.typography as any).notoSerifJP,
+            fontSize: 24,
+            padding: 4,
+          }}
+        >
+          {input}
+        </div>
+      );
+    case TYPE.pitch:
+    case TYPE.rhythm:
+    default:
+      return <SentencePitchLine pitchesArray={string2PitchesArray(input)} />;
+  }
+};
