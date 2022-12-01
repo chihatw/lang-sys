@@ -37,7 +37,7 @@ const TopPageCard = ({
               key={index}
               style={{
                 userSelect: 'none',
-                paddingRight: label.split('')[index + 1] ? '1em' : 0,
+                // paddingRight: label.split('')[index + 1] ? '1em' : 0,
               }}
             >
               {letter}

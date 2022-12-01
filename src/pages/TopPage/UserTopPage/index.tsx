@@ -22,12 +22,12 @@ const UserTopPage = () => {
         }}
       >
         <TopPageCard
-          label='聽力（高低）'
+          label='新聽力（高低）'
           imageURL={headphoneURL}
           handleClick={() => handleClick('/list/pitch')}
         />
         <TopPageCard
-          label='聽力'
+          label='舊聽力（節奏）'
           imageURL={headphoneURL}
           handleClick={() => handleClick('/list/rhythm')}
         />
