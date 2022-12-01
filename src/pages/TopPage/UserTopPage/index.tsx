@@ -22,20 +22,21 @@ const UserTopPage = () => {
         }}
       >
         <TopPageCard
-          label='聽力（節奏）'
-          imageURL={headphoneURL}
-          handleClick={() => handleClick('/list/rhythm')}
-        />
-        <TopPageCard
-          label='聽力（聲調）'
+          label='聽力（高低）'
           imageURL={headphoneURL}
           handleClick={() => handleClick('/list/pitch')}
         />
         <TopPageCard
+          label='聽力'
+          imageURL={headphoneURL}
+          handleClick={() => handleClick('/list/rhythm')}
+        />
+
+        {/* <TopPageCard
           label='認字'
           imageURL={lettersURL}
           handleClick={() => handleClick('/list/kana')}
-        />
+        /> */}
       </div>
     </Container>
   );
