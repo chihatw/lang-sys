@@ -1,5 +1,7 @@
 import { User } from '@firebase/auth';
 
+export type Schedule = { offset: number; start: number; stop: number };
+
 export type KanaCue = {
   id: string;
   end: number;
@@ -84,6 +86,7 @@ export type State = {
   kanaWorkouts: { [id: string]: Workout };
   pitchWorkouts: { [id: string]: Workout };
   rhythmWorkouts: { [id: string]: Workout };
+  pitchInputWorkouts: { [id: string]: Workout };
   authInitializing: boolean;
   audioContext: AudioContext | null;
   blobs: { [downloadURL: string]: Blob };
@@ -91,6 +94,7 @@ export type State = {
     kanaWorkouts: { [id: string]: Workout };
     pitchWorkouts: { [id: string]: Workout };
     rhythmWorkouts: { [id: string]: Workout };
+    pitchInputWorkouts: { [id: string]: Workout };
   };
 };
 
@@ -101,10 +105,12 @@ export const INITIAL_STATE: State = {
   kanaWorkouts: {},
   pitchWorkouts: {},
   rhythmWorkouts: {},
+  pitchInputWorkouts: {},
   authInitializing: true,
   admin: {
     kanaWorkouts: {},
     pitchWorkouts: {},
     rhythmWorkouts: {},
+    pitchInputWorkouts: {},
   },
 };

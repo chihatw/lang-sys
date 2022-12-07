@@ -4,7 +4,7 @@ import * as R from 'ramda';
 import React, { useContext } from 'react';
 import { AppContext } from '../../../../../App';
 import { INITIAL_STATE, Workout, State } from '../../../../../Model';
-import { setWorkout } from '../../../../../services/rhythmWorkout';
+import { setWorkout } from '../../../../../services/workout';
 import { ActionTypes } from '../../../../../Update';
 import { TYPE } from '../../../../Workout/commons';
 import LastLog from './LastLog';

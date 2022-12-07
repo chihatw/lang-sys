@@ -20,16 +20,24 @@ const AppRoute = () => {
         <Route path=':workoutId/edit' element={<WorkoutEditPage />} />
       </Route>
 
-      {/* 聽力 */}
+      {/* 聽力（節奏） */}
       <Route path='rhythm'>
         <Route path='new' element={<WorkoutEditPage />} />
         <Route path=':workoutId' element={<WorkoutPage type={TYPE.rhythm} />} />
         <Route path=':workoutId/edit' element={<WorkoutEditPage />} />
       </Route>
 
-      {/* 聽力（ピッチ） */}
+      {/* 聽力（聲調） */}
       <Route path='pitch'>
         <Route path=':workoutId' element={<WorkoutPage type={TYPE.pitch} />} />
+      </Route>
+
+      {/* 聽力（聲調+節奏） */}
+      <Route path='pitchInput'>
+        <Route
+          path=':workoutId'
+          element={<WorkoutPage type={TYPE.pitchInput} />}
+        />
       </Route>
 
       <Route path='/signIn' element={<SignInPage />} />

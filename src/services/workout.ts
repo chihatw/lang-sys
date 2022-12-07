@@ -18,6 +18,7 @@ const COLLECTIONS = {
   [TYPE.kana]: 'kanaWorkouts',
   [TYPE.pitch]: 'pitchWorkouts',
   [TYPE.rhythm]: 'rhythmWorkouts',
+  [TYPE.pitchInput]: 'pitchInputWorkouts',
 };
 
 export const getWorkouts = async ({

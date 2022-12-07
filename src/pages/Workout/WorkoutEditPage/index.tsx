@@ -21,10 +21,7 @@ import {
 import { AppContext } from '../../../App';
 import { USERS } from '../../../assets/user';
 import { INITIAL_WORKOUT, INITIAL_STATE, Workout, State } from '../../../Model';
-import {
-  buildRhythmKanaForm,
-  setWorkout,
-} from '../../../services/rhythmWorkout';
+import { buildRhythmKanaForm, setWorkout } from '../../../services/workout';
 import { ActionTypes } from '../../../Update';
 import { TYPE } from '../commons';
 import { INITIAL_RHYTHM_KANA_FORM_STATE, RhythmKanaFormState } from './Model';

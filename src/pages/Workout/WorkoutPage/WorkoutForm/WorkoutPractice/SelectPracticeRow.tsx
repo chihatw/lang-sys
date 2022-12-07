@@ -5,7 +5,7 @@ import React from 'react';
 import string2PitchesArray from 'string2pitches-array';
 import { TYPE } from '../../../commons';
 
-const WorkoutPracticeRow = ({
+const SelectPracticeRow = ({
   type,
   input,
   isSelected,
@@ -60,7 +60,7 @@ const WorkoutPracticeRow = ({
   );
 };
 
-export default WorkoutPracticeRow;
+export default SelectPracticeRow;
 
 const Display = ({ type, input }: { type: string; input: string }) => {
   const theme = useTheme();

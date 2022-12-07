@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import React from 'react';
 import { State, Workout, WorkoutLog } from '../../../Model';
-import { getWorkouts } from '../../../services/rhythmWorkout';
+import { getWorkouts } from '../../../services/workout';
 import { Action, ActionTypes } from '../../../Update';
 import { getCueIdsFromLog, PROP, TYPE } from '../commons';
 
@@ -24,12 +24,6 @@ export const buildWorkoutListItems = async (
     .sort((a, b) => a.createdAt - b.createdAt)
     /** ログの整形 */
     .map((workout) => {
-      const CUEIDS = {
-        [TYPE.pitch]: workout.cueIds,
-        [TYPE.rhythm]: workout.cueIds,
-        [TYPE.kana]: workout.kanas,
-      };
-
       return {
         id: workout.id,
         logs: sortWorkoutLog(workout, type),
@@ -53,6 +47,7 @@ const buildWorkouts = async (
     [TYPE.kana]: state.kanaWorkouts,
     [TYPE.pitch]: state.pitchWorkouts,
     [TYPE.rhythm]: state.rhythmWorkouts,
+    [TYPE.pitchInput]: state.pitchInputWorkouts,
   };
 
   /** ローカルにある場合 */

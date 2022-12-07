@@ -13,7 +13,7 @@ import { AppContext } from '../../../../App';
 import { USERS } from '../../../../assets/user';
 import { INITIAL_STATE, Workout, State } from '../../../../Model';
 import { Action, ActionTypes } from '../../../../Update';
-import { setWorkout } from '../../../../services/rhythmWorkout';
+import { setWorkout } from '../../../../services/workout';
 import { TYPE } from '../../../Workout/commons';
 
 const WorkoutRowHeader = ({

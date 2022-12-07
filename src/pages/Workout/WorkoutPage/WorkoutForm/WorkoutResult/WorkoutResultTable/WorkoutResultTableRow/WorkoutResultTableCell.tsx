@@ -53,6 +53,7 @@ const Display = ({ type, input }: { type: string; input: string }) => {
       );
     case TYPE.pitch:
     case TYPE.rhythm:
+    case TYPE.pitchInput:
       return <SentencePitchLine pitchesArray={string2PitchesArray(input)} />;
     default:
       return <></>;

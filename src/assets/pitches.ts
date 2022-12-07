@@ -1,6 +1,7 @@
-import { PitchCue } from '../Model';
+import { PitchCue, Schedule } from '../Model';
 import { TYPE } from '../pages/Workout/commons';
 import { createSourceNode } from '../services/utils';
+import { PITCH_INPUT_ITEMS } from './pitchInputItems';
 
 export const PITCHES: { [id: string]: PitchCue } = {
   ta: { id: 'ta', start: 0.6, end: 1.3, pitchStr: 'タ＼ッ' },
@@ -132,8 +133,6 @@ export const playRhythm = async (
   sourceNode.start(0, cue.start, cue.end - cue.start);
 };
 
-export type Schedule = { offset: number; start: number; stop: number };
-
 const GAP = {
   s: 0.05,
   m: 0.06,
@@ -245,21 +244,29 @@ export const buildPitchCues = (type: string, cueIds: string[]) => {
   }[] = [];
 
   if (!cueIds.length) return pitchCues;
+  console.log();
+  switch (type) {
+    case TYPE.pitchInput:
+      pitchCues = Object.values(PITCH_INPUT_ITEMS)
+        .filter((item) => cueIds.includes(item.pitchStr))
+        .map(({ pitchStr }) => ({ id: pitchStr, pitchStr }));
+      return pitchCues;
 
-  const PITCHSTRS: {
-    [key: string]: { [key: string]: { id: string; pitchStr: string } };
-  } = {
-    [TYPE.pitch]: PITCH_WORKOUT_ITEMS,
-    [TYPE.rhythm]: PITCHES,
-  };
+    default:
+      const PITCHSTRS: {
+        [key: string]: { [key: string]: { id: string; pitchStr: string } };
+      } = {
+        [TYPE.pitch]: PITCH_WORKOUT_ITEMS,
+        [TYPE.rhythm]: PITCHES,
+      };
 
-  pitchCues = Object.values(PITCHSTRS[type])
-    // PITCHES の中で、cueIds に含まれているものを抽出
-    .filter((item) => cueIds.includes(item.id))
-    // PITCHES のプロパティから id と pitchStr のみを抽出
-    .map(({ id, pitchStr }) => ({ id, pitchStr }));
-
-  return pitchCues;
+      pitchCues = Object.values(PITCHSTRS[type])
+        // PITCHES の中で、cueIds に含まれているものを抽出
+        .filter((item) => cueIds.includes(item.id))
+        // PITCHES のプロパティから id と pitchStr のみを抽出
+        .map(({ id, pitchStr }) => ({ id, pitchStr }));
+      return pitchCues;
+  }
 };
 
 export const playPitch = async (

@@ -9,8 +9,7 @@ import {
 } from '../../../Model';
 import { Action, ActionTypes } from '../../../Update';
 import { shuffle } from '../../../services/utils';
-import { PROP, SCENE, TYPE } from '../commons';
-import { setWorkout } from '../../../services/rhythmWorkout';
+import { SCENE, TYPE } from '../commons';
 
 export type WorkoutState = {
   id: string;
@@ -57,15 +56,17 @@ export const buildWorkoutState = async (
   }
 
   const CUEIDS = {
-    [TYPE.rhythm]: shuffle(workout.cueIds),
-    [TYPE.pitch]: shuffle(workout.cueIds),
     [TYPE.kana]: [],
+    [TYPE.pitch]: shuffle(workout.cueIds),
+    [TYPE.rhythm]: shuffle(workout.cueIds),
+    [TYPE.pitchInput]: shuffle(workout.cueIds),
   };
 
   const KANAS = {
-    [TYPE.rhythm]: [],
-    [TYPE.pitch]: [],
     [TYPE.kana]: shuffle(workout.kanas),
+    [TYPE.pitch]: [],
+    [TYPE.rhythm]: [],
+    [TYPE.pitchInput]: [],
   };
 
   return {

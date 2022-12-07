@@ -7,19 +7,20 @@ import { playPitch, playRhythm } from '../../../../../assets/pitches';
 import { AppContext } from '../../../../../App';
 import { WorkoutState } from '../../Model';
 import {
-  getAppWorkouts,
+  TYPE,
+  SCENE,
   getCues,
   getInput,
-  PROP,
-  SCENE,
-  setSceneToWorkoutState,
-  TYPE,
+  getAppWorkouts,
   updateWorkoutLog,
+  setSceneToWorkoutState,
 } from '../../../commons';
 import { playKana } from '../../../../../assets/kanas';
-import { State, Workout } from '../../../../../Model';
 import { ActionTypes } from '../../../../../Update';
-import { setWorkout } from '../../../../../services/rhythmWorkout';
+import {
+  getSchedules,
+  playScheduledItem,
+} from '../../../../../assets/pitchInputItems';
 
 const WorkoutOpening = ({
   type,
@@ -44,6 +45,11 @@ const WorkoutOpening = ({
       case TYPE.pitch:
         playPitch(cueId, state.blob, state.audioContext);
         break;
+      case TYPE.pitchInput:
+        const schedules = getSchedules(cueId);
+        playScheduledItem(schedules, state.blob, state.audioContext);
+        break;
+
       default:
     }
 
@@ -81,9 +87,7 @@ const WorkoutOpening = ({
           <div key={index}>
             <Card
               onClick={() => handleClick(cue.id)}
-              sx={{
-                cursor: 'pointer',
-              }}
+              sx={{ cursor: 'pointer' }}
             >
               <CardContent
                 sx={{
@@ -127,6 +131,7 @@ const Display = ({ type, input }: { type: string; input: string }) => {
       );
     case TYPE.pitch:
     case TYPE.rhythm:
+    case TYPE.pitchInput:
       return <SentencePitchLine pitchesArray={string2PitchesArray(input)} />;
     default:
       return <></>;

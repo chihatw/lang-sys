@@ -3,7 +3,7 @@ import { Button, Container } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { Workout, State } from '../../../Model';
 import { AppContext } from '../../../App';
-import { getWorkouts } from '../../../services/rhythmWorkout';
+import { getWorkouts } from '../../../services/workout';
 import { ActionTypes } from '../../../Update';
 import CustomLabel from '../../../ui/CustomLabel';
 import WorkoutRow from './WorkoutRow';
@@ -22,12 +22,22 @@ const AdminTopPage = () => {
       let kanaWorkouts: { [id: string]: Workout } = {};
       let pitchWorkouts: { [id: string]: Workout } = {};
       let rhythmWorkouts: { [id: string]: Workout } = {};
+      let pitchInputWorkous: { [id: string]: Workout } = {};
 
       if (Object.keys(state.admin.rhythmWorkouts).length) {
         rhythmWorkouts = state.admin.rhythmWorkouts;
       } else {
         rhythmWorkouts = await getWorkouts({
           type: TYPE.rhythm,
+          isActiveOnly: false,
+        });
+      }
+
+      if (Object.keys(state.admin.pitchInputWorkouts).length) {
+        pitchInputWorkous = state.admin.pitchInputWorkouts;
+      } else {
+        pitchInputWorkous = await getWorkouts({
+          type: TYPE.pitchInput,
           isActiveOnly: false,
         });
       }
@@ -62,6 +72,10 @@ const AdminTopPage = () => {
         R.assocPath<{ [id: string]: Workout }, State>(
           ['admin', 'kanaWorkouts'],
           kanaWorkouts
+        ),
+        R.assocPath<{ [id: string]: Workout }, State>(
+          ['admin', 'pitchInputWorkouts'],
+          pitchInputWorkous
         )
       )(state);
       dispatch({ type: ActionTypes.setState, payload: updatedState });
@@ -72,12 +86,13 @@ const AdminTopPage = () => {
   return (
     <Container maxWidth='sm' sx={{ paddingTop: 2, paddingBottom: 20 }}>
       <div style={{ display: 'grid', rowGap: 16 }}>
-        <CustomLabel label='聽力（聲調）' />
-        {Object.values(state.admin.pitchWorkouts)
+        <CustomLabel label='聽力（節奏+聲調）' />
+        {Object.values(state.admin.pitchInputWorkouts)
           .sort((a, b) => b.createdAt - a.createdAt)
           .map((workout, index) => (
             <WorkoutRow key={index} workout={workout} type='rhythm' />
           ))}
+
         <CustomLabel label='聽力（節奏）' />
         <div>
           <Button
@@ -89,6 +104,12 @@ const AdminTopPage = () => {
           </Button>
         </div>
         {Object.values(state.admin.rhythmWorkouts)
+          .sort((a, b) => b.createdAt - a.createdAt)
+          .map((workout, index) => (
+            <WorkoutRow key={index} workout={workout} type='rhythm' />
+          ))}
+        <CustomLabel label='聽力（聲調）' />
+        {Object.values(state.admin.pitchWorkouts)
           .sort((a, b) => b.createdAt - a.createdAt)
           .map((workout, index) => (
             <WorkoutRow key={index} workout={workout} type='rhythm' />

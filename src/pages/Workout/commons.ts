@@ -2,13 +2,14 @@ import * as R from 'ramda';
 import { buildKanaCues } from '../../assets/kanas';
 import { buildPitchCues } from '../../assets/pitches';
 import { State, Workout, WorkoutLog } from '../../Model';
-import { setWorkout } from '../../services/rhythmWorkout';
+import { setWorkout } from '../../services/workout';
 import { WorkoutState } from './WorkoutPage/Model';
 
 export const TYPE = {
   kana: 'kana',
   pitch: 'pitch',
   rhythm: 'rhythm',
+  pitchInput: 'pitchInput',
 };
 
 export const SCENE = {
@@ -21,6 +22,7 @@ export const PROP = {
   [TYPE.kana]: 'kanaWorkouts',
   [TYPE.pitch]: 'pitchWorkouts',
   [TYPE.rhythm]: 'rhythmWorkouts',
+  [TYPE.pitchInput]: 'pitchInputWorkouts',
 };
 
 export const getAppWorkouts = (type: string, state: State) => {
@@ -29,6 +31,8 @@ export const getAppWorkouts = (type: string, state: State) => {
       return state.kanaWorkouts;
     case TYPE.pitch:
       return state.pitchWorkouts;
+    case TYPE.pitchInput:
+      return state.pitchInputWorkouts;
     case TYPE.rhythm:
     default:
       return state.rhythmWorkouts;
@@ -121,6 +125,7 @@ export const getCues = (type: string, state: WorkoutState) => {
     [TYPE.kana]: kanaCues,
     [TYPE.pitch]: pitchCues,
     [TYPE.rhythm]: pitchCues,
+    [TYPE.pitchInput]: pitchCues,
   };
   const cues = CUES[type];
   return cues;
@@ -134,6 +139,7 @@ export const getInput = (
     [TYPE.kana]: cue.id,
     [TYPE.pitch]: cue.pitchStr,
     [TYPE.rhythm]: cue.pitchStr,
+    [TYPE.pitchInput]: cue.pitchStr,
   };
   return INPUT[type];
 };

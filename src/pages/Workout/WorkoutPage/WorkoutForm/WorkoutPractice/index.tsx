@@ -3,26 +3,25 @@ import { css } from '@emotion/css';
 import { PlayCircleRounded } from '@mui/icons-material';
 import { Button, IconButton, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-
 import { playPitch, playRhythm } from '../../../../../assets/pitches';
 import { AppContext } from '../../../../../App';
 import { ActionTypes } from '../../../../../Update';
-import { setWorkout } from '../../../../../services/rhythmWorkout';
 import { WorkoutState } from '../../Model';
-import WorkoutPracticeRow from './WorkoutPracticeRow';
-import { Workout, State } from '../../../../../Model';
 import {
   getAppWorkouts,
   getCueIds,
-  getCues,
-  getInput,
-  PROP,
   SCENE,
   setSceneToWorkoutState,
   TYPE,
   updateWorkoutLog,
 } from '../../../commons';
 import { playKana } from '../../../../../assets/kanas';
+import {
+  getSchedules,
+  playScheduledItem,
+} from '../../../../../assets/pitchInputItems';
+import SelectPractice from './SelectPractice';
+import InputPractice from './InputPractice';
 
 const WorkoutPractice = ({
   type,
@@ -36,8 +35,8 @@ const WorkoutPractice = ({
   const theme = useTheme();
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
+  const [input, setInput] = useState('');
   const [initialize, setInitialize] = useState(true);
-  const [selectedId, setSelectedId] = useState('');
   const AnimationElemRef = useRef<HTMLDivElement>(null);
 
   const cueIds = getCueIds(type, state);
@@ -69,6 +68,10 @@ const WorkoutPractice = ({
       case TYPE.pitch:
         playPitch(currentCueId, state.blob, state.audioContext);
         break;
+      case TYPE.pitchInput:
+        const schedules = getSchedules(currentCueId);
+        playScheduledItem(schedules, state.blob, state.audioContext);
+        break;
       default:
     }
 
@@ -76,13 +79,8 @@ const WorkoutPractice = ({
     dispatch(updatedState);
   };
 
-  const handleClickRow = (cueId: string) => {
-    cueId = selectedId === cueId ? '' : cueId;
-    setSelectedId(cueId);
-  };
-
   const handleNext = () => {
-    let updatedState = setSelectedIdToWorkoutState(selectedId, state);
+    let updatedState = setInputToWorkoutState(input, state);
 
     // 最終以外
     if (!isLast) {
@@ -97,7 +95,7 @@ const WorkoutPractice = ({
     }
 
     dispatch(updatedState);
-    setSelectedId('');
+    setInput('');
     setInitialize(true);
 
     const workouts = getAppWorkouts(type, appState);
@@ -148,32 +146,19 @@ const WorkoutPractice = ({
           <PlayCircleRounded sx={{ fontSize: 120 }} />
         </IconButton>
       </div>
-      <div
-        style={{
-          display: 'grid',
-          rowGap: 16,
-          maxHeight: 260,
-          overflowY: 'scroll',
-          paddingTop: 24,
-        }}
-      >
-        {getCues(type, state).map((cue, index) => (
-          <WorkoutPracticeRow
-            key={index}
-            type={type}
-            input={getInput(type, cue)}
-            isSelected={selectedId === cue.id}
-            handleClickRow={() => handleClickRow(cue.id)}
-          />
-        ))}
-      </div>
+      <WorkoutPracticeSwitcher
+        type={type}
+        state={state}
+        input={input}
+        setInput={setInput}
+      />
       <div
         style={{ display: 'flex', justifyContent: 'center', paddingTop: 40 }}
       >
         <Button
           variant='contained'
           sx={{ color: 'white', width: 240 }}
-          disabled={!selectedId}
+          disabled={input.length !== currentCueId.length}
           onClick={handleNext}
         >
           {isLast ? '選好了' : '下一題'}
@@ -202,13 +187,10 @@ const updatePlayedAt = (state: WorkoutState) => {
   return updatedState;
 };
 
-const setSelectedIdToWorkoutState = (
-  selectedId: string,
-  state: WorkoutState
-) => {
+const setInputToWorkoutState = (input: string, state: WorkoutState) => {
   return R.assocPath<string, WorkoutState>(
     ['log', 'practice', 'answers', state.currentIndex, 'selected'],
-    selectedId
+    input
   )(state);
 };
 
@@ -235,37 +217,28 @@ const checkPerfect = (state: WorkoutState, correctAnswers: string[]) => {
   return isPerfect;
 };
 
-const unlockNextWorkout = (
-  type: string,
-  state: WorkoutState,
-  workouts: { [key: string]: Workout },
-  appState: State
-) => {
-  const nextWorkoutId = getNextWorkoutId(state.id, workouts);
-  if (!nextWorkoutId) return appState;
-
-  // isLocked を false にする
-  const updatedNextWorkout = R.assocPath<boolean, Workout>(
-    ['isLocked'],
-    false
-  )(workouts[nextWorkoutId]);
-  setWorkout(type, updatedNextWorkout);
-
-  const updatedAppState = R.assocPath<Workout, State>(
-    [PROP[type], updatedNextWorkout.id],
-    updatedNextWorkout
-  )(appState);
-  return updatedAppState;
-};
-
-const getNextWorkoutId = (
-  currentId: string,
-  workouts: { [key: string]: Workout }
-) => {
-  const workoutListIds = Object.values(workouts)
-    .sort((a, b) => a.createdAt - b.createdAt)
-    .map((item) => item.id);
-  const targetWorkoutIndex = workoutListIds.indexOf(currentId);
-  const nextWorkoutId = workoutListIds[targetWorkoutIndex + 1] || '';
-  return nextWorkoutId;
+const WorkoutPracticeSwitcher = ({
+  type,
+  state,
+  input,
+  setInput,
+}: {
+  type: string;
+  state: WorkoutState;
+  input: string;
+  setInput: (cueId: string) => void;
+}) => {
+  switch (type) {
+    case TYPE.pitchInput:
+      return <InputPractice state={state} input={input} setInput={setInput} />;
+    default:
+      return (
+        <SelectPractice
+          type={type}
+          state={state}
+          input={input}
+          setInput={setInput}
+        />
+      );
+  }
 };

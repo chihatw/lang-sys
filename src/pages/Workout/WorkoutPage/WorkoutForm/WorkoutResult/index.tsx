@@ -19,6 +19,10 @@ import {
 } from '../../../commons';
 import { playKana } from '../../../../../assets/kanas';
 import { playPitch, playRhythm } from '../../../../../assets/pitches';
+import {
+  getSchedules,
+  playScheduledItem,
+} from '../../../../../assets/pitchInputItems';
 
 const WorkoutResult = ({
   type,
@@ -42,6 +46,10 @@ const WorkoutResult = ({
         break;
       case TYPE.pitch:
         playPitch(cueId, state.blob, state.audioContext);
+        break;
+      case TYPE.pitchInput:
+        const schedules = getSchedules(cueId);
+        playScheduledItem(schedules, state.blob, state.audioContext);
         break;
       default:
     }
