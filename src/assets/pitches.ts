@@ -244,7 +244,6 @@ export const buildPitchCues = (type: string, cueIds: string[]) => {
   }[] = [];
 
   if (!cueIds.length) return pitchCues;
-  console.log();
   switch (type) {
     case TYPE.pitchInput:
       pitchCues = Object.values(PITCH_INPUT_ITEMS)

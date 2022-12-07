@@ -114,15 +114,6 @@ const WorkoutPractice = ({
     appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
   };
 
-  console.log(input.replace('＼', ''), currentCueId.replace('＼', ''));
-  console.log(
-    input.replace('＼', '').length,
-    currentCueId.replace('＼', '').length
-  );
-  console.log(
-    input.replace('＼', '').length !== currentCueId.replace('＼', '').length
-  );
-
   return (
     <div style={{ display: 'grid', rowGap: 8 }}>
       <div

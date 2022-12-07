@@ -243,7 +243,6 @@ export const playScheduledItem = async (
 ) => {
   if (!blob || !audioContext) return;
 
-  const currentTime = audioContext.currentTime;
   // const sourceNodes: AudioBufferSourceNode[] = [];
   // await Promise.all(
   // schedules.map(async (_) => {
@@ -254,6 +253,7 @@ export const playScheduledItem = async (
   const item = schedules[0];
   // schedules.forEach((item, index) => {
   // const sourceNode = sourceNodes[index];
+  const currentTime = audioContext.currentTime;
   sourceNode.start(currentTime + item.offset, item.start);
   sourceNode.stop(currentTime + item.offset + item.stop - item.start);
   // });
