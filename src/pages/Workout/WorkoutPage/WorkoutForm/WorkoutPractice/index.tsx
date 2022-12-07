@@ -113,6 +113,16 @@ const WorkoutPractice = ({
 
     appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
   };
+
+  console.log(input.replace('＼', ''), currentCueId.replace('＼', ''));
+  console.log(
+    input.replace('＼', '').length,
+    currentCueId.replace('＼', '').length
+  );
+  console.log(
+    input.replace('＼', '').length !== currentCueId.replace('＼', '').length
+  );
+
   return (
     <div style={{ display: 'grid', rowGap: 8 }}>
       <div
@@ -158,7 +168,10 @@ const WorkoutPractice = ({
         <Button
           variant='contained'
           sx={{ color: 'white', width: 240 }}
-          disabled={input.length !== currentCueId.length}
+          disabled={
+            input.replace('＼', '').length !==
+            currentCueId.replace('＼', '').length
+          }
           onClick={handleNext}
         >
           {isLast ? '選好了' : '下一題'}
