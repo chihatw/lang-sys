@@ -244,16 +244,17 @@ export const playScheduledItem = async (
   if (!blob || !audioContext) return;
 
   const currentTime = audioContext.currentTime;
-  const sourceNodes: AudioBufferSourceNode[] = [];
-  await Promise.all(
-    schedules.map(async (_) => {
-      const sourceNode = await createSourceNode(blob, audioContext!);
-      sourceNodes.push(sourceNode);
-    })
-  );
-  schedules.forEach((item, index) => {
-    const sourceNode = sourceNodes[index];
-    sourceNode.start(currentTime + item.offset, item.start);
-    sourceNode.stop(currentTime + item.offset + item.stop - item.start);
-  });
+  // const sourceNodes: AudioBufferSourceNode[] = [];
+  // await Promise.all(
+  // schedules.map(async (_) => {
+  const sourceNode = await createSourceNode(blob, audioContext!);
+  // sourceNodes.push(sourceNode);
+  // })
+  // );
+  const item = schedules[0];
+  // schedules.forEach((item, index) => {
+  // const sourceNode = sourceNodes[index];
+  sourceNode.start(currentTime + item.offset, item.start);
+  sourceNode.stop(currentTime + item.offset + item.stop - item.start);
+  // });
 };

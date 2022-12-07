@@ -33,12 +33,6 @@ const UserTopPage = () => {
           handleClick={() => handleClick('/list/rhythm')}
         />
 
-        <TopPageCard
-          label='新聽力（高低）'
-          imageURL={headphoneURL}
-          handleClick={() => handleClick('/list/pitch')}
-        />
-
         {/* <TopPageCard
           label='認字'
           imageURL={lettersURL}
