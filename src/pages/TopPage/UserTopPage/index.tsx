@@ -26,10 +26,17 @@ const UserTopPage = () => {
           imageURL={headphoneURL}
           handleClick={() => handleClick('/list/pitchInput')}
         />
+
         <TopPageCard
           label='舊聽力（節奏）'
           imageURL={headphoneURL}
           handleClick={() => handleClick('/list/rhythm')}
+        />
+
+        <TopPageCard
+          label='新聽力（高低）'
+          imageURL={headphoneURL}
+          handleClick={() => handleClick('/list/pitch')}
         />
 
         {/* <TopPageCard

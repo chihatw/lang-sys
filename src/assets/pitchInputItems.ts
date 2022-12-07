@@ -248,15 +248,11 @@ export const playScheduledItem = async (
   await Promise.all(
     schedules.map(async (_) => {
       const sourceNode = await createSourceNode(blob, audioContext!);
-      console.log('1');
-      console.log({ sourceNode });
       sourceNodes.push(sourceNode);
     })
   );
   schedules.forEach((item, index) => {
     const sourceNode = sourceNodes[index];
-    console.log('2');
-    console.log({ sourceNode });
     sourceNode.start(currentTime + item.offset, item.start);
     sourceNode.stop(currentTime + item.offset + item.stop - item.start);
   });
