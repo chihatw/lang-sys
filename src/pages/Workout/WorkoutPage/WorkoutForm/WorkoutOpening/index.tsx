@@ -3,7 +3,6 @@ import string2PitchesArray from 'string2pitches-array';
 import React, { useContext } from 'react';
 import { SentencePitchLine } from '@chihatw/lang-gym-h.ui.sentence-pitch-line';
 import { Button, Card, CardContent, useTheme } from '@mui/material';
-import { playPitch, playRhythm } from '../../../../../assets/pitches';
 import { AppContext } from '../../../../../App';
 import { WorkoutState } from '../../Model';
 import {
@@ -15,12 +14,8 @@ import {
   updateWorkoutLog,
   setSceneToWorkoutState,
 } from '../../../commons';
-import { playKana } from '../../../../../assets/kanas';
 import { ActionTypes } from '../../../../../Update';
-import {
-  getSchedules,
-  playScheduledItem,
-} from '../../../../../assets/pitchInputItems';
+import { playAudioBuffer } from '../../../../../services/utils';
 
 const WorkoutOpening = ({
   type,
@@ -34,24 +29,8 @@ const WorkoutOpening = ({
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const handleClick = (cueId: string) => {
-    if (!state.blob || !state.audioContext) return;
-    switch (type) {
-      case TYPE.kana:
-        playKana(cueId, state.blob, state.audioContext);
-        break;
-      case TYPE.rhythm:
-        playRhythm(cueId, state.blob, state.audioContext);
-        break;
-      case TYPE.pitch:
-        playPitch(cueId, state.blob, state.audioContext);
-        break;
-      case TYPE.pitchInput:
-        const schedules = getSchedules(cueId);
-        playScheduledItem(schedules, state.blob, state.audioContext);
-        break;
-
-      default:
-    }
+    if (!state.audioBuffer || !state.audioContext) return;
+    playAudioBuffer(type, cueId, state.audioBuffer, state.audioContext);
 
     const updatedTapped = [...state.log.opening.tapped];
     updatedTapped.push(cueId);

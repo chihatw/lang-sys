@@ -7,22 +7,15 @@ import { AppContext } from '../../../../../App';
 import { ActionTypes } from '../../../../../Update';
 import { WorkoutState } from '../../Model';
 import WorkoutResultTable from './WorkoutResultTable';
-import { shuffle } from '../../../../../services/utils';
+import { playAudioBuffer, shuffle } from '../../../../../services/utils';
 import WorkoutResultCorrectRatio from './WorkoutResultCorrectRatio';
 import { INITIAL_WORKOUT_LOG } from '../../../../../Model';
 import {
   getAppWorkouts,
   getCueIds,
   SCENE,
-  TYPE,
   updateWorkoutLog,
 } from '../../../commons';
-import { playKana } from '../../../../../assets/kanas';
-import { playPitch, playRhythm } from '../../../../../assets/pitches';
-import {
-  getSchedules,
-  playScheduledItem,
-} from '../../../../../assets/pitchInputItems';
 
 const WorkoutResult = ({
   type,
@@ -36,23 +29,8 @@ const WorkoutResult = ({
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const handleClick = async (cueId: string) => {
-    if (!state.blob || !state.audioContext) return;
-    switch (type) {
-      case TYPE.kana:
-        playKana(cueId, state.blob, state.audioContext);
-        break;
-      case TYPE.rhythm:
-        playRhythm(cueId, state.blob, state.audioContext);
-        break;
-      case TYPE.pitch:
-        playPitch(cueId, state.blob, state.audioContext);
-        break;
-      case TYPE.pitchInput:
-        const schedules = getSchedules(cueId);
-        playScheduledItem(schedules, state.blob, state.audioContext);
-        break;
-      default:
-    }
+    if (!state.audioBuffer || !state.audioContext) return;
+    playAudioBuffer(type, cueId, state.audioBuffer, state.audioContext);
 
     const updatedState = updateTapped(state, cueId);
     dispatch(updatedState);

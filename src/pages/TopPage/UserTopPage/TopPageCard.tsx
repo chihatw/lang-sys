@@ -29,7 +29,7 @@ const TopPageCard = ({
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            fontSize: 24,
+            fontSize: 16,
           }}
         >
           {label.split('').map((letter, index) => (

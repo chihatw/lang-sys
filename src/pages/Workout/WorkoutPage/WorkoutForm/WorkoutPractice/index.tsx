@@ -3,7 +3,6 @@ import { css } from '@emotion/css';
 import { PlayCircleRounded } from '@mui/icons-material';
 import { Button, IconButton, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { playPitch, playRhythm } from '../../../../../assets/pitches';
 import { AppContext } from '../../../../../App';
 import { ActionTypes } from '../../../../../Update';
 import { WorkoutState } from '../../Model';
@@ -15,13 +14,9 @@ import {
   TYPE,
   updateWorkoutLog,
 } from '../../../commons';
-import { playKana } from '../../../../../assets/kanas';
-import {
-  getSchedules,
-  playScheduledItem,
-} from '../../../../../assets/pitchInputItems';
 import SelectPractice from './SelectPractice';
 import InputPractice from './InputPractice';
+import { playAudioBuffer } from '../../../../../services/utils';
 
 const WorkoutPractice = ({
   type,
@@ -57,23 +52,8 @@ const WorkoutPractice = ({
   }, [initialize]);
 
   const handleClickPlay = () => {
-    if (!state.blob || !state.audioContext) return;
-    switch (type) {
-      case TYPE.kana:
-        playKana(currentCueId, state.blob, state.audioContext);
-        break;
-      case TYPE.rhythm:
-        playRhythm(currentCueId, state.blob, state.audioContext);
-        break;
-      case TYPE.pitch:
-        playPitch(currentCueId, state.blob, state.audioContext);
-        break;
-      case TYPE.pitchInput:
-        const schedules = getSchedules(currentCueId);
-        playScheduledItem(schedules, state.blob, state.audioContext);
-        break;
-      default:
-    }
+    if (!state.audioBuffer || !state.audioContext) return;
+    playAudioBuffer(type, currentCueId, state.audioBuffer, state.audioContext);
 
     const updatedState = updatePlayedAt(state);
     dispatch(updatedState);

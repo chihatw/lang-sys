@@ -46,7 +46,7 @@ const WorkoutPage = ({ type }: { type: string }) => {
       setInitializing(false);
     };
     fetchData();
-  }, [workoutId, initializing, state.blobs, state.audioContext, type]);
+  }, [workoutId, initializing, state.audioBuffers, state.audioContext, type]);
 
   if (!state.user) return <Navigate to='/signIn' />;
 

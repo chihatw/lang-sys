@@ -13,7 +13,6 @@ const LastLog = ({ logs }: { logs: { [id: string]: WorkoutLog } }) => {
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
   let correctCount = 0;
-  // todo type による分岐
   const correctAnswers = lastLog.cueIds || lastLog.kanas;
   Object.values(lastLog.practice.answers).forEach((answer, index) => {
     if (answer.selected === correctAnswers[index]) {

@@ -1,3 +1,8 @@
+import { playKana } from '../assets/kanas';
+import { playPitch, playRhythm } from '../assets/pitches';
+import { getSchedules, playScheduledItem } from '../assets/pitchInputItems';
+import { TYPE } from '../pages/Workout/commons';
+
 export const getRandomInt = (max: number) => {
   return Math.floor(Math.random() * max);
 };
@@ -19,12 +24,12 @@ export const blobToAudioBuffer = async (
   return audioBuffer;
 };
 
-export const createSourceNode = async (
-  blob: Blob,
+export const createSourceNode = (
+  audioBuffer: AudioBuffer,
   audioContext: AudioContext
 ) => {
   const sourceNode = audioContext.createBufferSource();
-  sourceNode.buffer = await blobToAudioBuffer(blob, audioContext);
+  sourceNode.buffer = audioBuffer;
   sourceNode.connect(audioContext.destination);
   return sourceNode;
 };
@@ -41,4 +46,29 @@ export const createAudioContext = () => {
   osc.start(audioContext.currentTime);
   osc.stop(audioContext.currentTime + 0.01);
   return audioContext;
+};
+
+export const playAudioBuffer = (
+  type: string,
+  cueId: string,
+  audioBuffer: AudioBuffer,
+  audioContext: AudioContext
+) => {
+  switch (type) {
+    case TYPE.kana:
+      playKana(cueId, audioBuffer, audioContext);
+      break;
+    case TYPE.rhythm:
+      playRhythm(cueId, audioBuffer, audioContext);
+      break;
+    case TYPE.pitch:
+      playPitch(cueId, audioBuffer, audioContext);
+      break;
+    case TYPE.pitchInput:
+      const schedules = getSchedules(cueId);
+      playScheduledItem(schedules, audioBuffer, audioContext);
+      break;
+
+    default:
+  }
 };

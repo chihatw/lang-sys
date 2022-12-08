@@ -43,7 +43,6 @@ export const setSceneToWorkoutState = (state: WorkoutState, scene: string) => {
   let updatedState = R.assocPath<string, WorkoutState>(['scene'], scene)(state);
   switch (scene) {
     case SCENE.opening:
-      // TODO
       break;
     case SCENE.practice:
       updatedState = R.assocPath<number, WorkoutState>(

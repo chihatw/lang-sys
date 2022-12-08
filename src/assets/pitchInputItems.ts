@@ -238,23 +238,20 @@ export const getSchedules = (pitchStr: string) => {
 
 export const playScheduledItem = async (
   schedules: Schedule[],
-  blob: Blob,
+  audioBuffer: AudioBuffer,
   audioContext: AudioContext
 ) => {
-  if (!blob || !audioContext) return;
+  const sourceNodes: AudioBufferSourceNode[] = [];
 
-  // const sourceNodes: AudioBufferSourceNode[] = [];
-  // await Promise.all(
-  // schedules.map(async (_) => {
-  const sourceNode = await createSourceNode(blob, audioContext!);
-  // sourceNodes.push(sourceNode);
-  // })
-  // );
-  const item = schedules[0];
-  // schedules.forEach((item, index) => {
-  // const sourceNode = sourceNodes[index];
-  const currentTime = audioContext.currentTime;
-  sourceNode.start(currentTime + item.offset, item.start);
-  sourceNode.stop(currentTime + item.offset + item.stop - item.start);
-  // });
+  schedules.map(async (_) => {
+    const sourceNode = createSourceNode(audioBuffer, audioContext!);
+    sourceNodes.push(sourceNode);
+  });
+
+  schedules.forEach((item, index) => {
+    const sourceNode = sourceNodes[index];
+    const currentTime = audioContext.currentTime;
+    sourceNode.start(currentTime + item.offset, item.start);
+    sourceNode.stop(currentTime + item.offset + item.stop - item.start);
+  });
 };

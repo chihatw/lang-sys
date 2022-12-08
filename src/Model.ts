@@ -83,13 +83,13 @@ export const INITIAL_WORKOUT: Workout = {
 
 export type State = {
   user: User | null;
+  audioBuffers: { [downloadURL: string]: AudioBuffer };
+  audioContext: AudioContext | null;
   kanaWorkouts: { [id: string]: Workout };
   pitchWorkouts: { [id: string]: Workout };
   rhythmWorkouts: { [id: string]: Workout };
-  pitchInputWorkouts: { [id: string]: Workout };
   authInitializing: boolean;
-  audioContext: AudioContext | null;
-  blobs: { [downloadURL: string]: Blob };
+  pitchInputWorkouts: { [id: string]: Workout };
   admin: {
     kanaWorkouts: { [id: string]: Workout };
     pitchWorkouts: { [id: string]: Workout };
@@ -100,7 +100,7 @@ export type State = {
 
 export const INITIAL_STATE: State = {
   user: null,
-  blobs: {},
+  audioBuffers: {},
   audioContext: null,
   kanaWorkouts: {},
   pitchWorkouts: {},

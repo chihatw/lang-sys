@@ -125,11 +125,11 @@ export const PITCHES: { [id: string]: PitchCue } = {
 
 export const playRhythm = async (
   cueId: string,
-  blob: Blob,
+  audioBuffer: AudioBuffer,
   audioContext: AudioContext
 ) => {
   const cue = PITCHES[cueId];
-  const sourceNode = await createSourceNode(blob, audioContext);
+  const sourceNode = createSourceNode(audioBuffer, audioContext);
   sourceNode.start(0, cue.start, cue.end - cue.start);
 };
 
@@ -270,7 +270,7 @@ export const buildPitchCues = (type: string, cueIds: string[]) => {
 
 export const playPitch = async (
   cueId: string,
-  blob: Blob,
+  audioBuffer: AudioBuffer,
   audioContext: AudioContext
 ) => {
   const cue = PITCH_WORKOUT_ITEMS[cueId];
@@ -278,7 +278,7 @@ export const playPitch = async (
   const sourceNodes: AudioBufferSourceNode[] = [];
   await Promise.all(
     cue.schedules.map(async (_) => {
-      const sourceNode = await createSourceNode(blob, audioContext!);
+      const sourceNode = await createSourceNode(audioBuffer, audioContext!);
       sourceNodes.push(sourceNode);
     })
   );

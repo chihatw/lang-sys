@@ -8,26 +8,26 @@ import {
   State,
 } from '../../../Model';
 import { Action, ActionTypes } from '../../../Update';
-import { shuffle } from '../../../services/utils';
+import { blobToAudioBuffer, shuffle } from '../../../services/utils';
 import { SCENE, TYPE } from '../commons';
 
 export type WorkoutState = {
   id: string;
   log: WorkoutLog;
-  blob: Blob | null;
   scene: string;
   kanas: string[];
   cueIds: string[];
+  audioBuffer: AudioBuffer | null;
   audioContext: AudioContext | null;
   currentIndex: number;
 };
 
 export const INITIAL_WORKOUT_STATE: WorkoutState = {
   id: '',
-  blob: null,
   scene: SCENE.opening,
   kanas: [],
   cueIds: [],
+  audioBuffer: null,
   audioContext: null,
   currentIndex: 0,
   log: INITIAL_WORKOUT_LOG,
@@ -40,17 +40,18 @@ export const buildWorkoutState = async (
   dispatch: React.Dispatch<Action>,
   path: string
 ): Promise<WorkoutState> => {
-  if (!workout.id) return INITIAL_WORKOUT_STATE;
+  if (!workout.id || !state.audioContext) return INITIAL_WORKOUT_STATE;
 
-  let blob: Blob | null = null;
-  if (state.blobs[path]) {
-    blob = state.blobs[path];
+  let audioBuffer: AudioBuffer | null = null;
+  if (state.audioBuffers[path]) {
+    audioBuffer = state.audioBuffers[path];
   } else {
     const response = await fetch(path);
-    blob = await response.blob();
-    const updatedState = R.assocPath<Blob | null, State>(
-      ['blobs', path],
-      blob
+    const blob = await response.blob();
+    audioBuffer = await blobToAudioBuffer(blob, state.audioContext);
+    const updatedState = R.assocPath<AudioBuffer | null, State>(
+      ['audioBuffers', path],
+      audioBuffer
     )(state);
     dispatch({ type: ActionTypes.setState, payload: updatedState });
   }
@@ -71,10 +72,10 @@ export const buildWorkoutState = async (
 
   return {
     id: workout.id,
-    blob,
     scene: SCENE.opening,
     kanas: KANAS[type],
     cueIds: CUEIDS[type],
+    audioBuffer,
     audioContext: state.audioContext,
     currentIndex: 0,
     log: {
