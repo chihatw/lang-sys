@@ -27,10 +27,10 @@ const WorkoutAnswerRow = ({
 
   return (
     <div style={{ display: 'flex' }}>
-      <div style={{ flexBasis: 60, color: isIncorrect ? 'red' : 'inherit' }}>
+      <div style={{ flexBasis: 80, color: isIncorrect ? 'red' : 'inherit' }}>
         {getKana(correctAnswer)}
       </div>
-      <div style={{ flexBasis: 60 }}>{getKana(answer.selected)}</div>
+      <div style={{ flexBasis: 80 }}>{getKana(answer.selected)}</div>
       <div style={{ flexBasis: 40, textAlign: 'right' }}>
         {`${duration.toFixed(1)}秒`}
       </div>
