@@ -1,5 +1,4 @@
 import { Schedule } from '../Model';
-import { createSourceNode } from '../services/utils';
 
 export const PITCH_INPUT_ITEMS: {
   [key: string]: { pitchStr: string; schedules: Schedule[] };
@@ -226,32 +225,4 @@ export const PITCH_INPUT_ITEMS: {
     pitchStr: 'タタ＼ッタ',
     schedules: [{ offset: 0, start: 88.1, stop: 89.5 }],
   },
-};
-
-export const getSchedules = (pitchStr: string) => {
-  const item = Object.values(PITCH_INPUT_ITEMS).find(
-    (item) => item.pitchStr === pitchStr
-  );
-  if (!item) return [];
-  return item.schedules;
-};
-
-export const playScheduledItem = async (
-  schedules: Schedule[],
-  audioBuffer: AudioBuffer,
-  audioContext: AudioContext
-) => {
-  const sourceNodes: AudioBufferSourceNode[] = [];
-
-  schedules.map(async (_) => {
-    const sourceNode = createSourceNode(audioBuffer, audioContext!);
-    sourceNodes.push(sourceNode);
-  });
-
-  schedules.forEach((item, index) => {
-    const sourceNode = sourceNodes[index];
-    const currentTime = audioContext.currentTime;
-    sourceNode.start(currentTime + item.offset, item.start);
-    sourceNode.stop(currentTime + item.offset + item.stop - item.start);
-  });
 };

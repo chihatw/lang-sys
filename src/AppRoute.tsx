@@ -13,6 +13,7 @@ const AppRoute = () => {
     <Routes>
       <Route index element={<TopPage />} />
       <Route path='/list/:type' element={<WorkoutList />} />
+
       {/* 認字 */}
       <Route path='kana'>
         <Route path='new' element={<WorkoutEditPage />} />
@@ -38,6 +39,11 @@ const AppRoute = () => {
           path=':workoutId'
           element={<WorkoutPage type={TYPE.pitchInput} />}
         />
+      </Route>
+
+      {/* 錄音 */}
+      <Route path='record'>
+        <Route path=':workoutId' element={<WorkoutPage type={TYPE.record} />} />
       </Route>
 
       <Route path='/signIn' element={<SignInPage />} />

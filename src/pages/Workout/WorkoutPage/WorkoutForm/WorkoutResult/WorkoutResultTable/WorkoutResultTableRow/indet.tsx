@@ -1,7 +1,7 @@
 import { Check, Clear } from '@mui/icons-material';
 import { useTheme } from '@mui/material';
-import React from 'react';
-import { getCueIds, getCues, getInput } from '../../../../../commons';
+
+import { inputSwitch } from '../../../../../commons';
 import { WorkoutState } from '../../../../Model';
 import WorkoutResultTableCell from './WorkoutResultTableCell';
 
@@ -17,17 +17,16 @@ const WorkoutResultTableRow = ({
   handleClick: (cueId: string) => void;
 }) => {
   const theme = useTheme();
-  const cues = getCues(type, state);
-  const cueIds = getCueIds(type, state);
 
+  const cueIds = state.cues.map((cue) => cue.id);
   const cueId = cueIds[index];
   const answerId = state.log.practice.answers[index].selected;
   const isCorrect = cueId == answerId;
 
-  const cue = cues.find((item) => item.id === cueId);
+  const cue = state.cues.find((item) => item.id === cueId);
   if (!cue) return <></>;
 
-  const answer = cues.find((item) => item.id === answerId);
+  const answer = state.cues.find((item) => item.id === answerId);
   if (!answer) return <></>;
 
   return (
@@ -58,12 +57,12 @@ const WorkoutResultTableRow = ({
       </div>
       <WorkoutResultTableCell
         type={type}
-        input={getInput(type, cue)}
+        input={inputSwitch(type, cue)}
         handleClick={() => handleClick(cue.id)}
       />
       <WorkoutResultTableCell
         type={type}
-        input={getInput(type, answer)}
+        input={inputSwitch(type, answer)}
         isIncorrect={!isCorrect}
         handleClick={() => handleClick(answer.id)}
       />

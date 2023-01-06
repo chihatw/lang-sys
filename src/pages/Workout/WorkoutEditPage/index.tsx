@@ -102,10 +102,6 @@ const RhythmKanaEditForm = ({
     dispatch({ ...state, isActive });
   };
 
-  const handleChangeIsLocked = (isLocked: boolean) => {
-    dispatch({ ...state, isLocked });
-  };
-
   const handleChangeCueIdsStr = (cueIdsStr: string) => {
     dispatch({ ...state, cueIdsStr });
   };
@@ -127,7 +123,6 @@ const RhythmKanaEditForm = ({
           cueIds: state.cueIdsStr.split('\n'),
           isActive: state.isActive,
           createdAt: originalRhythmWorkout.createdAt || Date.now(),
-          isLocked: state.isLocked,
         };
 
         // remote
@@ -153,7 +148,6 @@ const RhythmKanaEditForm = ({
           cueIds: [],
           isActive: state.isActive,
           createdAt: originalKanaWorkout.createdAt || Date.now(),
-          isLocked: state.isLocked,
         };
 
         // remote
@@ -209,17 +203,6 @@ const RhythmKanaEditForm = ({
               />
             }
             label='isActive'
-          />
-        </FormGroup>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={state.isLocked}
-                onChange={(e) => handleChangeIsLocked(e.target.checked)}
-              />
-            }
-            label='isLocked'
           />
         </FormGroup>
         <TextField

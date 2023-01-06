@@ -34,14 +34,6 @@ const WorkoutRowHeader = ({
     navigate(`/${type}/${workout.id}/edit/`);
   };
 
-  const handleLock = () => {
-    const updatedWorkout: Workout = {
-      ...workout,
-      isLocked: !workout.isLocked,
-    };
-    updateState(updatedWorkout, type, state, dispatch);
-  };
-
   const handleVisiblity = () => {
     const updatedWorkout: Workout = {
       ...workout,
@@ -53,9 +45,6 @@ const WorkoutRowHeader = ({
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <div style={{ flexBasis: 60 }}>{USERS[workout.uid]}</div>
       <div style={{ flexGrow: 1 }}>{workout.title}</div>
-      <IconButton size='small' onClick={handleLock}>
-        {workout.isLocked ? <Lock /> : <LockOpen />}
-      </IconButton>
       <IconButton size='small' onClick={handleVisiblity}>
         {workout.isActive ? <Visibility /> : <VisibilityOff />}
       </IconButton>

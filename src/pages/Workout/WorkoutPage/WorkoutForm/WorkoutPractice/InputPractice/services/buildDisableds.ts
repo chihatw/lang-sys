@@ -1,10 +1,11 @@
 import { WorkoutState } from '../../../../Model';
 
 export const buildDisableds = (input: string, state: WorkoutState) => {
-  const currentCueId = state.cueIds[state.currentIndex];
-  const mora = getMora(currentCueId);
+  const currentCue = state.cues[state.currentIndex];
+  const mora = getMora(currentCue.id);
+  const pitchStrs = state.cues.map((cue) => cue.id);
 
-  const { hasA, hasN, hasX } = getHasParams(state.cueIds);
+  const { hasA, hasN, hasX } = getHasParams(pitchStrs);
   let { lows, highs } = _buildDisableds(input, mora);
   lows = specialMoraFilter(lows, hasA, hasN, hasX);
   highs = specialMoraFilter(highs, hasA, hasN, hasX);

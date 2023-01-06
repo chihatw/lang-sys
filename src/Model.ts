@@ -66,7 +66,6 @@ export type Workout = {
   logs: { [id: string]: WorkoutLog };
   isActive: boolean;
   createdAt: number;
-  isLocked: boolean;
 };
 
 export const INITIAL_WORKOUT: Workout = {
@@ -78,22 +77,23 @@ export const INITIAL_WORKOUT: Workout = {
   logs: {},
   isActive: false,
   createdAt: 0,
-  isLocked: false,
 };
 
 export type State = {
   user: User | null;
-  audioBuffers: { [downloadURL: string]: AudioBuffer };
+  audioBuffers: { [path: string]: AudioBuffer };
   audioContext: AudioContext | null;
   kanaWorkouts: { [id: string]: Workout };
   pitchWorkouts: { [id: string]: Workout };
   rhythmWorkouts: { [id: string]: Workout };
+  recordWorkouts: { [id: string]: Workout };
   authInitializing: boolean;
   pitchInputWorkouts: { [id: string]: Workout };
   admin: {
     kanaWorkouts: { [id: string]: Workout };
     pitchWorkouts: { [id: string]: Workout };
     rhythmWorkouts: { [id: string]: Workout };
+    recordWorkouts: { [id: string]: Workout };
     pitchInputWorkouts: { [id: string]: Workout };
   };
 };
@@ -105,12 +105,14 @@ export const INITIAL_STATE: State = {
   kanaWorkouts: {},
   pitchWorkouts: {},
   rhythmWorkouts: {},
-  pitchInputWorkouts: {},
+  recordWorkouts: {},
   authInitializing: true,
+  pitchInputWorkouts: {},
   admin: {
     kanaWorkouts: {},
     pitchWorkouts: {},
     rhythmWorkouts: {},
+    recordWorkouts: {},
     pitchInputWorkouts: {},
   },
 };

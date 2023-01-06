@@ -1,6 +1,7 @@
 import { PitchCue, Schedule } from '../Model';
 import { TYPE } from '../pages/Workout/commons';
 import { createSourceNode } from '../services/utils';
+import { CHIN_SAN_VOICES } from './chinSanVoices';
 import { PITCH_INPUT_ITEMS } from './pitchInputItems';
 
 export const PITCHES: { [id: string]: PitchCue } = {
@@ -248,43 +249,39 @@ export const buildPitchCues = (type: string, cueIds: string[]) => {
     case TYPE.pitchInput:
       pitchCues = Object.values(PITCH_INPUT_ITEMS)
         .filter((item) => cueIds.includes(item.pitchStr))
+        // id に pitchStr を設定
         .map(({ pitchStr }) => ({ id: pitchStr, pitchStr }));
       return pitchCues;
 
-    default:
-      const PITCHSTRS: {
-        [key: string]: { [key: string]: { id: string; pitchStr: string } };
-      } = {
-        [TYPE.pitch]: PITCH_WORKOUT_ITEMS,
-        [TYPE.rhythm]: PITCHES,
-      };
+    case TYPE.record:
+      pitchCues = cueIds
+        .map((cueId) => {
+          const item = Object.values(CHIN_SAN_VOICES).find(
+            (voice) => voice.pitchStr === cueId
+          );
+          if (!item) return { id: '', pitchStr: '' };
+          return { id: item.pitchStr, pitchStr: item.pitchStr };
+        })
+        .filter((i) => !!i.id);
 
-      pitchCues = Object.values(PITCHSTRS[type])
-        // PITCHES の中で、cueIds に含まれているものを抽出
+      return pitchCues;
+
+    case TYPE.pitch:
+      pitchCues = Object.values(PITCH_WORKOUT_ITEMS)
         .filter((item) => cueIds.includes(item.id))
-        // PITCHES のプロパティから id と pitchStr のみを抽出
+        // id が元々 pitchStr なので、そのまま利用
         .map(({ id, pitchStr }) => ({ id, pitchStr }));
       return pitchCues;
-  }
-};
 
-export const playPitch = async (
-  cueId: string,
-  audioBuffer: AudioBuffer,
-  audioContext: AudioContext
-) => {
-  const cue = PITCH_WORKOUT_ITEMS[cueId];
-  const currentTime = audioContext.currentTime;
-  const sourceNodes: AudioBufferSourceNode[] = [];
-  await Promise.all(
-    cue.schedules.map(async (_) => {
-      const sourceNode = await createSourceNode(audioBuffer, audioContext!);
-      sourceNodes.push(sourceNode);
-    })
-  );
-  cue.schedules.forEach((item, index) => {
-    const sourceNode = sourceNodes[index];
-    sourceNode.start(currentTime + item.offset, item.start);
-    sourceNode.stop(currentTime + item.stop);
-  });
+    case TYPE.rhythm:
+      pitchCues = Object.values(PITCHES)
+        .filter((item) => cueIds.includes(item.id))
+        // id が元々 pitchStr なので、そのまま利用
+        .map(({ id, pitchStr }) => ({ id, pitchStr }));
+      return pitchCues;
+
+    default:
+      console.error(`incorrect type: ${type}`);
+      return [];
+  }
 };

@@ -1,5 +1,3 @@
-import React from 'react';
-import { getCueIds } from '../../../../commons';
 import { WorkoutState } from '../../../Model';
 import WorkoutResultTableHeader from './WorkoutResultTableHeader';
 import WorkoutResultTableRow from './WorkoutResultTableRow/indet';
@@ -13,7 +11,7 @@ const WorkoutResultTable = ({
   state: WorkoutState;
   handleClick: (cueId: string) => void;
 }) => {
-  const cueIds = getCueIds(type, state);
+  const cueIds = state.cues.map((cue) => cue.id);
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <div

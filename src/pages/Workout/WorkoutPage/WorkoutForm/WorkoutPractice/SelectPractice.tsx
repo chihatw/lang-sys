@@ -1,5 +1,4 @@
-import React from 'react';
-import { getCues, getInput } from '../../../commons';
+import { inputSwitch } from '../../../commons';
 import { WorkoutState } from '../../Model';
 import SelectPracticeRow from './SelectPracticeRow';
 
@@ -18,6 +17,7 @@ const SelectPractice = ({
     cueId = input === cueId ? '' : cueId;
     setInput(cueId);
   };
+
   return (
     <div
       style={{
@@ -28,11 +28,11 @@ const SelectPractice = ({
         paddingTop: 24,
       }}
     >
-      {getCues(type, state).map((cue, index) => (
+      {state.cues.map((cue, index) => (
         <SelectPracticeRow
           key={index}
           type={type}
-          input={getInput(type, cue)}
+          input={inputSwitch(type, cue)}
           isSelected={input === cue.id}
           handleClickRow={() => handleClickRow(cue.id)}
         />

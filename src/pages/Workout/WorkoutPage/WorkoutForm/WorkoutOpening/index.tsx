@@ -8,29 +8,27 @@ import { WorkoutState } from '../../Model';
 import {
   TYPE,
   SCENE,
-  getCues,
-  getInput,
-  getAppWorkouts,
+  inputSwitch,
   updateWorkoutLog,
   setSceneToWorkoutState,
 } from '../../../commons';
-import { ActionTypes } from '../../../../../Update';
+
 import { playAudioBuffer } from '../../../../../services/utils';
 
 const WorkoutOpening = ({
-  type,
   state,
   dispatch,
+  type,
 }: {
-  type: string;
   state: WorkoutState;
   dispatch: React.Dispatch<WorkoutState>;
+  type: string;
 }) => {
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const handleClick = (cueId: string) => {
-    if (!state.audioBuffer || !state.audioContext) return;
-    playAudioBuffer(type, cueId, state.audioBuffer, state.audioContext);
+    if (!state.audioBuffer || !appState.audioContext) return;
+    playAudioBuffer(type, cueId, state.audioBuffer, appState.audioContext);
 
     const updatedTapped = [...state.log.opening.tapped];
     updatedTapped.push(cueId);
@@ -43,26 +41,26 @@ const WorkoutOpening = ({
 
   const handleNext = () => {
     const updatedState = setSceneToWorkoutState(state, SCENE.practice);
+    // local
     dispatch(updatedState);
 
-    const workouts = getAppWorkouts(type, appState);
-    const updatedAppState = updateWorkoutLog(
+    // app, remote
+    updateWorkoutLog(
       type,
       updatedState.log,
-      workouts[state.id],
-      appState
+      updatedState.workout,
+      appState,
+      appDispatch
     );
-
-    appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
   };
 
   return (
     <div style={{ display: 'grid', rowGap: 48 }}>
       <div style={{ fontFamily: 'serif', color: '#555' }}>
-        請點觸各個聲音，確認差異
+        {state.cues.length > 1 ? '請點觸各個聲音，確認差異' : '請確認聲音'}
       </div>
       <div style={{ display: 'grid', rowGap: 16 }}>
-        {getCues(type, state).map((cue, index) => (
+        {state.cues.map((cue, index) => (
           <div key={index}>
             <Card
               onClick={() => handleClick(cue.id)}
@@ -76,7 +74,7 @@ const WorkoutOpening = ({
                   marginBottom: -1,
                 }}
               >
-                <Display type={type} input={getInput(type, cue)} />
+                <Display type={type} input={inputSwitch(type, cue)} />
               </CardContent>
             </Card>
           </div>
@@ -111,8 +109,10 @@ const Display = ({ type, input }: { type: string; input: string }) => {
     case TYPE.pitch:
     case TYPE.rhythm:
     case TYPE.pitchInput:
+    case TYPE.record:
       return <SentencePitchLine pitchesArray={string2PitchesArray(input)} />;
     default:
+      console.error(`incorrect type: ${type}`);
       return <></>;
   }
 };

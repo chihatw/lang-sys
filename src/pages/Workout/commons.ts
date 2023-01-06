@@ -1,14 +1,15 @@
 import * as R from 'ramda';
-import { buildKanaCues } from '../../assets/kanas';
-import { buildPitchCues } from '../../assets/pitches';
+import { Dispatch } from 'react';
 import { State, Workout, WorkoutLog } from '../../Model';
 import { setWorkout } from '../../services/workout';
+import { Action, ActionTypes } from '../../Update';
 import { WorkoutState } from './WorkoutPage/Model';
 
 export const TYPE = {
   kana: 'kana',
   pitch: 'pitch',
   rhythm: 'rhythm',
+  record: 'record',
   pitchInput: 'pitchInput',
 };
 
@@ -18,14 +19,25 @@ export const SCENE = {
   result: 'result',
 };
 
-export const PROP = {
-  [TYPE.kana]: 'kanaWorkouts',
-  [TYPE.pitch]: 'pitchWorkouts',
-  [TYPE.rhythm]: 'rhythmWorkouts',
-  [TYPE.pitchInput]: 'pitchInputWorkouts',
+export const workoutPropSwitch = (type: string) => {
+  switch (type) {
+    case TYPE.kana:
+      return 'kanaWorkouts';
+    case TYPE.pitch:
+      return 'pitchWorkouts';
+    case TYPE.pitchInput:
+      return 'pitchInputWorkouts';
+    case TYPE.rhythm:
+      return 'rhythmWorkouts';
+    case TYPE.record:
+      return 'recordWorkouts';
+    default:
+      console.error(`incorrect type: ${type}`);
+      return '';
+  }
 };
 
-export const getAppWorkouts = (type: string, state: State) => {
+export const workoutsSwitch = (state: State, type: string) => {
   switch (type) {
     case TYPE.kana:
       return state.kanaWorkouts;
@@ -34,8 +46,12 @@ export const getAppWorkouts = (type: string, state: State) => {
     case TYPE.pitchInput:
       return state.pitchInputWorkouts;
     case TYPE.rhythm:
-    default:
       return state.rhythmWorkouts;
+    case TYPE.record:
+      return state.recordWorkouts;
+    default:
+      console.error(`incorrect type: ${type}`);
+      return {};
   }
 };
 
@@ -46,13 +62,13 @@ export const setSceneToWorkoutState = (state: WorkoutState, scene: string) => {
       break;
     case SCENE.practice:
       updatedState = R.assocPath<number, WorkoutState>(
-        ['log', scene, 'answers', 0, 'createdAt'],
+        ['log', SCENE.practice, 'answers', 0, 'createdAt'],
         new Date().getTime()
       )(updatedState);
       break;
     case SCENE.result:
       updatedState = R.assocPath<number, WorkoutState>(
-        ['log', scene, 'createdAt'],
+        ['log', SCENE.result, 'createdAt'],
         new Date().getTime()
       )(updatedState);
       break;
@@ -61,47 +77,34 @@ export const setSceneToWorkoutState = (state: WorkoutState, scene: string) => {
   return updatedState;
 };
 
+/**
+ * app, remote
+ */
 export const updateWorkoutLog = (
   type: string,
   log: WorkoutLog,
   workout: Workout,
-  appState: State,
-  unlock?: boolean
+  state: State,
+  dispatch: Dispatch<Action>
 ) => {
   const updatedWorkout = R.assocPath<WorkoutLog, Workout>(
     ['logs', log.id],
     log
   )(workout);
-  setWorkout(type, updatedWorkout);
 
-  let updatedAppState = R.assocPath<Workout, State>(
-    [PROP[type], updatedWorkout.id],
+  const workoutProp = workoutPropSwitch(type);
+  if (!workoutProp) return;
+
+  const updatedState = R.assocPath<Workout, State>(
+    [workoutProp, workout.id],
     updatedWorkout
-  )(appState);
+  )(state);
 
-  if (unlock) {
-    const workouts = getAppWorkouts(type, appState);
-    updatedAppState = unlockNextWorkout(
-      type,
-      workout.id,
-      workouts,
-      updatedAppState
-    );
-  }
+  // app
+  dispatch({ type: ActionTypes.setState, payload: updatedState });
 
-  return updatedAppState;
-};
-
-/** id のみ */
-export const getCueIds = (type: string, state: WorkoutState) => {
-  switch (type) {
-    case TYPE.kana:
-      return state.kanas;
-    case TYPE.pitch:
-    case TYPE.rhythm:
-    default:
-      return state.cueIds;
-  }
+  // remote
+  setWorkout(type, updatedWorkout);
 };
 
 export const getCueIdsFromLog = (type: string, log: WorkoutLog) => {
@@ -115,65 +118,21 @@ export const getCueIdsFromLog = (type: string, log: WorkoutLog) => {
   }
 };
 
-/** id と pitchStr */
-export const getCues = (type: string, state: WorkoutState) => {
-  const kanaCues = buildKanaCues(state.kanas);
-  const pitchCues = buildPitchCues(type, state.cueIds);
-
-  const CUES = {
-    [TYPE.kana]: kanaCues,
-    [TYPE.pitch]: pitchCues,
-    [TYPE.rhythm]: pitchCues,
-    [TYPE.pitchInput]: pitchCues,
-  };
-  const cues = CUES[type];
-  return cues;
-};
-
-export const getInput = (
+export const inputSwitch = (
   type: string,
   cue: { id: string; pitchStr: string }
 ) => {
-  const INPUT = {
-    [TYPE.kana]: cue.id,
-    [TYPE.pitch]: cue.pitchStr,
-    [TYPE.rhythm]: cue.pitchStr,
-    [TYPE.pitchInput]: cue.pitchStr,
-  };
-  return INPUT[type];
-};
+  switch (type) {
+    case TYPE.kana:
+      return cue.id;
+    case TYPE.pitch:
+    case TYPE.rhythm:
+    case TYPE.record:
+    case TYPE.pitchInput:
+      return cue.pitchStr;
 
-const unlockNextWorkout = (
-  type: string,
-  workoutId: string,
-  workouts: { [key: string]: Workout },
-  appState: State
-) => {
-  const nextWorkoutId = getNextWorkoutId(workoutId, workouts);
-  if (!nextWorkoutId) return appState;
-
-  // isLocked を false にする
-  const updatedNextWorkout = R.assocPath<boolean, Workout>(
-    ['isLocked'],
-    false
-  )(workouts[nextWorkoutId]);
-  setWorkout(type, updatedNextWorkout);
-
-  const updatedAppState = R.assocPath<Workout, State>(
-    [PROP[type], updatedNextWorkout.id],
-    updatedNextWorkout
-  )(appState);
-  return updatedAppState;
-};
-
-const getNextWorkoutId = (
-  currentId: string,
-  workouts: { [key: string]: Workout }
-) => {
-  const workoutListIds = Object.values(workouts)
-    .sort((a, b) => a.createdAt - b.createdAt)
-    .map((item) => item.id);
-  const targetWorkoutIndex = workoutListIds.indexOf(currentId);
-  const nextWorkoutId = workoutListIds[targetWorkoutIndex + 1] || '';
-  return nextWorkoutId;
+    default:
+      console.error(`incorrect type: ${type}`);
+      return '';
+  }
 };

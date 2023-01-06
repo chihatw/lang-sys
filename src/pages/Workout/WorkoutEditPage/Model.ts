@@ -7,7 +7,6 @@ export type RhythmKanaFormState = {
   uid: string;
   title: string;
   isActive: boolean;
-  isLocked: boolean;
   cueIdsStr: string;
 };
 
@@ -15,6 +14,5 @@ export const INITIAL_RHYTHM_KANA_FORM_STATE: RhythmKanaFormState = {
   uid: '',
   title: '',
   isActive: false,
-  isLocked: true,
   cueIdsStr: '',
 };

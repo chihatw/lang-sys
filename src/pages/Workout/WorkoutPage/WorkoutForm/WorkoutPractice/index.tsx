@@ -4,11 +4,8 @@ import { PlayCircleRounded } from '@mui/icons-material';
 import { Button, IconButton, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '../../../../../App';
-import { ActionTypes } from '../../../../../Update';
 import { WorkoutState } from '../../Model';
 import {
-  getAppWorkouts,
-  getCueIds,
   SCENE,
   setSceneToWorkoutState,
   TYPE,
@@ -31,29 +28,34 @@ const WorkoutPractice = ({
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const [input, setInput] = useState('');
-  const [initialize, setInitialize] = useState(true);
+  const [animationInitialize, setAnimationInitialize] = useState(true);
   const AnimationElemRef = useRef<HTMLDivElement>(null);
 
-  const cueIds = getCueIds(type, state);
+  const cueIds = state.cues.map((cue) => cue.id);
   const currentCueId = cueIds[state.currentIndex];
 
-  const isLast = state.currentIndex + 1 === state.cueIds.length;
+  const isLast = state.currentIndex + 1 === state.cues.length;
 
   useEffect(() => {
-    if (initialize) {
-      const AnswerList = AnimationElemRef.current;
-      if (!AnswerList) return;
-      AnswerList.classList.add('initial');
-      setInitialize(false);
+    if (animationInitialize) {
+      const AnimationElem = AnimationElemRef.current;
+      if (!AnimationElem) return;
+      AnimationElem.classList.add('initial');
+      setAnimationInitialize(false);
       setTimeout(() => {
-        AnswerList.classList.remove('initial');
+        AnimationElem.classList.remove('initial');
       }, 0);
     }
-  }, [initialize]);
+  }, [animationInitialize]);
 
   const handleClickPlay = () => {
-    if (!state.audioBuffer || !state.audioContext) return;
-    playAudioBuffer(type, currentCueId, state.audioBuffer, state.audioContext);
+    if (!state.audioBuffer || !appState.audioContext) return;
+    playAudioBuffer(
+      type,
+      currentCueId,
+      state.audioBuffer,
+      appState.audioContext
+    );
 
     const updatedState = updatePlayedAt(state);
     dispatch(updatedState);
@@ -74,24 +76,19 @@ const WorkoutPractice = ({
       updatedState = setSceneToWorkoutState(updatedState, SCENE.result);
     }
 
+    // local
     dispatch(updatedState);
     setInput('');
-    setInitialize(true);
+    setAnimationInitialize(true);
 
-    const workouts = getAppWorkouts(type, appState);
-
-    // 全問正解の場合、次の問題をアンロック
-    const isPerfect = isLast ? checkPerfect(updatedState, cueIds) : false;
-
-    const updatedAppState = updateWorkoutLog(
+    // app, remote
+    updateWorkoutLog(
       type,
       updatedState.log,
-      workouts[state.id],
+      updatedState.workout,
       appState,
-      isPerfect
+      appDispatch
     );
-
-    appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
   };
 
   return (
@@ -106,7 +103,7 @@ const WorkoutPractice = ({
       >
         <span>{state.currentIndex + 1}</span>
         <span style={{ fontSize: 32 }}> / </span>
-        <span>{cueIds.length}</span>
+        <span>{state.cues.length}</span>
       </div>
       <div
         ref={AnimationElemRef}
@@ -191,16 +188,6 @@ const setCurrentIndexToWorkoutState = (
   )(state);
 };
 
-const checkPerfect = (state: WorkoutState, correctAnswers: string[]) => {
-  let isPerfect = true;
-  Object.values(state.log.practice.answers).forEach((answer, index) => {
-    if (answer.selected !== correctAnswers[index]) {
-      isPerfect = false;
-    }
-  });
-  return isPerfect;
-};
-
 const WorkoutPracticeSwitcher = ({
   type,
   state,
@@ -215,7 +202,9 @@ const WorkoutPracticeSwitcher = ({
   switch (type) {
     case TYPE.pitchInput:
       return <InputPractice state={state} input={input} setInput={setInput} />;
-    default:
+    case TYPE.kana:
+    case TYPE.pitch:
+    case TYPE.rhythm:
       return (
         <SelectPractice
           type={type}
@@ -224,5 +213,8 @@ const WorkoutPracticeSwitcher = ({
           setInput={setInput}
         />
       );
+    default:
+      console.error(`incorrect type: ${type}`);
+      return <></>;
   }
 };

@@ -1,6 +1,8 @@
+import { CHIN_SAN_VOICES } from '../assets/chinSanVoices';
 import { playKana } from '../assets/kanas';
-import { playPitch, playRhythm } from '../assets/pitches';
-import { getSchedules, playScheduledItem } from '../assets/pitchInputItems';
+import { playRhythm, PITCH_WORKOUT_ITEMS } from '../assets/pitches';
+import { PITCH_INPUT_ITEMS } from '../assets/pitchInputItems';
+import { Schedule } from '../Model';
 import { TYPE } from '../pages/Workout/commons';
 
 export const getRandomInt = (max: number) => {
@@ -54,6 +56,7 @@ export const playAudioBuffer = (
   audioBuffer: AudioBuffer,
   audioContext: AudioContext
 ) => {
+  let schedules: Schedule[] = [];
   switch (type) {
     case TYPE.kana:
       playKana(cueId, audioBuffer, audioContext);
@@ -62,13 +65,52 @@ export const playAudioBuffer = (
       playRhythm(cueId, audioBuffer, audioContext);
       break;
     case TYPE.pitch:
-      playPitch(cueId, audioBuffer, audioContext);
+      const cue = PITCH_WORKOUT_ITEMS[cueId];
+      playScheduledItem(cue.schedules, audioBuffer, audioContext);
       break;
     case TYPE.pitchInput:
-      const schedules = getSchedules(cueId);
+      schedules = getSchedules(cueId, PITCH_INPUT_ITEMS);
       playScheduledItem(schedules, audioBuffer, audioContext);
       break;
-
+    case TYPE.record:
+      schedules = getSchedules(cueId, CHIN_SAN_VOICES);
+      playScheduledItem(schedules, audioBuffer, audioContext);
+      break;
     default:
+      console.error(`incorrect type: ${type}`);
   }
+};
+
+export const playScheduledItem = async (
+  schedules: Schedule[],
+  audioBuffer: AudioBuffer,
+  audioContext: AudioContext
+) => {
+  const sourceNodes: AudioBufferSourceNode[] = [];
+
+  schedules.map(async (_) => {
+    const sourceNode = createSourceNode(audioBuffer, audioContext);
+    sourceNodes.push(sourceNode);
+  });
+
+  const currentTime = audioContext.currentTime;
+  schedules.forEach((item, index) => {
+    const sourceNode = sourceNodes[index];
+    sourceNode.start(currentTime + item.offset, item.start);
+    sourceNode.stop(currentTime + item.offset + item.stop - item.start);
+  });
+};
+
+const getSchedules = (
+  pitchStr: string,
+  items: {
+    [key: string]: {
+      pitchStr: string;
+      schedules: Schedule[];
+    };
+  }
+) => {
+  const item = Object.values(items).find((item) => item.pitchStr === pitchStr);
+  if (!item) return [];
+  return item.schedules;
 };

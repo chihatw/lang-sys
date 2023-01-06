@@ -4,23 +4,17 @@ import { nanoid } from 'nanoid';
 import React, { useContext } from 'react';
 
 import { AppContext } from '../../../../../App';
-import { ActionTypes } from '../../../../../Update';
 import { WorkoutState } from '../../Model';
 import WorkoutResultTable from './WorkoutResultTable';
 import { playAudioBuffer, shuffle } from '../../../../../services/utils';
 import WorkoutResultCorrectRatio from './WorkoutResultCorrectRatio';
 import { INITIAL_WORKOUT_LOG } from '../../../../../Model';
-import {
-  getAppWorkouts,
-  getCueIds,
-  SCENE,
-  updateWorkoutLog,
-} from '../../../commons';
+import { SCENE, updateWorkoutLog } from '../../../commons';
 
 const WorkoutResult = ({
-  type,
   state,
   dispatch,
+  type,
 }: {
   type: string;
   state: WorkoutState;
@@ -29,31 +23,35 @@ const WorkoutResult = ({
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const handleClick = async (cueId: string) => {
-    if (!state.audioBuffer || !state.audioContext) return;
-    playAudioBuffer(type, cueId, state.audioBuffer, state.audioContext);
+    if (!state.audioBuffer || !appState.audioContext) return;
+    playAudioBuffer(type, cueId, state.audioBuffer, appState.audioContext);
 
     const updatedState = updateTapped(state, cueId);
+
+    // local
     dispatch(updatedState);
 
-    const workouts = getAppWorkouts(type, appState);
-    const updatedAppState = updateWorkoutLog(
+    // app, remote
+    updateWorkoutLog(
       type,
       updatedState.log,
-      workouts[state.id],
-      appState
+      updatedState.workout,
+      appState,
+      appDispatch
     );
-
-    appDispatch({ type: ActionTypes.setState, payload: updatedAppState });
   };
 
   const handleRetry = () => {
-    const cueIds = getCueIds(type, state);
+    const cueIds = state.cues.map((cue) => cue.id);
     const shuffledCueIds = shuffle(cueIds);
+    const shuffledCues = shuffledCueIds.map(
+      (id) => state.cues.find((cue) => cue.id === id)!
+    );
 
     const updatedState: WorkoutState = {
       ...state,
+      cues: shuffledCues,
       scene: SCENE.opening,
-      cueIds: shuffledCueIds,
       currentIndex: 0,
       log: {
         ...INITIAL_WORKOUT_LOG,
