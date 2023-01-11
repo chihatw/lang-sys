@@ -17,7 +17,9 @@ import { INITIAL_WORKOUT_LOG, Workout } from '../../../Model';
 import { nanoid } from 'nanoid';
 import { useAudioBuffer } from '../../../services/audioBuffer';
 import { buildKanaCues } from '../../../assets/kanas';
-import { buildPitchCues } from '../../../assets/pitches';
+import { PITCHES, PITCH_WORKOUT_ITEMS } from '../../../assets/pitches';
+import { PITCH_INPUT_ITEMS } from '../../../assets/pitchInputItems';
+import { CHIN_SAN_VOICES } from '../../../assets/chinSanVoices';
 
 const reducer = (state: WorkoutState, action: WorkoutState) => action;
 
@@ -118,15 +120,48 @@ const buildCues = (
   id: string;
   pitchStr: string;
 }[] => {
+  let pitchCues: {
+    id: string;
+    pitchStr: string;
+  }[] = [];
+
   switch (type) {
     case TYPE.kana:
       const kanaCues = buildKanaCues(kanas);
       return kanaCues;
     case TYPE.pitch:
+      pitchCues = cueIds.map((cueId) => {
+        const cue = Object.values(PITCH_WORKOUT_ITEMS).find(
+          (item) => item.pitchStr === cueId
+        );
+        if (!cue) return { id: '', pitchStr: '' };
+        return { id: cue.pitchStr, pitchStr: cue.pitchStr };
+      });
     case TYPE.rhythm:
+      pitchCues = cueIds.map((cueId) => {
+        const cue = Object.values(PITCHES).find(
+          (item) => item.pitchStr === cueId
+        );
+        if (!cue) return { id: '', pitchStr: '' };
+        return { id: cue.pitchStr, pitchStr: cue.pitchStr };
+      });
     case TYPE.record:
+      pitchCues = cueIds.map((cueId) => {
+        const cue = Object.values(CHIN_SAN_VOICES).find(
+          (item) => item.pitchStr === cueId
+        );
+        if (!cue) return { id: '', pitchStr: '' };
+        return { id: cue.pitchStr, pitchStr: cue.pitchStr };
+      });
+      return pitchCues;
     case TYPE.pitchInput:
-      const pitchCues = buildPitchCues(type, cueIds);
+      pitchCues = cueIds.map((cueId) => {
+        const cue = Object.values(PITCH_INPUT_ITEMS).find(
+          (item) => item.pitchStr === cueId
+        );
+        if (!cue) return { id: '', pitchStr: '' };
+        return { id: cue.pitchStr, pitchStr: cue.pitchStr };
+      });
       return pitchCues;
     default:
       console.error(`incorrect type: ${type}`);
