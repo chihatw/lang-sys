@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import string2PitchesArray from 'string2pitches-array';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SentencePitchLine } from '@chihatw/lang-gym-h.ui.sentence-pitch-line';
 import { Button, Card, CardContent, useTheme } from '@mui/material';
 import { AppContext } from '../../../../../App';
@@ -14,6 +14,10 @@ import {
 } from '../../../commons';
 
 import { playAudioBuffer } from '../../../../../services/utils';
+import { KANAS } from '../../../../../assets/kanas';
+import { PITCHES, PITCH_WORKOUT_ITEMS } from '../../../../../assets/pitches';
+import { CHIN_SAN_VOICES } from '../../../../../assets/chinSanVoices';
+import { PITCH_INPUT_ITEMS } from '../../../../../assets/pitchInputItems';
 
 const WorkoutOpening = ({
   state,
@@ -25,6 +29,49 @@ const WorkoutOpening = ({
   type: string;
 }) => {
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
+
+  const [sortedCues, setSortedCues] = useState<
+    {
+      id: string;
+      pitchStr: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const clonedCues = [...state.cues];
+    let sortedCues: {
+      id: string;
+      pitchStr: string;
+    }[] = [];
+    switch (type) {
+      case TYPE.kana:
+        sortedCues = clonedCues.sort((a, b) => {
+          const kanaA = Object.values(KANAS).find((item) =>
+            [item.hira, item.kata].includes(a.id)
+          );
+          const kanaB = Object.values(KANAS).find((item) =>
+            [item.hira, item.kata].includes(b.id)
+          );
+          return kanaA!.start - kanaB!.start;
+        });
+        break;
+      case TYPE.pitch:
+        sortedCues = buildSortedCues(PITCH_WORKOUT_ITEMS, state.cues);
+        break;
+      case TYPE.rhythm:
+        sortedCues = buildSortedCues(PITCHES, state.cues);
+        break;
+      case TYPE.record:
+        sortedCues = buildSortedCues(CHIN_SAN_VOICES, state.cues);
+        break;
+      case TYPE.pitchInput:
+        sortedCues = buildSortedCues(PITCH_INPUT_ITEMS, state.cues);
+        break;
+      default:
+        console.error(`incorrect type: ${type}`);
+    }
+    setSortedCues(sortedCues);
+  }, [state, type]);
 
   const handleClick = (cueId: string) => {
     if (!state.audioBuffer || !appState.audioContext) return;
@@ -60,7 +107,7 @@ const WorkoutOpening = ({
         {state.cues.length > 1 ? '請點觸各個聲音，確認差異' : '請確認聲音'}
       </div>
       <div style={{ display: 'grid', rowGap: 16 }}>
-        {state.cues.map((cue, index) => (
+        {sortedCues.map((cue, index) => (
           <div key={index}>
             <Card
               onClick={() => handleClick(cue.id)}
@@ -115,4 +162,17 @@ const Display = ({ type, input }: { type: string; input: string }) => {
       console.error(`incorrect type: ${type}`);
       return <></>;
   }
+};
+
+const buildSortedCues = (
+  pitchObj: { [id: string]: { pitchStr: string } },
+  cues: { id: string; pitchStr: string }[]
+) => {
+  const cloned = [...cues];
+  const pitchStrArray = Object.values(pitchObj).map((item) => item.pitchStr);
+  const sortedCues = cloned.sort(
+    (a, b) =>
+      pitchStrArray.indexOf(a.pitchStr) - pitchStrArray.indexOf(b.pitchStr)
+  );
+  return sortedCues;
 };
