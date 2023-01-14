@@ -1,14 +1,19 @@
+import * as R from 'ramda';
 import { Button, Container } from '@mui/material';
 import { useContext, useEffect, useReducer } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../../App';
-import { Workout } from '../../../Model';
+import { State, Workout } from '../../../Model';
 import CustomLabel from '../../../ui/CustomLabel';
 import { getCueIdsFromLog, TYPE } from '../commons';
 import { calcCorrectRatio, WorkoutListItem } from './Model';
 import WorkoutListRow from './WorkoutListRow';
 import { useUserWorkouts } from '../../../services/workout';
 import TouchMe from '../../../ui/TouchMe';
+import { blobToAudioBuffer } from '../../../services/utils';
+import { ActionTypes } from '../../../Update';
+import { getDownloadURL, ref } from 'firebase/storage';
+import { storage } from '../../../repositories/firebase';
 
 const reducer = (state: WorkoutListItem[], action: WorkoutListItem[]) => action;
 
@@ -29,9 +34,53 @@ const WorkoutList = () => {
   useEffect(() => {
     if (!type) return;
     if (!Object.keys(workouts).length) return;
-    const listItems = buildListItems(workouts, type);
+    const listItems = buildListItems(workouts, state.audioBuffers, type);
     listDispatch(listItems);
-  }, [type, workouts]);
+  }, [type, workouts, state.audioBuffers]);
+
+  /** state.audioBuffers の更新 */
+  useEffect(() => {
+    const paths = Object.values(workouts).map(
+      (workout) => `/recordWorkout/${workout.id}`
+    );
+
+    const localAudioBuffers: { [path: string]: AudioBuffer } = {};
+    for (const [path, audioBuffer] of Object.entries(state.audioBuffers)) {
+      if (paths.includes(path)) {
+        localAudioBuffers[path] = audioBuffer;
+      }
+    }
+    // local にある場合は、終了
+    if (Object.keys(localAudioBuffers).length === paths.length) return;
+
+    const fetchData = async () => {
+      let remoteAudioBuffers: { [path: string]: AudioBuffer } = {};
+      await Promise.all(
+        paths.map(async (path) => {
+          const audioBuffer =
+            state.audioContext &&
+            (await getAudioBuffer(path, state.audioContext, localAudioBuffers));
+          if (!!audioBuffer) {
+            remoteAudioBuffers = {
+              ...remoteAudioBuffers,
+              [path]: audioBuffer,
+            };
+          }
+        })
+      );
+      if (!Object.keys(remoteAudioBuffers).length) return;
+      const updatedAudioBuffers = {
+        ...state.audioBuffers,
+        ...remoteAudioBuffers,
+      };
+      const updatedState = R.assocPath<{ [path: string]: AudioBuffer }, State>(
+        ['audioBuffers'],
+        updatedAudioBuffers
+      )(state);
+      dispatch({ type: ActionTypes.setState, payload: updatedState });
+    };
+    fetchData();
+  }, [workouts, state.audioContext]);
 
   if (state.authInitializing) return <></>;
   if (!state.user) return <Navigate to='/' />;
@@ -67,17 +116,23 @@ const WorkoutList = () => {
 
 export default WorkoutList;
 
-const buildListItems = (workouts: { [id: string]: Workout }, type: string) => {
+const buildListItems = (
+  workouts: { [id: string]: Workout },
+  audioBuffers: { [id: string]: AudioBuffer },
+  type: string
+) => {
   const listItems = Object.values(workouts)
     /** リストの並べ替え */
     .sort((a, b) => a.createdAt - b.createdAt)
     /** ログの整形 */
     .map((workout) => {
+      const path = `/recordWorkout/${workout.id}`;
       return {
         id: workout.id,
         logs: sortWorkoutLog(workout, type),
         type,
         title: workout.title,
+        audioBuffer: audioBuffers[path] || null,
       };
     });
   return listItems;
@@ -96,4 +151,25 @@ const sortWorkoutLog = (workout: Workout, type: string) => {
       correctRatio: calcCorrectRatio(log, getCueIdsFromLog(type, log)),
     }));
   return logs;
+};
+
+const getAudioBuffer = async (
+  path: string,
+  audioContext: AudioContext,
+  localAudioBuffers: { [path: string]: AudioBuffer }
+) => {
+  // local にある場合は、何もしない
+  if (Object.keys(localAudioBuffers).includes(path)) return;
+
+  const fetchPath = await getDownloadURL(ref(storage, path));
+  if (!fetchPath) return;
+
+  const response = await fetch(fetchPath);
+  if (!response) return;
+
+  const blob = await response.blob();
+  if (!blob) return;
+
+  const audioBuffer = await blobToAudioBuffer(blob, audioContext);
+  return audioBuffer;
 };

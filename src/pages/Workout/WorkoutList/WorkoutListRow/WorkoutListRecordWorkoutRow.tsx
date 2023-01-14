@@ -1,10 +1,8 @@
 import * as R from 'ramda';
 import { IconButton } from '@mui/material';
 
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../../../App';
-
-import { useAudioBuffer } from '../../../../services/audioBuffer';
 
 import { WorkoutListItem } from '../Model';
 import { State } from '../../../../Model';
@@ -19,16 +17,7 @@ const WorkoutListRecordWorkoutRow = ({
   listItem: WorkoutListItem;
 }) => {
   const { state, dispatch } = useContext(AppContext);
-  const storagePath = useMemo(
-    () => `/recordWorkout/${listItem.id}`,
-    [listItem.id]
-  );
-  const audioBuffer = useAudioBuffer(
-    storagePath,
-    state,
-    dispatch,
-    true // isRemote
-  );
+  const storagePath = `/recordWorkout/${listItem.id}`;
 
   const handleDelete = () => {
     // app
@@ -41,7 +30,7 @@ const WorkoutListRecordWorkoutRow = ({
     deleteStorage(storagePath);
   };
 
-  if (!audioBuffer || !state.audioContext) return <></>;
+  if (!listItem.audioBuffer || !state.audioContext) return <></>;
   return (
     <div
       style={{
@@ -54,7 +43,7 @@ const WorkoutListRecordWorkoutRow = ({
     >
       <div style={{ flexGrow: 1 }}>
         <AudioBufferSlider
-          audioBuffer={audioBuffer}
+          audioBuffer={listItem.audioBuffer}
           audioContext={state.audioContext}
         />
       </div>

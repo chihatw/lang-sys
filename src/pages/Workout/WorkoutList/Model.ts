@@ -4,6 +4,7 @@ export type WorkoutListItem = {
   id: string;
   type: string;
   title: string;
+  audioBuffer: AudioBuffer | null;
   logs: { createdAt: number; correctRatio: number }[];
 };
 
