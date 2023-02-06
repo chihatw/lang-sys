@@ -25,3 +25,6 @@ dist-ssr
 
 # ADD
 .env
+
+#mp3
+*.mp3

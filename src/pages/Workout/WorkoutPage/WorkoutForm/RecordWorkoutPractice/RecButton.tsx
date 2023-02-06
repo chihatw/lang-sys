@@ -37,6 +37,7 @@ const IconSwitch = ({
       <div
         style={{
           height: 120,
+          width: 120,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',

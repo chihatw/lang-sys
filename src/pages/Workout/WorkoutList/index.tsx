@@ -40,6 +40,7 @@ const WorkoutList = () => {
 
   /** state.audioBuffers の更新 */
   useEffect(() => {
+    // 録音ファイルが存在しない場合、エラーを表示する
     const paths = Object.values(workouts).map(
       (workout) => `/recordWorkout/${workout.id}`
     );

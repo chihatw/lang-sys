@@ -63,19 +63,19 @@ const CheckPane = ({
             </div>
             <div style={{ display: 'grid', rowGap: 16 }}>
               <Button
+                onClick={abandonRecordedAudioBuffer}
+                variant='outlined'
+                color='primary'
+              >
+                再一次錄音
+              </Button>
+              <Button
                 onClick={saveRecordedAudioBuffer}
                 variant='contained'
                 color='primary'
                 sx={{ color: 'white' }}
               >
                 發音都正確
-              </Button>
-              <Button
-                onClick={abandonRecordedAudioBuffer}
-                variant='outlined'
-                color='primary'
-              >
-                再一次錄音
               </Button>
             </div>
             <div style={{ height: 180 }} />
