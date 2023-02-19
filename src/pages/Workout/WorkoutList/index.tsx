@@ -40,6 +40,7 @@ const WorkoutList = () => {
 
   /** state.audioBuffers の更新 */
   useEffect(() => {
+    if (!state.audioContext) return;
     // 録音ファイルが存在しない場合、エラーを表示する
     const paths = Object.values(workouts).map(
       (workout) => `/recordWorkout/${workout.id}`
@@ -69,6 +70,7 @@ const WorkoutList = () => {
           }
         })
       );
+
       if (!Object.keys(remoteAudioBuffers).length) return;
       const updatedAudioBuffers = {
         ...state.audioBuffers,
@@ -78,6 +80,7 @@ const WorkoutList = () => {
         ['audioBuffers'],
         updatedAudioBuffers
       )(state);
+      console.log(`%cdispatch state audioBuffers`, 'color:red');
       dispatch({ type: ActionTypes.setState, payload: updatedState });
     };
     fetchData();
@@ -162,7 +165,13 @@ const getAudioBuffer = async (
   // local にある場合は、何もしない
   if (Object.keys(localAudioBuffers).includes(path)) return;
 
-  const fetchPath = await getDownloadURL(ref(storage, path));
+  let fetchPath = '';
+  try {
+    // try catch に包まないと、エラーで処理が中断する
+    fetchPath = await getDownloadURL(ref(storage, path));
+  } catch (e) {
+    console.warn(e);
+  }
   if (!fetchPath) return;
 
   const response = await fetch(fetchPath);

@@ -1,4 +1,5 @@
 import { Button, IconButton } from '@mui/material';
+import { useMemo } from 'react';
 
 const RecButton = ({
   hasNext,
@@ -9,6 +10,12 @@ const RecButton = ({
   isRunning: boolean;
   handleClickPlayButton: () => void;
 }) => {
+  const buttonLabel = useMemo(() => {
+    if (!isRunning) return '開始錄音';
+    if (hasNext) return '下一個';
+    return '停止錄音';
+  }, [isRunning, hasNext]);
+
   return (
     <div
       style={{
@@ -16,67 +23,20 @@ const RecButton = ({
         justifyContent: 'center',
       }}
     >
-      <IconButton color='primary' onClick={handleClickPlayButton}>
-        <IconSwitch hasNext={hasNext} isRunning={isRunning} />
-      </IconButton>
+      <Button
+        color='primary'
+        variant='contained'
+        onClick={handleClickPlayButton}
+        sx={{
+          color: 'white',
+          width: 120,
+          fontSize: 18,
+        }}
+      >
+        {buttonLabel}
+      </Button>
     </div>
   );
 };
 
 export default RecButton;
-
-const IconSwitch = ({
-  isRunning,
-  hasNext,
-}: {
-  isRunning: boolean;
-  hasNext: boolean;
-}) => {
-  if (!isRunning) {
-    return (
-      <div
-        style={{
-          height: 120,
-          width: 120,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Button variant='contained' sx={{ color: 'white', fontSize: 18 }}>
-          開始錄音
-        </Button>
-      </div>
-    );
-  }
-  if (hasNext) {
-    return (
-      <div
-        style={{
-          height: 120,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Button variant='contained' sx={{ color: 'white', fontSize: 18 }}>
-          下一個
-        </Button>
-      </div>
-    );
-  }
-  return (
-    <div
-      style={{
-        height: 120,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Button variant='contained' sx={{ color: 'white', fontSize: 18 }}>
-        停止錄音
-      </Button>
-    </div>
-  );
-};

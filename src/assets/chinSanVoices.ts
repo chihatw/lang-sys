@@ -62,6 +62,7 @@ export const CHIN_SAN_VOICES: {
     pitchStr: 'タ＼ター',
     schedules: [{ offset: 0, start: 27.7, stop: 29.0 }],
   },
+  // 4
   tatatata0: {
     pitchStr: 'タタタタ',
     schedules: [{ offset: 0, start: 29.7, stop: 31.6 }],
@@ -101,5 +102,29 @@ export const CHIN_SAN_VOICES: {
   tataata2: {
     pitchStr: 'タタ＼ータ',
     schedules: [{ offset: 0, start: 51.7, stop: 53.4 }],
+  },
+  tantata0: {
+    pitchStr: 'タンタタ',
+    schedules: [{ offset: 0, start: 54.5, stop: 56.0 }],
+  },
+  tantata1: {
+    pitchStr: 'タ＼ンタタ',
+    schedules: [{ offset: 0, start: 56.6, stop: 57.8 }],
+  },
+  tantata3: {
+    pitchStr: 'タンタ＼タ',
+    schedules: [{ offset: 0, start: 58.6, stop: 60.0 }],
+  },
+  tatanta0: {
+    pitchStr: 'タタンタ',
+    schedules: [{ offset: 0, start: 60.7, stop: 62.5 }],
+  },
+  tatanta1: {
+    pitchStr: 'タ＼タンタ',
+    schedules: [{ offset: 0, start: 63.1, stop: 64.9 }],
+  },
+  tatanta2: {
+    pitchStr: 'タタ＼ンタ',
+    schedules: [{ offset: 0, start: 65.5, stop: 67.3 }],
   },
 };
