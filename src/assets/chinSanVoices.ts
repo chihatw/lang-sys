@@ -105,75 +105,75 @@ export const CHIN_SAN_VOICES: {
   },
   taaatata3: {
     pitchStr: 'タータ＼タ',
-    schedules: [{ offset: 0, start: 44.1, stop: 45.9 }],
+    schedules: [{ offset: 0, start: 44.0, stop: 45.9 }],
   },
   tataata0: {
     pitchStr: 'タタータ',
-    schedules: [{ offset: 0, start: 46.6, stop: 48.4 }],
+    schedules: [{ offset: 0, start: 46.5, stop: 48.4 }],
   },
   tataata1: {
     pitchStr: 'タ＼タータ',
-    schedules: [{ offset: 0, start: 49.2, stop: 50.9 }],
+    schedules: [{ offset: 0, start: 49.0, stop: 50.9 }],
   },
   tataata2: {
     pitchStr: 'タタ＼ータ',
-    schedules: [{ offset: 0, start: 51.7, stop: 53.4 }],
+    schedules: [{ offset: 0, start: 51.6, stop: 53.4 }],
   },
   tantata0: {
     pitchStr: 'タンタタ',
-    schedules: [{ offset: 0, start: 54.5, stop: 56.0 }],
+    schedules: [{ offset: 0, start: 54.3, stop: 56.0 }],
   },
   tantata1: {
     pitchStr: 'タ＼ンタタ',
-    schedules: [{ offset: 0, start: 56.6, stop: 57.8 }],
+    schedules: [{ offset: 0, start: 56.5, stop: 57.8 }],
   },
   tantata3: {
     pitchStr: 'タンタ＼タ',
-    schedules: [{ offset: 0, start: 58.6, stop: 60.0 }],
+    schedules: [{ offset: 0, start: 58.4, stop: 60.0 }],
   },
   tatanta0: {
     pitchStr: 'タタンタ',
-    schedules: [{ offset: 0, start: 60.7, stop: 62.5 }],
+    schedules: [{ offset: 0, start: 60.5, stop: 62.5 }],
   },
   tatanta1: {
     pitchStr: 'タ＼タンタ',
-    schedules: [{ offset: 0, start: 63.1, stop: 64.9 }],
+    schedules: [{ offset: 0, start: 63.0, stop: 64.9 }],
   },
   tatanta2: {
     pitchStr: 'タタ＼ンタ',
-    schedules: [{ offset: 0, start: 65.5, stop: 67.3 }],
+    schedules: [{ offset: 0, start: 65.4, stop: 67.3 }],
   },
   tatataa0: {
     pitchStr: 'タタター',
-    schedules: [{ offset: 0, start: 68.1, stop: 69.5 }],
+    schedules: [{ offset: 0, start: 67.9, stop: 69.5 }],
   },
   tatataa1: {
     pitchStr: 'タ＼タター',
-    schedules: [{ offset: 0, start: 70.1, stop: 71.8 }],
+    schedules: [{ offset: 0, start: 70.0, stop: 71.8 }],
   },
   tatataa2: {
     pitchStr: 'タタ＼ター',
-    schedules: [{ offset: 0, start: 72.5, stop: 74.5 }],
+    schedules: [{ offset: 0, start: 72.3, stop: 74.5 }],
   },
   tatataa3: {
     pitchStr: 'タタタ＼ー',
-    schedules: [{ offset: 0, start: 75.2, stop: 77.0 }],
+    schedules: [{ offset: 0, start: 74.9, stop: 76.9 }],
   },
   tatatan0: {
     pitchStr: 'タタタン',
-    schedules: [{ offset: 0, start: 77.6, stop: 79.6 }],
+    schedules: [{ offset: 0, start: 77.4, stop: 79.5 }],
   },
   tatatan1: {
     pitchStr: 'タ＼タタン',
-    schedules: [{ offset: 0, start: 80.1, stop: 81.9 }],
+    schedules: [{ offset: 0, start: 79.9, stop: 81.9 }],
   },
   tatatan2: {
     pitchStr: 'タタ＼タン',
-    schedules: [{ offset: 0, start: 82.5, stop: 84.4 }],
+    schedules: [{ offset: 0, start: 82.3, stop: 84.2 }],
   },
   tatatan3: {
     pitchStr: 'タタタ＼ン',
-    schedules: [{ offset: 0, start: 85.1, stop: 87.1 }],
+    schedules: [{ offset: 0, start: 84.9, stop: 87.0 }],
   },
   tattata0: {
     pitchStr: 'タッタタ',
