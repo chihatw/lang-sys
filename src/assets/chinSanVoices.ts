@@ -8,19 +8,19 @@ export const CHIN_SAN_VOICES: {
 } = {
   tata0: {
     pitchStr: 'タタ',
-    schedules: [{ offset: 0, start: 87.8, stop: 88.8 }],
+    schedules: [{ offset: 0, start: 87.6, stop: 88.6 }],
   },
   tata1: {
     pitchStr: 'タ＼タ',
-    schedules: [{ offset: 0, start: 89.4, stop: 90.4 }],
+    schedules: [{ offset: 0, start: 89.2, stop: 90.2 }],
   },
   tan0: {
     pitchStr: 'タン',
-    schedules: [{ offset: 0, start: 91.0, stop: 92.0 }],
+    schedules: [{ offset: 0, start: 90.8, stop: 91.9 }],
   },
   tan1: {
     pitchStr: 'タ＼ン',
-    schedules: [{ offset: 0, start: 92.7, stop: 93.8 }],
+    schedules: [{ offset: 0, start: 92.5, stop: 93.6 }],
   },
   tatata0: {
     pitchStr: 'タタタ',
