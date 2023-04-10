@@ -203,4 +203,37 @@ export const CHIN_SAN_VOICES: {
     pitchStr: 'タタ＼ッタ',
     schedules: [{ offset: 0, start: 106.0, stop: 107.7 }],
   },
+  // 応用
+  taxtaa0: {
+    pitchStr: 'タッター',
+    schedules: [{ offset: 0, start: 108.5, stop: 110.0 }],
+  },
+  taataa0: {
+    pitchStr: 'ターター',
+    schedules: [{ offset: 0, start: 124.0, stop: 125.7 }],
+  },
+  sobokuna0: {
+    pitchStr: 'そぼくな',
+    schedules: [{ offset: 0, start: 110.7, stop: 112.5 }],
+  },
+  hanagara0: {
+    pitchStr: 'はながら',
+    schedules: [{ offset: 0, start: 113.0, stop: 114.4 }],
+  },
+  ryuukou0: {
+    pitchStr: 'りゅーこー',
+    schedules: [{ offset: 0, start: 115.0, stop: 116.6 }],
+  },
+  kesshoo0: {
+    pitchStr: 'けっしょー',
+    schedules: [{ offset: 0, start: 117.2, stop: 118.9 }],
+  },
+  sutekina0: {
+    pitchStr: 'すてきな',
+    schedules: [{ offset: 0, start: 119.4, stop: 121.1 }],
+  },
+  hatsubai0: {
+    pitchStr: 'はつばい',
+    schedules: [{ offset: 0, start: 121.6, stop: 123.4 }],
+  },
 };
