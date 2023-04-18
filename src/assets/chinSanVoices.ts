@@ -212,28 +212,28 @@ export const CHIN_SAN_VOICES: {
     pitchStr: 'ターター',
     schedules: [{ offset: 0, start: 124.0, stop: 125.7 }],
   },
-  sobokuna0: {
-    pitchStr: 'そぼくな',
-    schedules: [{ offset: 0, start: 110.7, stop: 112.5 }],
+  igirisu0: {
+    pitchStr: 'イギリス',
+    schedules: [{ offset: 0, start: 127.0, stop: 128.5 }],
   },
-  hanagara0: {
-    pitchStr: 'はながら',
-    schedules: [{ offset: 0, start: 113.0, stop: 114.4 }],
+  ninkino0: {
+    pitchStr: 'にんきの',
+    schedules: [{ offset: 0, start: 129.2, stop: 130.6 }],
   },
-  ryuukou0: {
-    pitchStr: 'りゅーこー',
-    schedules: [{ offset: 0, start: 115.0, stop: 116.6 }],
+  azayaka2: {
+    pitchStr: 'あざ＼やか',
+    schedules: [{ offset: 0, start: 131.3, stop: 133.1 }],
   },
-  kesshoo0: {
-    pitchStr: 'けっしょー',
-    schedules: [{ offset: 0, start: 117.2, stop: 118.9 }],
+  ookina1: {
+    pitchStr: 'お＼ーきな',
+    schedules: [{ offset: 0, start: 133.7, stop: 135.0 }],
   },
-  sutekina0: {
-    pitchStr: 'すてきな',
-    schedules: [{ offset: 0, start: 119.4, stop: 121.1 }],
+  buruuto2: {
+    pitchStr: 'ブル＼ーと',
+    schedules: [{ offset: 0, start: 135.6, stop: 137.3 }],
   },
-  hatsubai0: {
-    pitchStr: 'はつばい',
-    schedules: [{ offset: 0, start: 121.6, stop: 123.4 }],
+  pinkuno1: {
+    pitchStr: 'ピ＼ンクの',
+    schedules: [{ offset: 0, start: 137.9, stop: 139.6 }],
   },
 };

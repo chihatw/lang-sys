@@ -74,6 +74,7 @@ export const playAudioBuffer = (
       break;
     case TYPE.record:
       schedules = getSchedules(cueId, CHIN_SAN_VOICES);
+      console.log(schedules);
       playScheduledItem(schedules, audioBuffer, audioContext);
       break;
     default:
