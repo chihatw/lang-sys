@@ -208,32 +208,36 @@ export const CHIN_SAN_VOICES: {
     pitchStr: 'タッター',
     schedules: [{ offset: 0, start: 108.5, stop: 110.0 }],
   },
-  taataa0: {
-    pitchStr: 'ターター',
-    schedules: [{ offset: 0, start: 124.0, stop: 125.7 }],
+  sample1: {
+    pitchStr: 'みぞ＼ーう',
+    schedules: [{ offset: 0, start: 124.5, stop: 126.2 }],
   },
-  igirisu0: {
-    pitchStr: 'イギリス',
-    schedules: [{ offset: 0, start: 127.0, stop: 128.5 }],
+  sample2: {
+    pitchStr: 'あ＼っても',
+    schedules: [{ offset: 0, start: 126.7, stop: 127.9 }],
   },
-  ninkino0: {
-    pitchStr: 'にんきの',
-    schedules: [{ offset: 0, start: 129.2, stop: 130.6 }],
+  sample3: {
+    pitchStr: 'てづ＼くり',
+    schedules: [{ offset: 0, start: 128.5, stop: 129.7 }],
   },
-  azayaka2: {
-    pitchStr: 'あざ＼やか',
-    schedules: [{ offset: 0, start: 131.3, stop: 133.1 }],
+  sample4: {
+    pitchStr: 'たのし＼み',
+    schedules: [{ offset: 0, start: 130.3, stop: 131.4 }],
   },
-  ookina1: {
-    pitchStr: 'お＼ーきな',
-    schedules: [{ offset: 0, start: 133.7, stop: 135.0 }],
+  sample5: {
+    pitchStr: 'しせーを',
+    schedules: [{ offset: 0, start: 131.9, stop: 133.2 }],
   },
-  buruuto2: {
-    pitchStr: 'ブル＼ーと',
-    schedules: [{ offset: 0, start: 135.6, stop: 137.3 }],
+  sample6: {
+    pitchStr: 'い＼まこそ',
+    schedules: [{ offset: 0, start: 133.8, stop: 135.0 }],
   },
-  pinkuno1: {
-    pitchStr: 'ピ＼ンクの',
-    schedules: [{ offset: 0, start: 137.9, stop: 139.6 }],
+  sample7: {
+    pitchStr: 'おてほん',
+    schedules: [{ offset: 0, start: 135.6, stop: 137.0 }],
+  },
+  sample8: {
+    pitchStr: 'もの＼です',
+    schedules: [{ offset: 0, start: 137.7, stop: 139.1 }],
   },
 };
