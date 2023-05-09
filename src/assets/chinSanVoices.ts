@@ -209,35 +209,35 @@ export const CHIN_SAN_VOICES: {
     schedules: [{ offset: 0, start: 108.5, stop: 110.0 }],
   },
   sample1: {
-    pitchStr: 'めずらし＼ー',
-    schedules: [{ offset: 0, start: 111.4, stop: 113.0 }],
+    pitchStr: 'ジャグカ＼バー',
+    schedules: [{ offset: 0, start: 114.0, stop: 115.5 }],
   },
   sample2: {
-    pitchStr: 'ミ＼セスたち',
-    schedules: [{ offset: 0, start: 113.5, stop: 114.8 }],
+    pitchStr: 'ざっかファ＼ン',
+    schedules: [{ offset: 0, start: 116.3, stop: 117.8 }],
   },
   sample3: {
-    pitchStr: 'コレクター',
-    schedules: [{ offset: 0, start: 115.4, stop: 116.7 }],
+    pitchStr: 'あみめも＼よー',
+    schedules: [{ offset: 0, start: 118.5, stop: 119.9 }],
   },
   sample4: {
-    pitchStr: 'くすぐった',
-    schedules: [{ offset: 0, start: 117.2, stop: 118.7 }],
+    pitchStr: 'ハ＼ーモニー',
+    schedules: [{ offset: 0, start: 120.5, stop: 121.5 }],
   },
   sample5: {
-    pitchStr: 'ハワ＼イアン',
-    schedules: [{ offset: 0, start: 119.4, stop: 120.5 }],
+    pitchStr: 'ハンドメ＼イド',
+    schedules: [{ offset: 0, start: 122.5, stop: 124.1 }],
   },
   sample6: {
-    pitchStr: 'ティータ＼イム',
-    schedules: [{ offset: 0, start: 121.2, stop: 122.4 }],
+    pitchStr: 'いろあせ＼る',
+    schedules: [{ offset: 0, start: 124.7, stop: 126.1 }],
   },
   sample7: {
-    pitchStr: 'おんな＼のこ',
-    schedules: [{ offset: 0, start: 123.1, stop: 124.2 }],
+    pitchStr: 'たっぷ＼りと',
+    schedules: [{ offset: 0, start: 126.8, stop: 128.0 }],
   },
   sample8: {
-    pitchStr: 'おか＼ーさん',
-    schedules: [{ offset: 0, start: 124.8, stop: 126.0 }],
+    pitchStr: 'おつたえ　しましょ＼ー',
+    schedules: [{ offset: 0, start: 128.9, stop: 131.0 }],
   },
 };
