@@ -204,40 +204,36 @@ export const CHIN_SAN_VOICES: {
     schedules: [{ offset: 0, start: 106.0, stop: 107.7 }],
   },
   // 応用
-  taxtaa0: {
-    pitchStr: 'タッター',
-    schedules: [{ offset: 0, start: 108.5, stop: 110.0 }],
-  },
   sample1: {
-    pitchStr: 'ジャグカ＼バー',
-    schedules: [{ offset: 0, start: 114.0, stop: 115.5 }],
+    pitchStr: 'ち＼ーさな　ビ＼ーズ',
+    schedules: [{ offset: 0, start: 112.0, stop: 114.0 }],
   },
   sample2: {
-    pitchStr: 'ざっかファ＼ン',
-    schedules: [{ offset: 0, start: 116.3, stop: 117.8 }],
+    pitchStr: 'お＼ーきな　ビ＼ーズ',
+    schedules: [{ offset: 0, start: 114.8, stop: 116.7 }],
   },
   sample3: {
-    pitchStr: 'あみめも＼よー',
-    schedules: [{ offset: 0, start: 118.5, stop: 119.9 }],
+    pitchStr: 'かわい＼ー　ジャグカ＼バー',
+    schedules: [{ offset: 0, start: 117.4, stop: 120.1 }],
   },
   sample4: {
-    pitchStr: 'ハ＼ーモニー',
-    schedules: [{ offset: 0, start: 120.5, stop: 121.5 }],
+    pitchStr: 'かわい＼ー　ししゅー',
+    schedules: [{ offset: 0, start: 120.7, stop: 123.1 }],
   },
   sample5: {
-    pitchStr: 'ハンドメ＼イド',
-    schedules: [{ offset: 0, start: 122.5, stop: 124.1 }],
+    pitchStr: 'ファ＼ンに　だいに＼んき',
+    schedules: [{ offset: 0, start: 123.7, stop: 125.9 }],
   },
   sample6: {
-    pitchStr: 'いろあせ＼る',
-    schedules: [{ offset: 0, start: 124.7, stop: 126.1 }],
+    pitchStr: 'こどもに　だいに＼んき',
+    schedules: [{ offset: 0, start: 126.5, stop: 129.0 }],
   },
   sample7: {
-    pitchStr: 'たっぷ＼りと',
-    schedules: [{ offset: 0, start: 126.8, stop: 128.0 }],
+    pitchStr: 'ふんい＼きに　ぴった＼り',
+    schedules: [{ offset: 0, start: 129.5, stop: 132.4 }],
   },
   sample8: {
-    pitchStr: 'おつたえ　しましょ＼ー',
-    schedules: [{ offset: 0, start: 128.9, stop: 131.0 }],
+    pitchStr: 'へや＼に　ぴった＼り',
+    schedules: [{ offset: 0, start: 132.9, stop: 135.1 }],
   },
 };
