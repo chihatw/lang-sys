@@ -205,35 +205,35 @@ export const CHIN_SAN_VOICES: {
   },
   // 応用
   sample1: {
-    pitchStr: 'ち＼ーさな　ビ＼ーズ',
-    schedules: [{ offset: 0, start: 112.0, stop: 114.0 }],
+    pitchStr: 'てあみ　な＼らでは',
+    schedules: [{ offset: 0, start: 112.5, stop: 114.9 }],
   },
   sample2: {
-    pitchStr: 'お＼ーきな　ビ＼ーズ',
-    schedules: [{ offset: 0, start: 114.8, stop: 116.7 }],
+    pitchStr: 'にほ＼ん　な＼らでは',
+    schedules: [{ offset: 0, start: 115.4, stop: 117.6 }],
   },
   sample3: {
-    pitchStr: 'かわい＼ー　ジャグカ＼バー',
-    schedules: [{ offset: 0, start: 117.4, stop: 120.1 }],
+    pitchStr: 'あそびご＼ころ　たっぷ＼り',
+    schedules: [{ offset: 0, start: 118.1, stop: 121.6 }],
   },
   sample4: {
-    pitchStr: 'かわい＼ー　ししゅー',
-    schedules: [{ offset: 0, start: 120.7, stop: 123.1 }],
+    pitchStr: 'えーよー　たっぷ＼り',
+    schedules: [{ offset: 0, start: 122.2, stop: 124.6 }],
   },
   sample5: {
-    pitchStr: 'ファ＼ンに　だいに＼んき',
-    schedules: [{ offset: 0, start: 123.7, stop: 125.9 }],
+    pitchStr: 'はな＼を　ひきたて＼る',
+    schedules: [{ offset: 0, start: 125.1, stop: 127.9 }],
   },
   sample6: {
-    pitchStr: 'こどもに　だいに＼んき',
-    schedules: [{ offset: 0, start: 126.5, stop: 129.0 }],
+    pitchStr: 'あ＼かを　ひきたて＼る',
+    schedules: [{ offset: 0, start: 128.5, stop: 130.9 }],
   },
   sample7: {
-    pitchStr: 'ふんい＼きに　ぴった＼り',
-    schedules: [{ offset: 0, start: 129.5, stop: 132.4 }],
+    pitchStr: 'かざりかた　し＼だい',
+    schedules: [{ offset: 0, start: 131.5, stop: 134.6 }],
   },
   sample8: {
-    pitchStr: 'へや＼に　ぴった＼り',
-    schedules: [{ offset: 0, start: 132.9, stop: 135.1 }],
+    pitchStr: 'う＼ん　し＼だい',
+    schedules: [{ offset: 0, start: 135.1, stop: 137.2 }],
   },
 };
