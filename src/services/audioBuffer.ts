@@ -5,11 +5,12 @@ import { Dispatch, useEffect, useState } from 'react';
 import { State } from '../Model';
 import { storage } from '../repositories/firebase';
 import { Action, ActionTypes } from '../Update';
-import { blobToAudioBuffer } from './utils';
+import { blobToAudioBuffer } from '../application/audio/core/2-services';
 
 export const useAudioBuffer = (
   path: string,
   state: State,
+  audioContext: AudioContext | null,
   dispatch: Dispatch<Action>,
   isRemote?: boolean
 ) => {
@@ -40,10 +41,16 @@ export const useAudioBuffer = (
     if (!!audioBuffer) return;
 
     const fetchData = async () => {
-      updateState_by_fetch_audioPath(path, state, dispatch, isRemote);
+      updateState_by_fetch_audioPath(
+        path,
+        state,
+        audioContext,
+        dispatch,
+        isRemote
+      );
     };
     fetchData();
-  }, [state.audioBuffers, state.audioContext, path]);
+  }, [state.audioBuffers, audioContext, path]);
 
   return audioBuffer;
 };
@@ -51,10 +58,11 @@ export const useAudioBuffer = (
 const updateState_by_fetch_audioPath = async (
   path: string,
   state: State,
+  audioContext: AudioContext | null,
   dispatch: Dispatch<Action>,
   isRemote?: boolean
 ) => {
-  if (!state.audioContext) return;
+  if (!audioContext) return;
 
   try {
     const fetchPath = !isRemote
@@ -66,7 +74,7 @@ const updateState_by_fetch_audioPath = async (
     const blob = await response.blob();
     if (!blob) return;
 
-    const audioBuffer = await blobToAudioBuffer(blob, state.audioContext);
+    const audioBuffer = await blobToAudioBuffer(blob, audioContext);
     if (!audioBuffer) return;
 
     const updatedState = R.assocPath<AudioBuffer, State>(

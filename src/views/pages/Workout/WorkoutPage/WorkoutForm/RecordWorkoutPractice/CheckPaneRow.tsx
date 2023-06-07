@@ -2,9 +2,12 @@ import { PlayArrow } from '@mui/icons-material';
 import { Divider, IconButton } from '@mui/material';
 import { useContext } from 'react';
 import { AppContext } from '../../../../..';
-import { playAudioBuffer } from '../../../../../../services/utils';
+
 import { TYPE } from '../../../commons';
 import SentencePitchLine from '../../../../../components/SentencePitchLine';
+import { playAudioBuffer } from '../../../../../../application/audio/core/2-services';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../../main';
 
 const CheckPaneRow = ({
   cue,
@@ -15,9 +18,11 @@ const CheckPaneRow = ({
 }) => {
   const { state } = useContext(AppContext);
 
+  const { audioContext } = useSelector((state: RootState) => state.audio);
+
   const handlePlay = () => {
-    if (!state.audioContext) return;
-    playAudioBuffer(TYPE.record, cue.id, audioBuffer, state.audioContext);
+    if (!audioContext) return;
+    playAudioBuffer(TYPE.record, cue.id, audioBuffer, audioContext);
   };
 
   return (

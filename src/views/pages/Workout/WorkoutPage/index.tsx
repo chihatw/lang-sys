@@ -31,12 +31,13 @@ const WorkoutPage = ({ type }: { type: string }) => {
   const { state, dispatch } = useContext(AppContext);
 
   const { currentUser } = useSelector((state: RootState) => state.user);
+  const { audioContext } = useSelector((state: RootState) => state.audio);
 
   const [formState, formDispatch] = useReducer(reducer, INITIAL_WORKOUT_STATE);
   const [path, setPath] = useState('');
 
   const workout = useWorkout(workoutId, state, dispatch, type);
-  const audioBuffer = useAudioBuffer(path, state, dispatch);
+  const audioBuffer = useAudioBuffer(path, state, audioContext, dispatch);
 
   useEffect(() => {
     const path = audioPathSwitch(type);
@@ -54,7 +55,7 @@ const WorkoutPage = ({ type }: { type: string }) => {
 
   if (!currentUser) return <Navigate to='/signIn' />;
 
-  if (!state.audioContext) return <TouchMe />;
+  if (!audioContext) return <TouchMe />;
 
   return <WorkoutForm state={formState} dispatch={formDispatch} type={type} />;
 };

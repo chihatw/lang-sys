@@ -1,5 +1,5 @@
 import { KanaCue } from '../Model';
-import { createSourceNode } from '../services/utils';
+import { createSourceNode } from '../application/audio/core/2-services';
 
 export const KANAS: {
   [id: string]: KanaCue;

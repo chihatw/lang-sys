@@ -13,8 +13,11 @@ import {
 } from '../../../commons';
 import SelectPractice from './SelectPractice';
 import InputPractice from './InputPractice';
-import { playAudioBuffer } from '../../../../../../services/utils';
+
 import { AppContext } from '../../../../..';
+import { playAudioBuffer } from '../../../../../../application/audio/core/2-services';
+import { RootState } from '../../../../../../main';
+import { useSelector } from 'react-redux';
 
 const WorkoutPractice = ({
   type,
@@ -27,6 +30,8 @@ const WorkoutPractice = ({
 }) => {
   const theme = useTheme();
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
+
+  const { audioContext } = useSelector((state: RootState) => state.audio);
 
   const [input, setInput] = useState('');
   const [animationInitialize, setAnimationInitialize] = useState(true);
@@ -50,13 +55,8 @@ const WorkoutPractice = ({
   }, [animationInitialize]);
 
   const handleClickPlay = () => {
-    if (!state.audioBuffer || !appState.audioContext) return;
-    playAudioBuffer(
-      type,
-      currentCueId,
-      state.audioBuffer,
-      appState.audioContext
-    );
+    if (!state.audioBuffer || !audioContext) return;
+    playAudioBuffer(type, currentCueId, state.audioBuffer, audioContext);
 
     const updatedState = updatePlayedAt(state);
     dispatch(updatedState);

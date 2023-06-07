@@ -1,3 +1,5 @@
+import { IWorkoutLog } from './application/workoutLog/core/0-interface';
+
 export type Schedule = { offset: number; start: number; stop: number };
 
 export type KanaCue = {
@@ -15,30 +17,7 @@ export type PitchCue = {
   pitchStr: string;
 };
 
-export type WorkoutLog = {
-  id: string;
-  kanas: string[];
-  cueIds: string[];
-  createdAt: number;
-  opening: {
-    tapped: string[];
-  };
-  practice: {
-    answers: {
-      [index: number]: {
-        createdAt: number;
-        playedAt: number[];
-        selected: string;
-      };
-    };
-  };
-  result: {
-    createdAt: number;
-    tapped: string[];
-  };
-};
-
-export const INITIAL_WORKOUT_LOG: WorkoutLog = {
+export const INITIAL_WORKOUT_LOG: IWorkoutLog = {
   id: '',
   kanas: [],
   cueIds: [],
@@ -61,7 +40,7 @@ export type Workout = {
   kanas: string[];
   cueIds: string[];
   title: string;
-  logs: { [id: string]: WorkoutLog };
+  logs: { [id: string]: IWorkoutLog };
   isActive: boolean;
   createdAt: number;
 };
@@ -78,41 +57,21 @@ export const INITIAL_WORKOUT: Workout = {
 };
 
 export type State = {
-  // user: User | null;
   audioBuffers: { [path: string]: AudioBuffer };
-  audioContext: AudioContext | null;
-  kanaWorkouts: { [id: string]: Workout };
-  pitchWorkouts: { [id: string]: Workout };
-  rhythmWorkouts: { [id: string]: Workout };
+  // kanaWorkouts: { [id: string]: Workout };
+  // pitchWorkouts: { [id: string]: Workout };
+  // rhythmWorkouts: { [id: string]: Workout };
   recordWorkouts: { [id: string]: Workout };
   chineseCueWorkouts: { [id: string]: Workout };
-  // authInitializing: boolean;
-  pitchInputWorkouts: { [id: string]: Workout };
-  admin: {
-    kanaWorkouts: { [id: string]: Workout };
-    pitchWorkouts: { [id: string]: Workout };
-    rhythmWorkouts: { [id: string]: Workout };
-    recordWorkouts: { [id: string]: Workout };
-    pitchInputWorkouts: { [id: string]: Workout };
-  };
+  // pitchInputWorkouts: { [id: string]: Workout };
 };
 
 export const INITIAL_STATE: State = {
-  // user: null,
   audioBuffers: {},
-  audioContext: null,
-  kanaWorkouts: {},
-  pitchWorkouts: {},
-  rhythmWorkouts: {},
+  // kanaWorkouts: {},
+  // pitchWorkouts: {},
+  // rhythmWorkouts: {},
   recordWorkouts: {},
-  // authInitializing: true,
-  pitchInputWorkouts: {},
+  // pitchInputWorkouts: {},
   chineseCueWorkouts: {},
-  admin: {
-    kanaWorkouts: {},
-    pitchWorkouts: {},
-    rhythmWorkouts: {},
-    recordWorkouts: {},
-    pitchInputWorkouts: {},
-  },
 };

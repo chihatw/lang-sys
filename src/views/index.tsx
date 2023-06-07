@@ -7,12 +7,14 @@ import SignInPage from './pages/SignInPage';
 import Layout from './Layout';
 import { createContext, useEffect, useReducer } from 'react';
 import { INITIAL_STATE, State } from '../Model';
-import { Action, ActionTypes, reducer } from '../Update';
+import { Action, reducer } from '../Update';
 import { auth } from '../repositories/firebase';
-import { createAudioContext } from '../services/utils';
+
 import { userActions } from '../application/user/framework/0-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../main';
+import { createAudioContext } from '../application/audio/core/2-services';
+import { audioActions } from '../application/audio/framework/0-reducer';
 
 export const AppContext = createContext<{
   state: State;
@@ -30,6 +32,8 @@ function App() {
     (state: RootState) => state.user
   );
 
+  const { audioContext } = useSelector((state: RootState) => state.audio);
+
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (authUser) {
@@ -40,18 +44,21 @@ function App() {
     });
   }, [dispatch]);
 
-  // debug use redux
-  useEffect(() => {
-    const { audioContext } = state;
-    const _createAudioContext = () => {
-      const _audioContext = createAudioContext();
-      dispatch({ type: ActionTypes.setAudioContext, payload: _audioContext });
-      window.removeEventListener('click', _createAudioContext);
-    };
-    if (!audioContext) {
-      window.addEventListener('click', _createAudioContext);
+  const handleClick = () => {
+    const audioContext = createAudioContext();
+    if (audioContext) {
+      _dispatch(audioActions.setAudioContext(audioContext));
+      window.removeEventListener('click', handleClick);
+    } else {
+      _dispatch(audioActions.removeAudioContext());
     }
-  }, [state.audioContext]);
+  };
+
+  useEffect(() => {
+    if (!audioContext) {
+      window.addEventListener('click', handleClick);
+    }
+  }, [audioContext]);
 
   if (authInitializing) return <></>;
 
@@ -62,7 +69,10 @@ function App() {
           <Routes>
             <Route index element={currentUser ? <TopPage /> : <SignInPage />} />
             <Route path='/list/chineseCue' element={<></>} />
-            <Route path='/list/:type' element={<WorkoutList />} />
+            <Route
+              path='/list/record'
+              element={currentUser ? <WorkoutList /> : <SignInPage />}
+            />
 
             {/* 錄音 */}
             <Route path='record'>

@@ -1,5 +1,4 @@
 import { Card, CardContent, CardMedia, useTheme } from '@mui/material';
-import React from 'react';
 
 const TopPageCard = ({
   label,

@@ -2,14 +2,14 @@ import {
   INITIAL_WORKOUT,
   INITIAL_WORKOUT_LOG,
   Workout,
-  WorkoutLog,
 } from '../../../../Model';
+import { IWorkoutLog } from '../../../../application/workoutLog/core/0-interface';
 
 import { SCENE } from '../commons';
 
 export type WorkoutState = {
   id: string;
-  log: WorkoutLog;
+  log: IWorkoutLog;
   cues: { id: string; pitchStr: string }[];
   scene: string;
   workout: Workout;

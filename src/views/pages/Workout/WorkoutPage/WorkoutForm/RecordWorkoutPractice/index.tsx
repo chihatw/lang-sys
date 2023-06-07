@@ -1,22 +1,19 @@
 import * as R from 'ramda';
 import { useTheme } from '@mui/material';
-import React, {
-  MutableRefObject,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { MutableRefObject, useContext, useRef, useState } from 'react';
 import { AppContext } from '../../../../..';
 import { WorkoutState } from '../../Model';
 import CueCard from './CueCard';
 import RecButton from './RecButton';
 import CheckPane from './CheckPane';
-import { blobToAudioBuffer } from '../../../../../../services/utils';
+
 import { uploadStorage } from '../../../../../../repositories/storage';
 import { State } from '../../../../../../Model';
 import { useNavigate } from 'react-router-dom';
 import { ActionTypes } from '../../../../../../Update';
+import { blobToAudioBuffer } from '../../../../../../application/audio/core/2-services';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../../main';
 
 const CUE_CARD_HEIGHT = 200;
 
@@ -30,28 +27,25 @@ const RecordWorkoutPractice = ({
   const theme = useTheme();
   const navigate = useNavigate();
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
+
+  const { audioContext } = useSelector((state: RootState) => state.audio);
   const [blob, setBlob] = useState<Blob | null>(null); // upload 用
   const [isRunning, setIsRunning] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
-  // const [pitchArray, setPitchArray] = useState<string[][][]>([]);
   const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null); // play 用
 
   // streamと連携してマイクを切るため
   const micAudioElemRef = useRef(new Audio());
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
-  // useEffect(() => {
   const cue = state.cues[state.currentIndex];
-  // const pitchArray = string2PitchesArray(cue.pitchStr);
-  // setPitchArray(pitchArray);
-  // }, [state.cues, state.currentIndex]);
 
   const isLast = state.currentIndex + 1 === state.cues.length;
 
   const start = async () => {
-    if (!navigator.mediaDevices || !appState.audioContext) return;
+    if (!navigator.mediaDevices || !audioContext) return;
     await startRecording(
-      appState.audioContext,
+      audioContext,
       micAudioElemRef,
       mediaRecorderRef,
       setAudioBuffer,
@@ -163,7 +157,7 @@ const RecordWorkoutPractice = ({
         isRunning={isRunning}
         handleClickPlayButton={handleClickPlayButton}
       />
-      {!!audioBuffer && !!appState.audioContext && (
+      {!!audioBuffer && !!audioContext && (
         <CheckPane
           state={state}
           isChecking={isChecking}

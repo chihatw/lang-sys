@@ -1,21 +1,31 @@
-import { Card, CardContent, useTheme } from '@mui/material';
+import { Card, CardContent, IconButton, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { TYPE } from '../../commons';
-import { WorkoutListItem } from '../Model';
-import WorkoutListLogRow from './WorkoutListLogRow';
-import WorkoutListRecordWorkoutRow from './WorkoutListRecordWorkoutRow';
+import { IRecordWorkout } from '../../../../../application/recordWorkouts/core/0-interface';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../../main';
+import AudioBufferSlider from '../../../../components/AudioBufferSlider';
+import { Delete } from '@mui/icons-material';
+import { recordWorkoutsActions } from '../../../../../application/recordWorkouts/framework/0-reducer';
 
 const WorkoutListRow = ({
-  listItem,
-  type,
+  workout,
+  audioBuffer,
 }: {
-  listItem: WorkoutListItem;
-  type: string;
+  workout: IRecordWorkout;
+  audioBuffer: AudioBuffer | null;
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { audioContext } = useSelector((state: RootState) => state.audio);
+
   const handleClick = () => {
-    navigate(`/${listItem.type}/${listItem.id}`);
+    navigate(`/record/${workout.id}`);
+  };
+
+  const handleDelete = () => {
+    dispatch(recordWorkoutsActions.removeAudioBuffer(workout.id));
   };
 
   return (
@@ -43,55 +53,39 @@ const WorkoutListRow = ({
             <div
               style={{ fontSize: 20, lineHeight: '40px', textAlign: 'center' }}
             >
-              {listItem.title}
+              {workout.title}
             </div>
-            <WorkoutListLogRowSwitch type={type} listItem={listItem} />
           </div>
         </CardContent>
       </Card>
-      {type === TYPE.record && (
-        <WorkoutListRecordWorkoutRow listItem={listItem} />
+      {!!audioBuffer && !!audioContext && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            columnGap: 8,
+            paddingTop: 8,
+            paddingBottom: 16,
+          }}
+        >
+          <div style={{ flexGrow: 1 }}>
+            <AudioBufferSlider
+              audioBuffer={audioBuffer}
+              audioContext={audioContext}
+            />
+          </div>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDelete();
+            }}
+          >
+            <Delete />
+          </IconButton>
+        </div>
       )}
     </div>
   );
 };
 
 export default WorkoutListRow;
-
-const WorkoutListLogRowSwitch = ({
-  listItem,
-  type,
-}: {
-  listItem: WorkoutListItem;
-  type: string;
-}) => {
-  switch (type) {
-    case TYPE.kana:
-    case TYPE.pitch:
-    case TYPE.pitchInput:
-    case TYPE.rhythm:
-      if (!listItem.logs.length) return <></>;
-      return (
-        <div
-          style={{
-            display: 'grid',
-            rowGap: 4,
-            color: '#aaa',
-            fontSize: 14,
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <div style={{ flexBasis: 168 }}>練習紀錄</div>
-          </div>
-          {listItem.logs.map((log, index) => (
-            <WorkoutListLogRow log={log} key={index} />
-          ))}
-        </div>
-      );
-    case TYPE.record:
-      return <></>;
-    default:
-      console.error(`incorrect type: ${type}`);
-      return <></>;
-  }
-};

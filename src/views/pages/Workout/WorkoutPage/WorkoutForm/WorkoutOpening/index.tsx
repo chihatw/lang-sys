@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import string2PitchesArray from 'string2pitches-array';
+
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Card, CardContent, useTheme } from '@mui/material';
 import { AppContext } from '../../../../..';
@@ -12,12 +12,14 @@ import {
   setSceneToWorkoutState,
 } from '../../../commons';
 
-import { playAudioBuffer } from '../../../../../../services/utils';
 import { KANAS } from '../../../../../../assets/kanas';
 import { PITCHES, PITCH_WORKOUT_ITEMS } from '../../../../../../assets/pitches';
 import { CHIN_SAN_VOICES } from '../../../../../../assets/chinSanVoices';
 import { PITCH_INPUT_ITEMS } from '../../../../../../assets/pitchInputItems';
 import SentencePitchLine from '../../../../../components/SentencePitchLine';
+import { playAudioBuffer } from '../../../../../../application/audio/core/2-services';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../../main';
 
 const WorkoutOpening = ({
   state,
@@ -29,6 +31,8 @@ const WorkoutOpening = ({
   type: string;
 }) => {
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
+
+  const { audioContext } = useSelector((state: RootState) => state.audio);
 
   const [sortedCues, setSortedCues] = useState<
     {
@@ -74,8 +78,8 @@ const WorkoutOpening = ({
   }, [state, type]);
 
   const handleClick = (cueId: string) => {
-    if (!state.audioBuffer || !appState.audioContext) return;
-    playAudioBuffer(type, cueId, state.audioBuffer, appState.audioContext);
+    if (!state.audioBuffer || !audioContext) return;
+    playAudioBuffer(type, cueId, state.audioBuffer, audioContext);
 
     const updatedTapped = [...state.log.opening.tapped];
     updatedTapped.push(cueId);

@@ -1,15 +1,15 @@
 import { PlayArrow } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import { useContext } from 'react';
-import { AppContext } from '../../../../..';
-import { createSourceNode } from '../../../../../../services/utils';
+import { createSourceNode } from '../../../../../../application/audio/core/2-services';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../../main';
 
 const PlayButton = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
-  const { state } = useContext(AppContext);
+  const { audioContext } = useSelector((state: RootState) => state.audio);
 
   const play = () => {
-    if (!state.audioContext) return;
-    const sourceNode = createSourceNode(audioBuffer, state.audioContext);
+    if (!audioContext) return;
+    const sourceNode = createSourceNode(audioBuffer, audioContext);
     sourceNode.start();
   };
   return (

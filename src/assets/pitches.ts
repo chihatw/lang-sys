@@ -1,6 +1,7 @@
 import { PitchCue, Schedule } from '../Model';
+import { createSourceNode } from '../application/audio/core/2-services';
 import { TYPE } from '../views/pages/Workout/commons';
-import { createSourceNode } from '../services/utils';
+
 import { CHIN_SAN_VOICES } from './chinSanVoices';
 import { PITCH_INPUT_ITEMS } from './pitchInputItems';
 

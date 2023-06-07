@@ -1,9 +1,10 @@
 import * as R from 'ramda';
 import { Dispatch } from 'react';
-import { State, Workout, WorkoutLog } from '../../../Model';
+import { State, Workout } from '../../../Model';
 import { setWorkout } from '../../../services/workout';
 import { Action, ActionTypes } from '../../../Update';
 import { WorkoutState } from './WorkoutPage/Model';
+import { IWorkoutLog } from '../../../application/workoutLog/core/0-interface';
 
 export const TYPE = {
   kana: 'kana',
@@ -40,14 +41,6 @@ export const workoutPropSwitch = (type: string) => {
 
 export const workoutsSwitch = (state: State, type: string) => {
   switch (type) {
-    case TYPE.kana:
-      return state.kanaWorkouts;
-    case TYPE.pitch:
-      return state.pitchWorkouts;
-    case TYPE.pitchInput:
-      return state.pitchInputWorkouts;
-    case TYPE.rhythm:
-      return state.rhythmWorkouts;
     case TYPE.record:
       return state.recordWorkouts;
     case TYPE.chineseCue:
@@ -85,12 +78,12 @@ export const setSceneToWorkoutState = (state: WorkoutState, scene: string) => {
  */
 export const updateWorkoutLog = (
   type: string,
-  log: WorkoutLog,
+  log: IWorkoutLog,
   workout: Workout,
   state: State,
   dispatch: Dispatch<Action>
 ) => {
-  const updatedWorkout = R.assocPath<WorkoutLog, Workout>(
+  const updatedWorkout = R.assocPath<IWorkoutLog, Workout>(
     ['logs', log.id],
     log
   )(workout);
@@ -110,7 +103,7 @@ export const updateWorkoutLog = (
   setWorkout(type, updatedWorkout);
 };
 
-export const getCueIdsFromLog = (type: string, log: WorkoutLog) => {
+export const getCueIdsFromLog = (type: string, log: IWorkoutLog) => {
   switch (type) {
     case TYPE.kana:
       return log.kanas;

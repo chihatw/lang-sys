@@ -11,8 +11,17 @@ export const configureStore = (services: Services) =>
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
-          ignoredActions: ['user/signinSuccess', 'user/setUser'],
-          ignoredPaths: ['user.currentUser'],
+          ignoredActions: [
+            'user/setUser',
+            'user/signinSuccess',
+            'audio/setAudioContext',
+            'recordWorkouts/fetchRecordWorkoutsSuccess',
+          ],
+          ignoredPaths: [
+            'user.currentUser',
+            'audio.audioContext',
+            'recordWorkouts.audioBuffers',
+          ],
         },
       })
         .concat(logger)

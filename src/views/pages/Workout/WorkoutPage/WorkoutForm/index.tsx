@@ -1,13 +1,11 @@
 import { Button, Container } from '@mui/material';
 import React, { Dispatch } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SCENE, TYPE } from '../../commons';
+import { SCENE } from '../../commons';
 
 import { WorkoutState } from '../Model';
 import RecordWorkoutPractice from './RecordWorkoutPractice';
 import WorkoutOpening from './WorkoutOpening';
-import WorkoutPractice from './WorkoutPractice';
-import WorkoutResult from './WorkoutResult';
 
 const WorkoutForm = ({
   state,
@@ -51,35 +49,8 @@ const WorkoutSceneSwitch = ({
     case SCENE.opening:
       return <WorkoutOpening state={state} dispatch={dispatch} type={type} />;
     case SCENE.practice:
-      return (
-        <WorkoutPracticeSwitch state={state} dispatch={dispatch} type={type} />
-      );
-    case SCENE.result:
-      return <WorkoutResult state={state} dispatch={dispatch} type={type} />;
-    default:
-      throw new Error(`incorrect scene ${state.scene}`);
-  }
-};
-
-const WorkoutPracticeSwitch = ({
-  state,
-  dispatch,
-  type,
-}: {
-  state: WorkoutState;
-  dispatch: Dispatch<WorkoutState>;
-  type: string;
-}) => {
-  switch (type) {
-    case TYPE.kana:
-    case TYPE.pitch:
-    case TYPE.rhythm:
-    case TYPE.pitchInput:
-      return <WorkoutPractice state={state} dispatch={dispatch} type={type} />;
-    case TYPE.record:
       return <RecordWorkoutPractice state={state} dispatch={dispatch} />;
     default:
-      console.error(`incorrect type: ${type}`);
-      return <></>;
+      throw new Error(`incorrect scene ${state.scene}`);
   }
 };

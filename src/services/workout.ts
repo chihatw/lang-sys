@@ -13,7 +13,6 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { db } from '../repositories/firebase';
-import { RhythmKanaFormState } from '../views/pages/Workout/WorkoutEditPage/Model';
 import {
   workoutsSwitch,
   workoutPropSwitch,
@@ -50,17 +49,17 @@ export const useWorkout = (
   /** 代入 */
   useEffect(() => {
     if (!workoutId) return;
-    const workouts = workoutsSwitch(state, type);
+    const workouts = state.recordWorkouts;
     const workout = workouts[workoutId];
     if (!workout) return;
     setWorkout(workout);
   }, [
     workoutId,
-    state.kanaWorkouts,
-    state.pitchWorkouts,
-    state.rhythmWorkouts,
+    // state.kanaWorkouts,
+    // state.pitchWorkouts,
+    // state.rhythmWorkouts,
     state.recordWorkouts,
-    state.pitchInputWorkouts,
+    // state.pitchInputWorkouts,
   ]);
 
   /** state.*Workouts の更新 */
@@ -86,55 +85,14 @@ export const useWorkout = (
     fetchData();
   }, [
     workoutId,
-    state.kanaWorkouts,
-    state.pitchWorkouts,
-    state.rhythmWorkouts,
+    // state.kanaWorkouts,
+    // state.pitchWorkouts,
+    // state.rhythmWorkouts,
     state.recordWorkouts,
-    state.pitchInputWorkouts,
+    // state.pitchInputWorkouts,
   ]);
 
   return workout;
-};
-
-export const useUserWorkouts = (
-  uid: string,
-  state: State,
-  dispatch: Dispatch<Action>,
-  type: string | undefined
-) => {
-  const [workouts, setWorkous] = useState<{ [id: string]: Workout }>({});
-
-  /** 代入 */
-  useEffect(() => {
-    if (!type) return;
-    const workouts = workoutsSwitch(state, type);
-    if (!Object.keys(workouts).length) return;
-    setWorkous(workouts);
-  }, [
-    type,
-    state.kanaWorkouts,
-    state.pitchWorkouts,
-    state.rhythmWorkouts,
-    state.recordWorkouts,
-    state.pitchInputWorkouts,
-  ]);
-
-  /** state.*Workouts の更新 */
-  useEffect(() => {
-    if (!uid || !type) return;
-
-    // ローカルにある場合、終了
-    const workouts = workoutsSwitch(state, type);
-    if (!!Object.keys(workouts).length) return;
-
-    // ローカルにない場合は、リモートから取得
-    const fetchData = async () => {
-      updateState_by_fetch_workouts(uid, state, dispatch, type);
-    };
-    fetchData();
-  }, [uid]);
-
-  return { workouts };
 };
 
 export const getWorkout = async (id: string, type: string) => {
@@ -179,18 +137,6 @@ export const setWorkout = (type: string, workout: Workout) => {
   console.log(`set ${COLLECTIONS[type]}`);
   const { id, ...omitted } = workout;
   setDoc(doc(db, COLLECTIONS[type], id), { ...omitted });
-};
-
-export const buildRhythmKanaForm = (
-  workout: Workout,
-  cueIdsStr: string
-): RhythmKanaFormState => {
-  return {
-    uid: workout.uid,
-    title: workout.title,
-    isActive: workout.isActive,
-    cueIdsStr,
-  };
 };
 
 const buildWorkout = (doc: DocumentData): Workout => {
