@@ -3,7 +3,7 @@ import { playKana } from '../assets/kanas';
 import { playRhythm, PITCH_WORKOUT_ITEMS } from '../assets/pitches';
 import { PITCH_INPUT_ITEMS } from '../assets/pitchInputItems';
 import { Schedule } from '../Model';
-import { TYPE } from '../pages/Workout/commons';
+import { TYPE } from '../views/pages/Workout/commons';
 
 export const getRandomInt = (max: number) => {
   return Math.floor(Math.random() * max);

@@ -1,5 +1,3 @@
-import { User } from '@firebase/auth';
-
 export type Schedule = { offset: number; start: number; stop: number };
 
 export type KanaCue = {
@@ -80,14 +78,15 @@ export const INITIAL_WORKOUT: Workout = {
 };
 
 export type State = {
-  user: User | null;
+  // user: User | null;
   audioBuffers: { [path: string]: AudioBuffer };
   audioContext: AudioContext | null;
   kanaWorkouts: { [id: string]: Workout };
   pitchWorkouts: { [id: string]: Workout };
   rhythmWorkouts: { [id: string]: Workout };
   recordWorkouts: { [id: string]: Workout };
-  authInitializing: boolean;
+  chineseCueWorkouts: { [id: string]: Workout };
+  // authInitializing: boolean;
   pitchInputWorkouts: { [id: string]: Workout };
   admin: {
     kanaWorkouts: { [id: string]: Workout };
@@ -99,15 +98,16 @@ export type State = {
 };
 
 export const INITIAL_STATE: State = {
-  user: null,
+  // user: null,
   audioBuffers: {},
   audioContext: null,
   kanaWorkouts: {},
   pitchWorkouts: {},
   rhythmWorkouts: {},
   recordWorkouts: {},
-  authInitializing: true,
+  // authInitializing: true,
   pitchInputWorkouts: {},
+  chineseCueWorkouts: {},
   admin: {
     kanaWorkouts: {},
     pitchWorkouts: {},

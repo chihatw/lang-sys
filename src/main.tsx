@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { TypographyOptions } from '@mui/material/styles/createTypography';
-import App from './App';
+
 import './index.css';
+import { configureStore } from './application/0-store/store';
+import services from './infrastructure/services';
+import { Provider } from 'react-redux';
+import App from './views';
 
 interface ExtendedTypographyOptions extends TypographyOptions {
   lato: React.CSSProperties;
@@ -71,10 +74,16 @@ const theme = createTheme({
   } as ExtendedTypographyOptions,
 });
 
+const store = configureStore(services);
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <ThemeProvider theme={theme}>
-    <BrowserRouter>
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
       <App />
-    </BrowserRouter>
-  </ThemeProvider>
+    </ThemeProvider>
+  </Provider>
 );
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppStore = ReturnType<typeof configureStore>;
+export type AppDispatch = typeof store.dispatch;

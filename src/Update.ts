@@ -1,16 +1,14 @@
 import * as R from 'ramda';
-import { User } from '@firebase/auth';
 import { State } from './Model';
 
 export const ActionTypes = {
-  setUser: 'setUser',
   setState: 'setState',
   setAudioContext: 'setAudioContext',
 };
 
 export type Action = {
   type: string;
-  payload?: State | null | User | string | AudioContext;
+  payload?: State | null | string | AudioContext;
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -23,12 +21,6 @@ export const reducer = (state: State, action: Action): State => {
       return R.assocPath<AudioContext | null, State>(
         ['audioContext'],
         audioContext
-      )(state);
-    case ActionTypes.setUser:
-      const user = payload as User | null;
-      return R.compose(
-        R.assocPath<User | null, State>(['user'], user),
-        R.assocPath<boolean, State>(['authInitializing'], false)
       )(state);
     default:
       return state;

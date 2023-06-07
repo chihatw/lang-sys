@@ -13,14 +13,23 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { db } from '../repositories/firebase';
-import { RhythmKanaFormState } from '../pages/Workout/WorkoutEditPage/Model';
+import { RhythmKanaFormState } from '../views/pages/Workout/WorkoutEditPage/Model';
 import {
   workoutsSwitch,
-  TYPE,
   workoutPropSwitch,
-} from '../pages/Workout/commons';
+} from '../views/pages/Workout/commons';
 import { Dispatch, useEffect, useState } from 'react';
 import { Action, ActionTypes } from '../Update';
+
+// todo duplicate
+const TYPE = {
+  kana: 'kana',
+  pitch: 'pitch',
+  rhythm: 'rhythm',
+  record: 'record',
+  pitchInput: 'pitchInput',
+  chineseCue: 'chineseCue',
+};
 
 const COLLECTIONS = {
   [TYPE.kana]: 'kanaWorkouts',
