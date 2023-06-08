@@ -2,21 +2,6 @@ import { IWorkoutLog } from './application/workoutLog/core/0-interface';
 
 export type Schedule = { offset: number; start: number; stop: number };
 
-export type KanaCue = {
-  id: string;
-  end: number;
-  start: number;
-  hira: string;
-  kata: string;
-};
-
-export type PitchCue = {
-  id: string;
-  end: number;
-  start: number;
-  pitchStr: string;
-};
-
 export const INITIAL_WORKOUT_LOG: IWorkoutLog = {
   id: '',
   kanas: [],

@@ -1,5 +1,11 @@
-import { KanaCue } from '../Model';
 import { createSourceNode } from '../application/audio/core/2-services';
+type KanaCue = {
+  id: string;
+  end: number;
+  start: number;
+  hira: string;
+  kata: string;
+};
 
 export const KANAS: {
   [id: string]: KanaCue;

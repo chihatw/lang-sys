@@ -1,3 +1,4 @@
+import chinSan_voice from '../../../assets/audios/chinSan_voice.mp3';
 import { AnyAction, Middleware } from '@reduxjs/toolkit';
 import { Services } from '../../../infrastructure/services';
 import { audioActions } from './0-reducer';
@@ -22,10 +23,11 @@ const audioMiddleware =
         await Promise.all(
           workoutIds.map(async (id) => {
             const path = RECORD_WORKOUT_STORAGE_PATH + id;
-            const audioBuffer = await services.api.audio.fetchAudioBuffer(
-              path,
-              audioContext!
-            );
+            const audioBuffer =
+              await services.api.audio.fetchStorageAudioBuffer(
+                path,
+                audioContext!
+              );
             if (audioBuffer) {
               audioBufferPaths.push(path);
               audioBuffers[path] = audioBuffer;
@@ -48,6 +50,19 @@ const audioMiddleware =
       case 'audio/removeAudioBuffer': {
         const path = action.payload as string;
         await services.api.audio.deleteStorageByPath(path);
+        break;
+      }
+      case 'recordWorkoutPractice/setWorkoutIdStart': {
+        const { audioContext, chenVoice } = (getState() as RootState).audio;
+        // chenVoice が存在すれば、終了
+        if (!!chenVoice) break;
+        const audioBuffer = await services.api.audio.fetchLocalAudioBuffer(
+          chinSan_voice,
+          audioContext!
+        );
+        if (audioBuffer) {
+          dispatch(audioActions.setChenVoice(audioBuffer));
+        }
         break;
       }
       default:

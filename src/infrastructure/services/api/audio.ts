@@ -1,5 +1,10 @@
 import {
   deleteStorageByPath,
-  fetchAudioBuffer,
+  fetchLocalAudioBuffer,
+  fetchStorageAudioBuffer,
 } from '../../../application/audio/infrastructure/api';
-export default { deleteStorageByPath, fetchAudioBuffer };
+export default {
+  deleteStorageByPath,
+  fetchLocalAudioBuffer,
+  fetchStorageAudioBuffer,
+};

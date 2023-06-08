@@ -7,9 +7,8 @@ import { AppContext } from '../../..';
 import { WorkoutState, INITIAL_WORKOUT_STATE } from './Model';
 import WorkoutForm from './WorkoutForm';
 import { SCENE } from '../commons';
-import { useWorkout } from '../../../../services/workout';
 import { shuffle } from '../../../../services/utils';
-import { INITIAL_WORKOUT_LOG, Workout } from '../../../../Model';
+import { INITIAL_WORKOUT_LOG } from '../../../../Model';
 import { nanoid } from 'nanoid';
 import { useAudioBuffer } from '../../../../services/audioBuffer';
 
@@ -18,35 +17,54 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../main';
 import TouchMe from '../../../components/TouchMe';
 import { recordWorkoutPracticeActions } from '../../../../application/recordWorkoutPractice/framework/0-reducer';
+import { IRecordWorkout } from '../../../../application/recordWorkouts/core/0-interface';
 
 const reducer = (state: WorkoutState, action: WorkoutState) => action;
 
-const WorkoutPage = ({ type }: { type: string }) => {
-  const { workoutId } = useParams();
+// debug update
+const WorkoutPage = () => {
+  const { workoutId: paramWorkoutId } = useParams();
   const { state, dispatch } = useContext(AppContext);
 
   const _dispatch = useDispatch();
   const { audioContext } = useSelector((state: RootState) => state.audio);
+  const { workoutId } = useSelector(
+    (state: RootState) => state.recordWorkoutPractice
+  );
+  const { recordWorkouts } = useSelector((state: RootState) => state);
+
+  const [workout, setWorkout] = useState<null | IRecordWorkout>(null);
 
   useEffect(() => {
-    if (!workoutId) return;
-    _dispatch(recordWorkoutPracticeActions.fetchRecordWorkout(workoutId));
-  }, [workoutId]);
+    if (!paramWorkoutId) return;
+    if (!audioContext) return;
+    _dispatch(
+      recordWorkoutPracticeActions.setWorkoutIdStart({
+        workoutId: paramWorkoutId,
+      })
+    );
+  }, [paramWorkoutId, audioContext]);
+
+  useEffect(() => {
+    if (!workoutId) {
+      setWorkout(null);
+      return;
+    }
+    setWorkout(recordWorkouts[workoutId] || null);
+  }, [workoutId, recordWorkouts]);
 
   const [formState, formDispatch] = useReducer(reducer, INITIAL_WORKOUT_STATE);
-  const [path, setPath] = useState('');
 
-  const workout = useWorkout(workoutId, state, dispatch, type);
-  const audioBuffer = useAudioBuffer(path, state, audioContext, dispatch);
-
-  useEffect(() => {
-    const path = chinSan_voice;
-    if (!path) return;
-    setPath(path);
-  }, [type]);
+  const audioBuffer = useAudioBuffer(
+    chinSan_voice,
+    state,
+    audioContext,
+    dispatch
+  );
 
   /** 代入 */
   useEffect(() => {
+    if (!workout) return;
     if (!workout.id || !audioBuffer) return;
     if (formState.scene !== SCENE.opening) return;
     const newFormState = buildWorkoutState(workout, audioBuffer);
@@ -55,12 +73,15 @@ const WorkoutPage = ({ type }: { type: string }) => {
 
   if (!audioContext) return <TouchMe />;
 
-  return <WorkoutForm state={formState} dispatch={formDispatch} type={type} />;
+  return <WorkoutForm state={formState} dispatch={formDispatch} />;
 };
 
 export default WorkoutPage;
 
-const buildWorkoutState = (workout: Workout, audioBuffer: AudioBuffer) => {
+const buildWorkoutState = (
+  workout: IRecordWorkout,
+  audioBuffer: AudioBuffer
+) => {
   const cueIds = shuffle(workout.cueIds);
   const cues = buildCues(cueIds);
 

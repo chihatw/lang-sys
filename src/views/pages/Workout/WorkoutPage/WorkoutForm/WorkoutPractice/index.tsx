@@ -84,7 +84,6 @@ const WorkoutPractice = ({
 
     // app, remote
     updateWorkoutLog(
-      type,
       updatedState.log,
       updatedState.workout,
       appState,

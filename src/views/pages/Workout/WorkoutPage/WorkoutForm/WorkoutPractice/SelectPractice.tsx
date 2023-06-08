@@ -1,4 +1,3 @@
-import { inputSwitch } from '../../../commons';
 import { WorkoutState } from '../../Model';
 import SelectPracticeRow from './SelectPracticeRow';
 
@@ -32,7 +31,7 @@ const SelectPractice = ({
         <SelectPracticeRow
           key={index}
           type={type}
-          input={inputSwitch(type, cue)}
+          input={cue.pitchStr}
           isSelected={input === cue.id}
           handleClickRow={() => handleClickRow(cue.id)}
         />

@@ -14,10 +14,12 @@ export const configureStore = (services: Services) =>
           ignoredActions: [
             'user/setUser',
             'user/signinSuccess',
+            'audio/setChenVoice',
             'audio/setAudioContext',
             'audio/setAudioBuffers',
           ],
           ignoredPaths: [
+            'audio.chenVoice',
             'user.currentUser',
             'audio.audioContext',
             'audio.audioBuffers',

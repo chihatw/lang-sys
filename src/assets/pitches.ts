@@ -1,9 +1,16 @@
-import { PitchCue, Schedule } from '../Model';
+import { Schedule } from '../Model';
 import { createSourceNode } from '../application/audio/core/2-services';
 import { TYPE } from '../views/pages/Workout/commons';
 
 import { CHIN_SAN_VOICES } from './chinSanVoices';
 import { PITCH_INPUT_ITEMS } from './pitchInputItems';
+
+type PitchCue = {
+  id: string;
+  end: number;
+  start: number;
+  pitchStr: string;
+};
 
 export const PITCHES: { [id: string]: PitchCue } = {
   ta: { id: 'ta', start: 0.6, end: 1.3, pitchStr: 'タ＼ッ' },

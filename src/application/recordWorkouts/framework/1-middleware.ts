@@ -2,6 +2,8 @@ import { AnyAction, Middleware } from '@reduxjs/toolkit';
 import { Services } from '../../../infrastructure/services';
 import { recordWorkoutActions } from './0-reducer';
 import { recordWorkoutListActions } from '../../recordWorkoutList/framework/0-reducer';
+import { RootState } from '../../../main';
+import { recordWorkoutPracticeActions } from '../../recordWorkoutPractice/framework/0-reducer';
 
 const recordWorkoutsMiddleware =
   (services: Services): Middleware =>
@@ -21,6 +23,31 @@ const recordWorkoutsMiddleware =
           .map((workout) => workout.id);
 
         dispatch(recordWorkoutListActions.setWorkoutIds(workoutIds));
+        break;
+      }
+      case 'recordWorkoutPractice/setWorkoutIdStart': {
+        const workoutId: string = action.payload.workoutId;
+        const recordWorkouts = (getState() as RootState).recordWorkouts;
+
+        const workout = recordWorkouts[workoutId];
+
+        // workout が存在する場合
+        if (!!workout) {
+          dispatch(recordWorkoutPracticeActions.setWorkoutId(workoutId));
+          break;
+        }
+
+        // workout が存在しない場合
+        const gotWorkout = await services.api.recordWorkouts.fetchWorkout(
+          workoutId
+        );
+        if (!!gotWorkout) {
+          dispatch(
+            recordWorkoutActions.setWorkouts({ [workoutId]: gotWorkout })
+          );
+          dispatch(recordWorkoutPracticeActions.setWorkoutId(workoutId));
+        }
+
         break;
       }
       default:
