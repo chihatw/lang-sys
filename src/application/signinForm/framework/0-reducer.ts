@@ -13,7 +13,10 @@ const signinFormSlice = createSlice({
       state.password = payload;
       state.hasError = false;
     },
-    signinInitiate: (state) => state,
+    signinInitiate: (
+      state,
+      { payload }: { payload: { email: string; password: string } }
+    ) => state,
     resetSigninForm: () => initialState,
   },
 });

@@ -17,6 +17,7 @@ const WorkoutList = () => {
   const { workoutIds, workoutIdsInitializing, audioBufferPathsInitializing } =
     useSelector((state: RootState) => state.recordWorkoutList);
 
+  // workoutIdsの取得
   useEffect(() => {
     if (!currentUser) return;
     // 初期化が終わっていれば、終了
@@ -24,6 +25,7 @@ const WorkoutList = () => {
     dispatch(recordWorkoutListActions.getList({ uid: currentUser.uid }));
   }, [currentUser, workoutIdsInitializing]);
 
+  // audioBufferPathsの取得
   useEffect(() => {
     // audioContext がなければ、終了
     if (!audioContext) return;

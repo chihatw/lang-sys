@@ -18,7 +18,7 @@ const SignInPage = () => {
   );
 
   const handleSignIn = async () => {
-    dispatch(signinFormActions.signinInitiate());
+    dispatch(signinFormActions.signinInitiate({ email, password }));
   };
 
   return (
