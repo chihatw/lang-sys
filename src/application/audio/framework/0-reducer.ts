@@ -11,6 +11,17 @@ const audioSlice = createSlice({
     removeAudioContext: (state) => {
       state.audioContext = null;
     },
+    setAudioBuffers: (
+      state,
+      { payload }: { payload: { [path: string]: AudioBuffer } }
+    ) => {
+      state.audioBuffers = { ...state.audioBuffers, ...payload };
+    },
+    removeAudioBuffer: (state, { payload }: { payload: string }) => {
+      const audioBuffers = { ...state.audioBuffers };
+      delete audioBuffers[payload];
+      state.audioBuffers = audioBuffers;
+    },
   },
 });
 

@@ -5,28 +5,26 @@ const recordWorkoutListSlice = createSlice({
   name: 'recordWorkoutList',
   initialState,
   reducers: {
-    fetchRecordWorkoutsStart: (state) => {
-      state.isFetching = true;
-    },
-    fetchRecordWorkoutsSuccess: (
+    initiate: () => {},
+    setProps: (
       state,
       {
         payload,
       }: {
         payload: {
           workoutIds: string[];
-          audioBuffers: { [id: string]: AudioBuffer };
+          audioBufferPaths: string[];
         };
       }
     ) => {
-      state.isFetching = false;
       state.workoutIds = payload.workoutIds;
-      state.audioBuffers = payload.audioBuffers;
+      state.audioBufferPaths = payload.audioBufferPaths;
     },
-    removeAudioBuffer: (state, { payload }: { payload: string }) => {
-      const currentAudioBuffers = { ...state.audioBuffers };
-      delete currentAudioBuffers[payload];
-      state.audioBuffers = currentAudioBuffers;
+    removeAudioBufferPath: (state, { payload }: { payload: string }) => {
+      const audioBufferPaths = [...state.audioBufferPaths].filter(
+        (path) => path !== payload
+      );
+      state.audioBufferPaths = audioBufferPaths;
     },
   },
 });

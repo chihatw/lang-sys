@@ -10,8 +10,7 @@ const fetchRecordWorkout =
     switch (action.type) {
       case 'recordWorkoutPractice/fetchRecordWorkout': {
         const id = action.payload as string;
-        const workout =
-          await services.api.recordWorkoutPractice.fetchRecordWorkout(id);
+        const workout = await services.api.recordWorkouts.fetchWorkout(id);
         console.log({ workout });
         // todo
         break;

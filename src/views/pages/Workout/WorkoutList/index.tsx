@@ -14,19 +14,18 @@ const WorkoutList = () => {
 
   const dispatch = useDispatch();
   const { audioContext } = useSelector((state: RootState) => state.audio);
-  const { workoutIds, audioBuffers } = useSelector(
+  const { workoutIds } = useSelector(
     (state: RootState) => state.recordWorkoutList
   );
 
-  const { recordWorkouts } = useSelector((state: RootState) => state);
-
+  // todo workoutIds と audioBufferPaths を分けて取得？
   useEffect(() => {
     // audioContext がなければ、終了
     if (!audioContext) return;
     // workoutIds が存在すれば、終了
     if (workoutIds.length) return;
 
-    dispatch(recordWorkoutListActions.fetchRecordWorkoutsStart());
+    dispatch(recordWorkoutListActions.initiate());
   }, [workoutIds, audioContext]);
 
   const handleBack = () => {
@@ -41,11 +40,7 @@ const WorkoutList = () => {
         <div style={{ display: 'grid', rowGap: 24 }}>
           <CustomLabel label='練習' />
           {workoutIds.map((workoutId, index) => (
-            <WorkoutListRow
-              key={index}
-              workout={recordWorkouts[workoutId]}
-              audioBuffer={audioBuffers[workoutId]}
-            />
+            <WorkoutListRow key={index} workoutId={workoutId} />
           ))}
         </div>
         <Button

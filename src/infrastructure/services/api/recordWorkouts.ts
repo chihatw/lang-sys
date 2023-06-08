@@ -1,5 +1,9 @@
-import { fetchWorkouts } from '../../../application/recordWorkouts/infrastructure/api';
+import {
+  fetchWorkout,
+  fetchWorkouts,
+} from '../../../application/recordWorkouts/infrastructure/api';
 
 export default {
+  fetchWorkout,
   fetchWorkouts,
 };

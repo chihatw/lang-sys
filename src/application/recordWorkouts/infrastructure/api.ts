@@ -2,13 +2,23 @@ import { db } from '../../../repositories/firebase';
 import {
   DocumentData,
   collection,
+  getDoc,
   getDocs,
   orderBy,
   query,
   where,
+  doc,
 } from 'firebase/firestore';
 import { IRecordWorkout } from '../core/0-interface';
+
 const COLLECTION = 'recordWorkouts';
+
+export const fetchWorkout = async (id: string) => {
+  const docSnapshot = await getDoc(doc(db, COLLECTION, id));
+  if (!docSnapshot.exists()) return null;
+  const workout = buildWorkout(docSnapshot);
+  return workout;
+};
 
 export const fetchWorkouts = async (uid: string) => {
   let q = query(collection(db, COLLECTION));

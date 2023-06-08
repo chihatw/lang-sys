@@ -5,28 +5,44 @@ import { RootState } from '../../../../../main';
 import AudioBufferSlider from '../../../../components/AudioBufferSlider';
 import { Delete } from '@mui/icons-material';
 import { recordWorkoutListActions } from '../../../../../application/recordWorkoutList/framework/0-reducer';
-import { IRecordWorkout } from '../../../../../application/recordWorkouts/core/0-interface';
+import { RECORD_WORKOUT_STORAGE_PATH } from '../../../../../application/recordWorkouts/core/1-constants';
+import { useEffect, useState } from 'react';
 
-const WorkoutListRow = ({
-  workout,
-  audioBuffer,
-}: {
-  workout: IRecordWorkout;
-  audioBuffer: AudioBuffer | null;
-}) => {
+const WorkoutListRow = ({ workoutId }: { workoutId: string }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { audioContext } = useSelector((state: RootState) => state.audio);
+  const { audioContext, audioBuffers } = useSelector(
+    (state: RootState) => state.audio
+  );
+  const { recordWorkouts } = useSelector((state: RootState) => state);
+  const { audioBufferPaths } = useSelector(
+    (state: RootState) => state.recordWorkoutList
+  );
+
+  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
+
+  useEffect(() => {
+    let audioBuffer: null | AudioBuffer = null;
+    const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
+    if (audioBufferPaths.includes(path)) {
+      audioBuffer = audioBuffers[path];
+    }
+    setAudioBuffer(audioBuffer);
+  }, [workoutId, audioBufferPaths]);
 
   const handleClick = () => {
-    navigate(`/record/${workout.id}`);
+    navigate(`/record/${workoutId}`);
   };
 
   const handleDelete = () => {
-    dispatch(recordWorkoutListActions.removeAudioBuffer(workout.id));
+    const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
+    dispatch(recordWorkoutListActions.removeAudioBufferPath(path));
   };
+
+  const workout = recordWorkouts[workoutId];
+  if (!workout) return <></>;
 
   return (
     <div>
@@ -74,12 +90,7 @@ const WorkoutListRow = ({
               audioContext={audioContext}
             />
           </div>
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDelete();
-            }}
-          >
+          <IconButton onClick={handleDelete}>
             <Delete />
           </IconButton>
         </div>

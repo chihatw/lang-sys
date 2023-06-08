@@ -15,11 +15,12 @@ export const configureStore = (services: Services) =>
             'user/setUser',
             'user/signinSuccess',
             'audio/setAudioContext',
-            'recordWorkoutList/fetchRecordWorkoutsSuccess',
+            'audio/setAudioBuffers',
           ],
           ignoredPaths: [
             'user.currentUser',
             'audio.audioContext',
+            'audio.audioBuffers',
             'recordWorkoutList.audioBuffers',
           ],
         },

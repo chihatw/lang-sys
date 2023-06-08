@@ -2,7 +2,5 @@ import { IRecordWorkoutList } from './0-interface';
 
 export const initialState: IRecordWorkoutList = {
   workoutIds: [],
-  audioBuffers: {},
-  isFetching: false,
-  errorMsg: '',
+  audioBufferPaths: [],
 };

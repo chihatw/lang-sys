@@ -20,6 +20,7 @@ import {
 import { Dispatch, useEffect, useState } from 'react';
 import { Action, ActionTypes } from '../Update';
 
+// debug delete this file
 // todo duplicate
 const TYPE = {
   kana: 'kana',

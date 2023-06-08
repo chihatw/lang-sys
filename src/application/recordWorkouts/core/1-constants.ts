@@ -10,3 +10,5 @@ export const initialRecordWorkout: IRecordWorkout = {
 };
 
 export const initialState: { [id: string]: IRecordWorkout } = {};
+
+export const RECORD_WORKOUT_STORAGE_PATH = 'recordWorkout/';

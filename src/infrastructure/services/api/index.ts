@@ -1,11 +1,9 @@
 import user from './user';
+import audio from './audio';
 import recordWorkouts from './recordWorkouts';
-import recordWorkoutList from './recordWorkoutList';
-import recordWorkoutPractice from './recordWorkoutPractice';
 
 export default {
   user,
+  audio,
   recordWorkouts,
-  recordWorkoutList,
-  recordWorkoutPractice,
 };
