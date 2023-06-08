@@ -1,7 +1,11 @@
 import user from './user';
+import recordWorkouts from './recordWorkouts';
 import recordWorkoutList from './recordWorkoutList';
 import recordWorkoutPractice from './recordWorkoutPractice';
 
-const api = { user, recordWorkoutList, recordWorkoutPractice };
-
-export default api;
+export default {
+  user,
+  recordWorkouts,
+  recordWorkoutList,
+  recordWorkoutPractice,
+};

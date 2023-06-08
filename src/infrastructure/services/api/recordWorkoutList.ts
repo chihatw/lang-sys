@@ -1,13 +1,9 @@
 import {
-  fetchRecordWorkouts,
   fetchAudioBuffer,
   deleteRecordWorkoutAudio,
 } from '../../../application/recordWorkoutList/infrastructure/api';
 
-const recordWorkouts = {
-  fetchRecordWorkouts,
+export default {
   fetchAudioBuffer,
   deleteRecordWorkoutAudio,
 };
-
-export default recordWorkouts;

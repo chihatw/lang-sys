@@ -1,34 +1,8 @@
-import { db, storage } from '../../../repositories/firebase';
-import {
-  DocumentData,
-  collection,
-  getDocs,
-  orderBy,
-  query,
-  where,
-} from 'firebase/firestore';
+import { storage } from '../../../repositories/firebase';
+import { DocumentData } from 'firebase/firestore';
 import { deleteObject, getDownloadURL, ref } from 'firebase/storage';
 import { blobToAudioBuffer } from '../../audio/core/2-services';
 import { IRecordWorkout } from '../../recordWorkouts/core/0-interface';
-
-const COLLECTION = 'recordWorkouts';
-
-export const fetchRecordWorkouts = async (uid: string) => {
-  let q = query(collection(db, COLLECTION));
-  q = query(q, where('uid', '==', uid));
-  q = query(q, where('isActive', '==', true));
-  q = query(q, orderBy('createdAt', 'desc'));
-
-  console.log(`get ${COLLECTION}`);
-
-  const querySnapshot = await getDocs(q);
-  const workouts: { [id: string]: IRecordWorkout } = {};
-  querySnapshot.forEach((doc) => {
-    const workout = buildWorkout(doc);
-    workouts[doc.id] = workout;
-  });
-  return workouts;
-};
 
 export const fetchAudioBuffer = async (
   path: string,

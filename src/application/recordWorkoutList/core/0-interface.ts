@@ -1,7 +1,5 @@
-import { IRecordWorkout } from '../../recordWorkouts/core/0-interface';
-
 export interface IRecordWorkoutList {
-  workouts: { [id: string]: IRecordWorkout };
+  workoutIds: string[];
   audioBuffers: { [id: string]: AudioBuffer };
   isFetching: boolean;
   errorMsg: string;

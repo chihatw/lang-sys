@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { initialState } from '../core/1-constants';
-import { IRecordWorkout } from '../../recordWorkouts/core/0-interface';
 
 const recordWorkoutListSlice = createSlice({
   name: 'recordWorkoutList',
@@ -8,10 +7,6 @@ const recordWorkoutListSlice = createSlice({
   reducers: {
     fetchRecordWorkoutsStart: (state) => {
       state.isFetching = true;
-      if (Object.keys(state.workouts).length) {
-        state.workouts = {};
-      }
-      state.errorMsg = '';
     },
     fetchRecordWorkoutsSuccess: (
       state,
@@ -19,13 +14,13 @@ const recordWorkoutListSlice = createSlice({
         payload,
       }: {
         payload: {
-          workouts: { [id: string]: IRecordWorkout };
+          workoutIds: string[];
           audioBuffers: { [id: string]: AudioBuffer };
         };
       }
     ) => {
       state.isFetching = false;
-      state.workouts = payload.workouts;
+      state.workoutIds = payload.workoutIds;
       state.audioBuffers = payload.audioBuffers;
     },
     removeAudioBuffer: (state, { payload }: { payload: string }) => {

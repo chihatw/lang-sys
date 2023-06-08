@@ -2,6 +2,7 @@ import { AnyAction, Middleware } from '@reduxjs/toolkit';
 import { Services } from '../../../infrastructure/services';
 import { RootState } from '../../../main';
 import { recordWorkoutListActions } from './0-reducer';
+import { recordWorkoutActions } from '../../recordWorkouts/framework/0-reducer';
 
 const fetchRecordWorkouts =
   (services: Services): Middleware =>
@@ -15,10 +16,9 @@ const fetchRecordWorkouts =
         const { currentUser } = (getState() as RootState).user;
 
         // workouts の取得
-        const workouts =
-          await services.api.recordWorkoutList.fetchRecordWorkouts(
-            currentUser!.uid
-          );
+        const workouts = await services.api.recordWorkouts.fetchWorkouts(
+          currentUser!.uid
+        );
 
         // audioBuffers の取得
         const audioBuffers: { [id: string]: AudioBuffer } = {};
@@ -35,9 +35,15 @@ const fetchRecordWorkouts =
             }
           })
         );
+
+        dispatch(recordWorkoutActions.setWorkouts(workouts));
+
+        const workoutIds = Object.values(workouts)
+          .sort((a, b) => a.createdAt - b.createdAt)
+          .map((workout) => workout.id);
         dispatch(
           recordWorkoutListActions.fetchRecordWorkoutsSuccess({
-            workouts,
+            workoutIds,
             audioBuffers,
           })
         );

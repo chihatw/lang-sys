@@ -14,18 +14,20 @@ const WorkoutList = () => {
 
   const dispatch = useDispatch();
   const { audioContext } = useSelector((state: RootState) => state.audio);
-  const { workouts, audioBuffers } = useSelector(
+  const { workoutIds, audioBuffers } = useSelector(
     (state: RootState) => state.recordWorkoutList
   );
+
+  const { recordWorkouts } = useSelector((state: RootState) => state);
 
   useEffect(() => {
     // audioContext がなければ、終了
     if (!audioContext) return;
-    // workouts が存在すれば、終了
-    if (Object.keys(workouts).length) return;
+    // workoutIds が存在すれば、終了
+    if (workoutIds.length) return;
 
     dispatch(recordWorkoutListActions.fetchRecordWorkoutsStart());
-  }, [workouts, audioContext]);
+  }, [workoutIds, audioContext]);
 
   const handleBack = () => {
     navigate('/');
@@ -38,15 +40,13 @@ const WorkoutList = () => {
       <div style={{ display: 'grid', rowGap: 80 }}>
         <div style={{ display: 'grid', rowGap: 24 }}>
           <CustomLabel label='練習' />
-          {Object.values(workouts)
-            .sort((a, b) => a.createdAt - b.createdAt)
-            .map((workout, index) => (
-              <WorkoutListRow
-                key={index}
-                workout={workout}
-                audioBuffer={audioBuffers[workout.id]}
-              />
-            ))}
+          {workoutIds.map((workoutId, index) => (
+            <WorkoutListRow
+              key={index}
+              workout={recordWorkouts[workoutId]}
+              audioBuffer={audioBuffers[workoutId]}
+            />
+          ))}
         </div>
         <Button
           sx={{ color: 'white' }}
