@@ -7,9 +7,9 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-import { IRecordWorkout } from '../core/0-interface';
 import { deleteObject, getDownloadURL, ref } from 'firebase/storage';
 import { blobToAudioBuffer } from '../../audio/core/2-services';
+import { IRecordWorkout } from '../../recordWorkouts/core/0-interface';
 
 const COLLECTION = 'recordWorkouts';
 
@@ -61,7 +61,7 @@ export const deleteRecordWorkoutAudio = async (id: string) => {
     .catch((err) => console.error(err));
 };
 
-const buildWorkout = (doc: DocumentData): IRecordWorkout => {
+export const buildWorkout = (doc: DocumentData): IRecordWorkout => {
   const { uid, cueIds, title, logs, createdAt } = doc.data();
   return {
     id: doc.id,

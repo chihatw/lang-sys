@@ -22,7 +22,7 @@ const CheckPaneRow = ({
 
   const handlePlay = () => {
     if (!audioContext) return;
-    playAudioBuffer(TYPE.record, cue.id, audioBuffer, audioContext);
+    playAudioBuffer(cue.id, audioBuffer, audioContext);
   };
 
   return (

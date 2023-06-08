@@ -1,11 +1,11 @@
 import { Card, CardContent, IconButton, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { IRecordWorkout } from '../../../../../application/recordWorkouts/core/0-interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../main';
 import AudioBufferSlider from '../../../../components/AudioBufferSlider';
 import { Delete } from '@mui/icons-material';
-import { recordWorkoutsActions } from '../../../../../application/recordWorkouts/framework/0-reducer';
+import { recordWorkoutListActions } from '../../../../../application/recordWorkoutList/framework/0-reducer';
+import { IRecordWorkout } from '../../../../../application/recordWorkouts/core/0-interface';
 
 const WorkoutListRow = ({
   workout,
@@ -25,7 +25,7 @@ const WorkoutListRow = ({
   };
 
   const handleDelete = () => {
-    dispatch(recordWorkoutsActions.removeAudioBuffer(workout.id));
+    dispatch(recordWorkoutListActions.removeAudioBuffer(workout.id));
   };
 
   return (

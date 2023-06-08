@@ -79,7 +79,7 @@ const WorkoutOpening = ({
 
   const handleClick = (cueId: string) => {
     if (!state.audioBuffer || !audioContext) return;
-    playAudioBuffer(type, cueId, state.audioBuffer, audioContext);
+    playAudioBuffer(cueId, state.audioBuffer, audioContext);
 
     const updatedTapped = [...state.log.opening.tapped];
     updatedTapped.push(cueId);

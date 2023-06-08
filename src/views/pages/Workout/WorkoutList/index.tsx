@@ -7,7 +7,7 @@ import WorkoutListRow from './WorkoutListRow';
 import { RootState } from '../../../../main';
 import TouchMe from '../../../components/TouchMe';
 import CustomLabel from '../../../components/CustomLabel';
-import { recordWorkoutsActions } from '../../../../application/recordWorkouts/framework/0-reducer';
+import { recordWorkoutListActions } from '../../../../application/recordWorkoutList/framework/0-reducer';
 
 const WorkoutList = () => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const WorkoutList = () => {
   const dispatch = useDispatch();
   const { audioContext } = useSelector((state: RootState) => state.audio);
   const { workouts, audioBuffers } = useSelector(
-    (state: RootState) => state.recordWorkouts
+    (state: RootState) => state.recordWorkoutList
   );
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const WorkoutList = () => {
     // workouts が存在すれば、終了
     if (Object.keys(workouts).length) return;
 
-    dispatch(recordWorkoutsActions.fetchRecordWorkoutsStart());
+    dispatch(recordWorkoutListActions.fetchRecordWorkoutsStart());
   }, [workouts, audioContext]);
 
   const handleBack = () => {

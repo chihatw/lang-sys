@@ -8,10 +8,3 @@ export interface IRecordWorkout {
   logs: { [id: string]: IWorkoutLog };
   createdAt: number;
 }
-
-export interface IRecordWorkouts {
-  workouts: { [id: string]: IRecordWorkout };
-  audioBuffers: { [id: string]: AudioBuffer };
-  isFetching: boolean;
-  errorMsg: string;
-}

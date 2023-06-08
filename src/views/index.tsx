@@ -44,11 +44,11 @@ function App() {
     });
   }, [dispatch]);
 
-  const handleClick = () => {
+  const setAudioContext = () => {
     const audioContext = createAudioContext();
     if (audioContext) {
       _dispatch(audioActions.setAudioContext(audioContext));
-      window.removeEventListener('click', handleClick);
+      window.removeEventListener('click', setAudioContext);
     } else {
       _dispatch(audioActions.removeAudioContext());
     }
@@ -56,7 +56,7 @@ function App() {
 
   useEffect(() => {
     if (!audioContext) {
-      window.addEventListener('click', handleClick);
+      window.addEventListener('click', setAudioContext);
     }
   }, [audioContext]);
 
@@ -78,7 +78,13 @@ function App() {
             <Route path='record'>
               <Route
                 path=':workoutId'
-                element={<WorkoutPage type={TYPE.record} />}
+                element={
+                  currentUser ? (
+                    <WorkoutPage type={TYPE.record} />
+                  ) : (
+                    <SignInPage />
+                  )
+                }
               />
             </Route>
 

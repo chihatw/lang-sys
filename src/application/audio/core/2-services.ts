@@ -39,35 +39,15 @@ export const blobToAudioBuffer = async (
 };
 
 export const playAudioBuffer = (
-  type: string,
-  cueId: string,
+  pitchStr: string,
   audioBuffer: AudioBuffer,
   audioContext: AudioContext
 ) => {
-  let schedules: Schedule[] = [];
-  switch (type) {
-    case TYPE.kana:
-      playKana(cueId, audioBuffer, audioContext);
-      break;
-    case TYPE.rhythm:
-      playRhythm(cueId, audioBuffer, audioContext);
-      break;
-    case TYPE.pitch:
-      const cue = PITCH_WORKOUT_ITEMS[cueId];
-      playScheduledItem(cue.schedules, audioBuffer, audioContext);
-      break;
-    case TYPE.pitchInput:
-      schedules = getSchedules(cueId, PITCH_INPUT_ITEMS);
-      playScheduledItem(schedules, audioBuffer, audioContext);
-      break;
-    case TYPE.record:
-      schedules = getSchedules(cueId, CHIN_SAN_VOICES);
-      console.log(schedules);
-      playScheduledItem(schedules, audioBuffer, audioContext);
-      break;
-    default:
-      console.error(`incorrect type: ${type}`);
-  }
+  const item = Object.values(CHIN_SAN_VOICES).find(
+    (item) => item.pitchStr === pitchStr
+  );
+  const schedules: Schedule[] = item?.schedules || [];
+  playScheduledItem(schedules, audioBuffer, audioContext);
 };
 
 export const playScheduledItem = async (
@@ -88,18 +68,4 @@ export const playScheduledItem = async (
     sourceNode.start(currentTime + item.offset, item.start);
     sourceNode.stop(currentTime + item.offset + item.stop - item.start);
   });
-};
-
-const getSchedules = (
-  pitchStr: string,
-  items: {
-    [key: string]: {
-      pitchStr: string;
-      schedules: Schedule[];
-    };
-  }
-) => {
-  const item = Object.values(items).find((item) => item.pitchStr === pitchStr);
-  if (!item) return [];
-  return item.schedules;
 };

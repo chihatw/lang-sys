@@ -1,4 +1,4 @@
-import { IRecordWorkout, IRecordWorkouts } from './0-interface';
+import { IRecordWorkout } from './0-interface';
 
 export const initialRecordWorkout: IRecordWorkout = {
   id: '',
@@ -9,9 +9,4 @@ export const initialRecordWorkout: IRecordWorkout = {
   createdAt: 0,
 };
 
-export const initialState: IRecordWorkouts = {
-  workouts: {},
-  audioBuffers: {},
-  isFetching: false,
-  errorMsg: '',
-};
+export const initialState: { [id: string]: IRecordWorkout } = {};

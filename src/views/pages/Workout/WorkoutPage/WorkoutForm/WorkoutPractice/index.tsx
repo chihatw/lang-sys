@@ -56,7 +56,7 @@ const WorkoutPractice = ({
 
   const handleClickPlay = () => {
     if (!state.audioBuffer || !audioContext) return;
-    playAudioBuffer(type, currentCueId, state.audioBuffer, audioContext);
+    playAudioBuffer(currentCueId, state.audioBuffer, audioContext);
 
     const updatedState = updatePlayedAt(state);
     dispatch(updatedState);

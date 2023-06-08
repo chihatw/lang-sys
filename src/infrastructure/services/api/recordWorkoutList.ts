@@ -2,7 +2,7 @@ import {
   fetchRecordWorkouts,
   fetchAudioBuffer,
   deleteRecordWorkoutAudio,
-} from '../../../application/recordWorkouts/infrastructure/api';
+} from '../../../application/recordWorkoutList/infrastructure/api';
 
 const recordWorkouts = {
   fetchRecordWorkouts,

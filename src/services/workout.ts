@@ -53,14 +53,7 @@ export const useWorkout = (
     const workout = workouts[workoutId];
     if (!workout) return;
     setWorkout(workout);
-  }, [
-    workoutId,
-    // state.kanaWorkouts,
-    // state.pitchWorkouts,
-    // state.rhythmWorkouts,
-    state.recordWorkouts,
-    // state.pitchInputWorkouts,
-  ]);
+  }, [workoutId, state.recordWorkouts]);
 
   /** state.*Workouts の更新 */
   useEffect(() => {

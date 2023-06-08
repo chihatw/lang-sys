@@ -1,7 +1,7 @@
 import { AnyAction, Middleware } from '@reduxjs/toolkit';
 import { Services } from '../../../infrastructure/services';
 import { RootState } from '../../../main';
-import { recordWorkoutsActions } from './0-reducer';
+import { recordWorkoutListActions } from './0-reducer';
 
 const fetchRecordWorkouts =
   (services: Services): Middleware =>
@@ -10,14 +10,15 @@ const fetchRecordWorkouts =
   async (action: AnyAction) => {
     next(action);
     switch (action.type) {
-      case 'recordWorkouts/fetchRecordWorkoutsStart': {
+      case 'recordWorkoutList/fetchRecordWorkoutsStart': {
         const { audioContext } = (getState() as RootState).audio;
         const { currentUser } = (getState() as RootState).user;
 
         // workouts の取得
-        const workouts = await services.api.recordWorkouts.fetchRecordWorkouts(
-          currentUser!.uid
-        );
+        const workouts =
+          await services.api.recordWorkoutList.fetchRecordWorkouts(
+            currentUser!.uid
+          );
 
         // audioBuffers の取得
         const audioBuffers: { [id: string]: AudioBuffer } = {};
@@ -25,7 +26,7 @@ const fetchRecordWorkouts =
           Object.keys(workouts).map(async (id) => {
             const path = `recordWorkout/${id}`;
             const audioBuffer =
-              await services.api.recordWorkouts.fetchAudioBuffer(
+              await services.api.recordWorkoutList.fetchAudioBuffer(
                 path,
                 audioContext!
               );
@@ -35,16 +36,16 @@ const fetchRecordWorkouts =
           })
         );
         dispatch(
-          recordWorkoutsActions.fetchRecordWorkoutsSuccess({
+          recordWorkoutListActions.fetchRecordWorkoutsSuccess({
             workouts,
             audioBuffers,
           })
         );
         break;
       }
-      case 'recordWorkouts/removeAudioBuffer': {
+      case 'recordWorkoutList/removeAudioBuffer': {
         const id = action.payload as string;
-        await services.api.recordWorkouts.deleteRecordWorkoutAudio(id);
+        await services.api.recordWorkoutList.deleteRecordWorkoutAudio(id);
         break;
       }
       default:
