@@ -11,22 +11,28 @@ import { recordWorkoutListActions } from '../../../../application/recordWorkoutL
 
 const WorkoutList = () => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const { audioContext } = useSelector((state: RootState) => state.audio);
-  const { workoutIds } = useSelector(
-    (state: RootState) => state.recordWorkoutList
-  );
+  const { workoutIds, workoutIdsInitializing, audioBufferPathsInitializing } =
+    useSelector((state: RootState) => state.recordWorkoutList);
 
-  // todo workoutIds と audioBufferPaths を分けて取得？
+  useEffect(() => {
+    if (!currentUser) return;
+    // 初期化が終わっていれば、終了
+    if (!workoutIdsInitializing) return;
+    dispatch(recordWorkoutListActions.getList({ uid: currentUser.uid }));
+  }, [currentUser, workoutIdsInitializing]);
+
   useEffect(() => {
     // audioContext がなければ、終了
     if (!audioContext) return;
-    // workoutIds が存在すれば、終了
-    if (workoutIds.length) return;
-
-    dispatch(recordWorkoutListActions.initiate());
-  }, [workoutIds, audioContext]);
+    // workoutIds が存在しなければ、終了
+    if (!workoutIds.length) return;
+    // 初期化が終わっていれば、終了
+    if (!audioBufferPathsInitializing) return;
+    dispatch(recordWorkoutListActions.getAudioBufferPaths({ workoutIds }));
+  }, [workoutIds, audioBufferPathsInitializing, audioContext]);
 
   const handleBack = () => {
     navigate('/');
