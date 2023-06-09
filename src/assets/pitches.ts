@@ -1,4 +1,4 @@
-import { Schedule } from '../Model';
+import { ISchedule } from '../application/audio/core/0-interface';
 import { createSourceNode } from '../application/audio/core/2-services';
 
 import { CHIN_SAN_VOICES } from './chinSanVoices';
@@ -181,8 +181,8 @@ const DURATION: { [key: string]: number } = {
  * input は低音をl, 高音をhで表す 'lhhh'
  */
 
-const buildSchedules = (input: string): Schedule[] => {
-  const schedules: Schedule[] = [];
+const buildSchedules = (input: string): ISchedule[] => {
+  const schedules: ISchedule[] = [];
 
   const pitches = input.split('');
 
@@ -205,7 +205,7 @@ const buildSchedules = (input: string): Schedule[] => {
 };
 
 export const PITCH_WORKOUT_ITEMS: {
-  [key: string]: { id: string; pitchStr: string; schedules: Schedule[] };
+  [key: string]: { id: string; pitchStr: string; schedules: ISchedule[] };
 } = {
   hl: {
     id: 'hl',

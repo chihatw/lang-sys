@@ -14,8 +14,9 @@ const WorkoutList = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.user);
   const { audioContext } = useSelector((state: RootState) => state.audio);
-  const { workoutIds, workoutIdsInitializing, audioBufferPathsInitializing } =
-    useSelector((state: RootState) => state.recordWorkoutList);
+  const { workoutIds, workoutIdsInitializing } = useSelector(
+    (state: RootState) => state.recordWorkoutList
+  );
 
   // workoutIdsの取得
   useEffect(() => {
@@ -31,10 +32,8 @@ const WorkoutList = () => {
     if (!audioContext) return;
     // workoutIds が存在しなければ、終了
     if (!workoutIds.length) return;
-    // 初期化が終わっていれば、終了
-    if (!audioBufferPathsInitializing) return;
     dispatch(recordWorkoutListActions.getAudioBufferPaths({ workoutIds }));
-  }, [workoutIds, audioBufferPathsInitializing, audioContext]);
+  }, [workoutIds, audioContext]);
 
   const handleBack = () => {
     navigate('/');

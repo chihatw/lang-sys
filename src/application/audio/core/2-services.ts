@@ -1,5 +1,7 @@
-import { Schedule } from '../../../Model';
+import { MutableRefObject } from 'react';
+
 import { CHIN_SAN_VOICES } from '../../../assets/chinSanVoices';
+import { ISchedule } from './0-interface';
 
 export const createAudioContext = () => {
   const audioContext = new window.AudioContext();
@@ -34,6 +36,7 @@ export const blobToAudioBuffer = async (
   return audioBuffer;
 };
 
+// todo will delete
 export const playAudioBuffer = (
   pitchStr: string,
   audioBuffer: AudioBuffer,
@@ -42,12 +45,12 @@ export const playAudioBuffer = (
   const item = Object.values(CHIN_SAN_VOICES).find(
     (item) => item.pitchStr === pitchStr
   );
-  const schedules: Schedule[] = item?.schedules || [];
+  const schedules: ISchedule[] = item?.schedules || [];
   playScheduledItem(schedules, audioBuffer, audioContext);
 };
 
 export const playScheduledItem = async (
-  schedules: Schedule[],
+  schedules: ISchedule[],
   audioBuffer: AudioBuffer,
   audioContext: AudioContext
 ) => {
@@ -95,4 +98,53 @@ export const getStartAndStopFromChenSanVoices = (pitchStr: string) => {
   if (!target) return { start: 0, stop: 0 };
   const { start, stop } = target.schedules[0];
   return { start, stop };
+};
+
+export const createMediaRecorder = async (
+  audioElemRef: MutableRefObject<HTMLAudioElement>,
+  mediaRecorderRef: MutableRefObject<MediaRecorder | null>
+) => {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: false,
+  });
+  const mediaRecorder = new MediaRecorder(stream);
+  // streamと連携してマイクを切るため
+  audioElemRef.current.srcObject = stream;
+  mediaRecorderRef.current = mediaRecorder;
+  return mediaRecorder;
+};
+
+export const startRecording = async (
+  mediaRecorder: MediaRecorder,
+  audioContext: AudioContext,
+  callback: (blob: Blob, audioBuffer: AudioBuffer) => void
+) => {
+  // データが入力された時の処理
+  mediaRecorder.ondataavailable = async (event: BlobEvent) => {
+    const blob = event.data;
+    if (!blob) return;
+    const audioBuffer = await blobToAudioBuffer(blob, audioContext);
+    if (!audioBuffer) return;
+    callback(blob, audioBuffer);
+  };
+  // 録音開始
+  mediaRecorder.start();
+};
+
+export const clearMediaRecorder = (
+  audioElemRef: MutableRefObject<HTMLAudioElement>,
+  mediaRecorderRef: MutableRefObject<MediaRecorder | null>
+) => {
+  let mediaRecorder = mediaRecorderRef.current;
+  let audioElem = audioElemRef.current;
+  if (!mediaRecorder) return;
+  mediaRecorder.stop();
+  const stream = audioElem.srcObject as MediaStream;
+  stream.getTracks().forEach((track) => {
+    track.stop();
+  });
+  // ブラウザのマイク使用中の表示を消すために必要
+  audioElem.srcObject = null;
+  mediaRecorder = null;
 };

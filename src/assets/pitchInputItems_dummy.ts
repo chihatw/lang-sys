@@ -1,5 +1,3 @@
-import { Schedule } from '../Model';
-
 export const PITCH_INPUT_ITEMS: string[] = [
   // 4拍 - 30
   // タタタタ

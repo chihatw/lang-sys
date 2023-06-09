@@ -1,5 +1,3 @@
-import { IWorkoutLog } from '../../workoutLog/core/0-interface';
-
 export interface IRecordWorkoutPractice {
   blob: Blob | null; // upload用
   scene: string;

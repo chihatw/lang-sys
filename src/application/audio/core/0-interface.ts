@@ -1,3 +1,9 @@
+export interface ISchedule {
+  offset: number;
+  start: number;
+  stop: number;
+}
+
 export interface IAudio {
   chenVoice: null | AudioBuffer;
   audioContext: null | AudioContext;

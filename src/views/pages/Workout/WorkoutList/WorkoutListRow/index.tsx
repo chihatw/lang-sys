@@ -18,14 +18,11 @@ const WorkoutListRow = ({ workoutId }: { workoutId: string }) => {
     (state: RootState) => state.audio
   );
   const { recordWorkouts } = useSelector((state: RootState) => state);
-  const { audioBufferPaths } = useSelector(
-    (state: RootState) => state.recordWorkoutList
-  );
 
   const audioBuffer = useMemo(() => {
     const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
     return audioBuffers[path] || null;
-  }, [workoutId, audioBufferPaths]);
+  }, [workoutId, audioBuffers]);
 
   const handleClick = () => {
     navigate(`/record/${workoutId}`);
@@ -33,7 +30,7 @@ const WorkoutListRow = ({ workoutId }: { workoutId: string }) => {
 
   const handleDelete = () => {
     const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
-    dispatch(recordWorkoutListActions.removeAudioBufferPath(path));
+    dispatch(recordWorkoutListActions.removeAudioBufferStart(path));
   };
 
   const workout = recordWorkouts[workoutId];

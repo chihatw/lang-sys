@@ -14,16 +14,7 @@ const recordWorkoutListSlice = createSlice({
       state.workoutIds = payload;
       state.workoutIdsInitializing = false;
     },
-    setAudioBufferPaths: (state, { payload }: { payload: string[] }) => {
-      state.audioBufferPaths = payload;
-      state.audioBufferPathsInitializing = false;
-    },
-    removeAudioBufferPath: (state, { payload }: { payload: string }) => {
-      const audioBufferPaths = [...state.audioBufferPaths].filter(
-        (path) => path !== payload
-      );
-      state.audioBufferPaths = audioBufferPaths;
-    },
+    removeAudioBufferStart: (state, { payload }: { payload: string }) => state,
   },
 });
 

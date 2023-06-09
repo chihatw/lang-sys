@@ -4,7 +4,7 @@ import { Services } from '../../../infrastructure/services';
 import { audioActions } from './0-reducer';
 import { RootState } from '../../../main';
 import { RECORD_WORKOUT_STORAGE_PATH } from '../../recordWorkouts/core/1-constants';
-import { recordWorkoutListActions } from '../../recordWorkoutList/framework/0-reducer';
+import { recordWorkoutPracticeActions } from '../../recordWorkoutPractice/framework/0-reducer';
 
 const audioMiddleware =
   (services: Services): Middleware =>
@@ -19,7 +19,6 @@ const audioMiddleware =
 
         // audioBuffers の取得
         const audioBuffers: { [path: string]: AudioBuffer } = {};
-        const audioBufferPaths: string[] = [];
         await Promise.all(
           workoutIds.map(async (id) => {
             const path = RECORD_WORKOUT_STORAGE_PATH + id;
@@ -29,20 +28,16 @@ const audioMiddleware =
                 audioContext!
               );
             if (audioBuffer) {
-              audioBufferPaths.push(path);
               audioBuffers[path] = audioBuffer;
             }
           })
         );
 
         dispatch(audioActions.setAudioBuffers(audioBuffers));
-        dispatch(
-          recordWorkoutListActions.setAudioBufferPaths(audioBufferPaths)
-        );
 
         break;
       }
-      case 'recordWorkoutList/removeAudioBufferPath': {
+      case 'recordWorkoutList/removeAudioBufferStart': {
         const path = action.payload as string;
         dispatch(audioActions.removeAudioBuffer(path));
         break;
@@ -63,6 +58,23 @@ const audioMiddleware =
         if (audioBuffer) {
           dispatch(audioActions.setChenVoice(audioBuffer));
         }
+        break;
+      }
+      case 'recordWorkoutPractice/saveAudioBuffer': {
+        const { workoutId, blob, audioBuffer } = (getState() as RootState)
+          .recordWorkoutPractice;
+
+        if (!!blob && !!audioBuffer) {
+          const storagePath = RECORD_WORKOUT_STORAGE_PATH + workoutId;
+          await services.api.audio.uploadStorageByPath(blob, storagePath);
+
+          dispatch(
+            audioActions.setAudioBuffers({ [storagePath]: audioBuffer })
+          );
+
+          dispatch(recordWorkoutPracticeActions.clearState());
+        }
+
         break;
       }
       default:

@@ -1,9 +1,9 @@
-import { Schedule } from '../Model';
+import { ISchedule } from '../application/audio/core/0-interface';
 
 export const CHIN_SAN_VOICES: {
   [id: string]: {
     pitchStr: string;
-    schedules: Schedule[];
+    schedules: ISchedule[];
   };
 } = {
   tata0: {

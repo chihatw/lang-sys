@@ -1,7 +1,5 @@
 import { PlayArrow } from '@mui/icons-material';
 import { Divider, IconButton } from '@mui/material';
-import { useContext } from 'react';
-import { AppContext } from '../../../..';
 
 import SentencePitchLine from '../../../../components/SentencePitchLine';
 import { playAudioBuffer } from '../../../../../application/audio/core/2-services';
@@ -15,10 +13,9 @@ const CheckPaneRow = ({
   pitchStr: string;
   audioBuffer: AudioBuffer;
 }) => {
-  const { state } = useContext(AppContext);
-
   const { audioContext } = useSelector((state: RootState) => state.audio);
 
+  // todo update play
   const handlePlay = () => {
     if (!audioContext) return;
     playAudioBuffer(pitchStr, audioBuffer, audioContext);

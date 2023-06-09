@@ -1,7 +1,7 @@
-import { Schedule } from '../Model';
+import { ISchedule } from '../application/audio/core/0-interface';
 
 export const PITCH_INPUT_ITEMS: {
-  [key: string]: { pitchStr: string; schedules: Schedule[] };
+  [key: string]: { pitchStr: string; schedules: ISchedule[] };
 } = {
   // 2拍 - 6
   tata0: {

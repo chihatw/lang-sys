@@ -1,6 +1,19 @@
-import { deleteObject, ref, getDownloadURL } from 'firebase/storage';
+import {
+  deleteObject,
+  ref,
+  getDownloadURL,
+  uploadBytes,
+} from 'firebase/storage';
 import { storage } from '../../../repositories/firebase';
 import { blobToAudioBuffer } from '../core/2-services';
+
+export const uploadStorageByPath = async (blob: Blob, path: string) => {
+  const storageRef = ref(storage, path);
+  // Blob 経由でファイルをアップロード
+  uploadBytes(storageRef, blob)
+    .then(() => console.log(`%c"${path}" uploaded`, 'color:red'))
+    .catch((error) => console.error(error));
+};
 
 export const deleteStorageByPath = async (path: string) => {
   const storageRef = ref(storage, path);
