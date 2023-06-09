@@ -7,11 +7,11 @@ import TouchMe from '../../../components/TouchMe';
 import { RootState } from '../../../../main';
 import { recordWorkoutPracticeActions } from '../../../../application/recordWorkoutPractice/framework/0-reducer';
 
-import WorkoutOpening from './WorkoutOpening';
-import RecordWorkoutPractice from './RecordWorkoutPractice';
+import OpeningScene from './OpeningScene';
+import PracticeScene from './PracticeScene';
 import { SCENE } from '../../../../application/recordWorkoutPractice/core/1-constants';
 
-const WorkoutPage = () => {
+const RecordWorkoutPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { workoutId: paramWorkoutId } = useParams();
@@ -29,7 +29,7 @@ const WorkoutPage = () => {
    */
   useEffect(() => {
     if (!paramWorkoutId) return;
-    if (!audioContext) return;
+    if (!audioContext) return; // chenVoice の AudioBuffer 作成のために必要
     dispatch(
       recordWorkoutPracticeActions.initiate({
         workoutId: paramWorkoutId,
@@ -46,11 +46,7 @@ const WorkoutPage = () => {
   return (
     <Container maxWidth='xs' sx={{ paddingTop: 2, paddingBottom: 20 }}>
       <div style={{ display: 'grid', rowGap: 48 }}>
-        {scene === SCENE.opening ? (
-          <WorkoutOpening />
-        ) : (
-          <RecordWorkoutPractice />
-        )}
+        {scene === SCENE.opening ? <OpeningScene /> : <PracticeScene />}
         <Button variant='outlined' onClick={handleBack}>
           練習結束
         </Button>
@@ -59,4 +55,4 @@ const WorkoutPage = () => {
   );
 };
 
-export default WorkoutPage;
+export default RecordWorkoutPage;

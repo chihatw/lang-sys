@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { initialState } from '../core/1-constants';
+import { SCENE, initialState } from '../core/1-constants';
 import { shuffle } from '../../../services/utils';
 
 const recordWorkoutPracticeSlice = createSlice({
@@ -16,11 +16,17 @@ const recordWorkoutPracticeSlice = createSlice({
       state.shuffledCueIds = payload.shuffledCueIds;
     },
     setChenVoiceStart: (state) => state,
-    setScene: (state, { payload }: { payload: string }) => {
-      state.scene = payload;
+    startPractice: (state) => {
+      state.scene = SCENE.practice;
     },
     increseCurrentIndex: (state) => {
       state.currentIndex++;
+    },
+    startRecording: (state) => {
+      state.isRunning = true;
+    },
+    stopRecording: (state) => {
+      state.isChecking = true;
     },
     saveRecordedAudioBuffer: (state) => initialState,
     abandomRecordedAudioBuffer: (state) => {

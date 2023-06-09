@@ -17,7 +17,7 @@ import { RECORD_WORKOUT_STORAGE_PATH } from '../../../../../application/recordWo
 import { recordWorkoutPracticeActions } from '../../../../../application/recordWorkoutPractice/framework/0-reducer';
 
 const CUE_CARD_HEIGHT = 200;
-const RecordWorkoutPractice = () => {
+const PracticeScene = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -25,21 +25,17 @@ const RecordWorkoutPractice = () => {
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const { audioContext } = useSelector((state: RootState) => state.audio);
-  const { workoutId, currentIndex, shuffledCueIds } = useSelector(
-    (state: RootState) => state.recordWorkoutPractice
-  );
+  const { workoutId, currentIndex, shuffledCueIds, isRunning, isChecking } =
+    useSelector((state: RootState) => state.recordWorkoutPractice);
   const [blob, setBlob] = useState<Blob | null>(null); // upload 用
-  const [isRunning, setIsRunning] = useState(false);
-  const [isChecking, setIsChecking] = useState(false);
   const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null); // play 用
+
+  const pitchStr = shuffledCueIds[currentIndex];
+  const isLast = currentIndex + 1 === shuffledCueIds.length;
 
   // streamと連携してマイクを切るため
   const micAudioElemRef = useRef(new Audio());
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-
-  const pitchStr = shuffledCueIds[currentIndex];
-
-  const isLast = currentIndex + 1 === shuffledCueIds.length;
 
   const start = async () => {
     if (!navigator.mediaDevices || !audioContext) return;
@@ -51,19 +47,14 @@ const RecordWorkoutPractice = () => {
       setBlob
     );
 
-    // local
-    setIsRunning(true);
-  };
-
-  const next = () => {
-    dispatch(recordWorkoutPracticeActions.increseCurrentIndex());
+    dispatch(recordWorkoutPracticeActions.startRecording());
   };
 
   const stop = async () => {
     stopRecording(micAudioElemRef, mediaRecorderRef);
 
     // local
-    setIsChecking(true);
+    dispatch(recordWorkoutPracticeActions.stopRecording());
   };
 
   const handleClickPlayButton = () => {
@@ -71,9 +62,8 @@ const RecordWorkoutPractice = () => {
       start();
       return;
     }
-
     if (!isLast) {
-      next();
+      dispatch(recordWorkoutPracticeActions.increseCurrentIndex());
       return;
     }
     stop();
@@ -81,11 +71,8 @@ const RecordWorkoutPractice = () => {
 
   const abandonRecordedAudioBuffer = () => {
     // local
-    setIsRunning(false);
-    setIsChecking(false);
     setAudioBuffer(null);
     setBlob(null);
-
     dispatch(recordWorkoutPracticeActions.abandomRecordedAudioBuffer());
   };
 
@@ -105,12 +92,6 @@ const RecordWorkoutPractice = () => {
       audioBuffer
     )(appState);
 
-    // local
-    setIsRunning(false);
-    setIsChecking(false);
-    setAudioBuffer(null);
-    setBlob(null);
-
     dispatch(recordWorkoutPracticeActions.saveRecordedAudioBuffer());
 
     navigate('/list/record');
@@ -129,20 +110,25 @@ const RecordWorkoutPractice = () => {
         rowGap: 8,
       }}
     >
+      {/* currentIndex/total */}
       <div style={{ fontSize: 48, textAlign: 'center', color: '#aaa' }}>{`${
         currentIndex + 1
       }/${shuffledCueIds.length}`}</div>
+
+      {/* CueCard */}
       <div style={{ height: CUE_CARD_HEIGHT }}>
         {isRunning && <CueCard pitchStr={pitchStr} height={CUE_CARD_HEIGHT} />}
       </div>
+
+      {/* button */}
       <RecButton
-        hasNext={!isLast}
-        isRunning={isRunning}
+        // isRunning={isRunning}
         handleClickPlayButton={handleClickPlayButton}
       />
+
+      {/* todo これシーン分ける？ */}
       {!!audioBuffer && !!audioContext && (
         <CheckPane
-          isChecking={isChecking}
           audioBuffer={audioBuffer}
           saveRecordedAudioBuffer={saveRecordedAudioBuffer}
           abandonRecordedAudioBuffer={abandonRecordedAudioBuffer}
@@ -152,7 +138,7 @@ const RecordWorkoutPractice = () => {
   );
 };
 
-export default RecordWorkoutPractice;
+export default PracticeScene;
 
 const startRecording = async (
   audioContext: AudioContext,

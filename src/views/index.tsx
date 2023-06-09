@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import TopPage from './pages/TopPage';
 import WorkoutList from './pages/Workout/WorkoutList';
-import WorkoutPage from './pages/Workout/WorkoutPage';
+import RecordWorkoutPage from './pages/Workout/RecordWorkoutPage';
 import SignInPage from './pages/SignInPage';
 import Layout from './Layout';
 import { createContext, useEffect, useReducer } from 'react';
@@ -77,7 +77,7 @@ function App() {
             <Route path='record'>
               <Route
                 path=':workoutId'
-                element={currentUser ? <WorkoutPage /> : <SignInPage />}
+                element={currentUser ? <RecordWorkoutPage /> : <SignInPage />}
               />
             </Route>
 
@@ -85,7 +85,7 @@ function App() {
             <Route path='chineseCue'>
               <Route
                 path=':workoutId'
-                element={currentUser ? <WorkoutPage /> : <SignInPage />}
+                element={currentUser ? <RecordWorkoutPage /> : <SignInPage />}
               />
             </Route>
 

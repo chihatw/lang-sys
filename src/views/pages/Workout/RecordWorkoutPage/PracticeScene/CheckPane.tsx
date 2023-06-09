@@ -5,18 +5,16 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../main';
 
 const CheckPane = ({
-  isChecking,
   audioBuffer,
   saveRecordedAudioBuffer,
   abandonRecordedAudioBuffer,
 }: {
-  isChecking: boolean;
   audioBuffer: AudioBuffer;
   saveRecordedAudioBuffer: () => void;
   abandonRecordedAudioBuffer: () => void;
 }) => {
   const { chenVoice } = useSelector((state: RootState) => state.audio);
-  const { shuffledCueIds } = useSelector(
+  const { shuffledCueIds, isChecking } = useSelector(
     (state: RootState) => state.recordWorkoutPractice
   );
 

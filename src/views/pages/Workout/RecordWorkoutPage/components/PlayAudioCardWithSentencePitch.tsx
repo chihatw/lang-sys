@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../main';
 import { playAudioBuffer } from '../../../../../application/audio/core/2-services';
 
-function WorkoutOpeningRow({ cueId }: { cueId: string }) {
+function PlayAudioCardWithSentencePitch({ cueId }: { cueId: string }) {
   const { audioContext, chenVoice } = useSelector(
     (state: RootState) => state.audio
   );
@@ -30,4 +30,4 @@ function WorkoutOpeningRow({ cueId }: { cueId: string }) {
   );
 }
 
-export default WorkoutOpeningRow;
+export default PlayAudioCardWithSentencePitch;

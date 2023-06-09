@@ -1,20 +1,22 @@
 import { Button, IconButton } from '@mui/material';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../main';
 
 const RecButton = ({
-  hasNext,
-  isRunning,
   handleClickPlayButton,
 }: {
-  hasNext: boolean;
-  isRunning: boolean;
   handleClickPlayButton: () => void;
 }) => {
+  const { currentIndex, shuffledCueIds, isRunning } = useSelector(
+    (state: RootState) => state.recordWorkoutPractice
+  );
+
   const buttonLabel = useMemo(() => {
     if (!isRunning) return '開始錄音';
-    if (hasNext) return '下一個';
+    if (currentIndex + 1 !== shuffledCueIds.length) return '下一個';
     return '停止錄音';
-  }, [isRunning, hasNext]);
+  }, [isRunning, currentIndex, shuffledCueIds]);
 
   return (
     <div
