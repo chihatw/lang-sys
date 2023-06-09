@@ -9,15 +9,15 @@ import {
 } from '../../../../../application/audio/core/2-services';
 import { useEffect, useMemo, useRef } from 'react';
 
-function PlayChenVoiceCard({ cueId }: { cueId: string }) {
+function PlayChenVoiceCard({ pitchStr }: { pitchStr: string }) {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
   const { audioContext, chenVoice } = useSelector(
     (state: RootState) => state.audio
   );
 
   const { start, stop } = useMemo(
-    () => getStartAndStopFromChenSanVoices(cueId),
-    [cueId]
+    () => getStartAndStopFromChenSanVoices(pitchStr),
+    [pitchStr]
   );
 
   useEffect(() => {
@@ -46,7 +46,7 @@ function PlayChenVoiceCard({ cueId }: { cueId: string }) {
           justifyContent: 'center',
         }}
       >
-        <SentencePitchLine pitchStr={cueId} />
+        <SentencePitchLine pitchStr={pitchStr} />
       </CardContent>
     </Card>
   );

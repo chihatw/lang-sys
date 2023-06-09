@@ -7,9 +7,10 @@ import TouchMe from '../../../components/TouchMe';
 import { RootState } from '../../../../main';
 import { recordWorkoutPracticeActions } from '../../../../application/recordWorkoutPractice/framework/0-reducer';
 
+import { SCENE } from '../../../../application/recordWorkoutPractice/core/1-constants';
 import OpeningScene from './OpeningScene';
 import PracticeScene from './PracticeScene';
-import { SCENE } from '../../../../application/recordWorkoutPractice/core/1-constants';
+import CheckScene from './CheckScene';
 
 const RecordWorkoutPage = () => {
   const navigate = useNavigate();
@@ -46,7 +47,9 @@ const RecordWorkoutPage = () => {
   return (
     <Container maxWidth='xs' sx={{ paddingTop: 2, paddingBottom: 20 }}>
       <div style={{ display: 'grid', rowGap: 48 }}>
-        {scene === SCENE.opening ? <OpeningScene /> : <PracticeScene />}
+        {scene === SCENE.opening && <OpeningScene />}
+        {scene === SCENE.practice && <PracticeScene />}
+        {scene === SCENE.check && <CheckScene />}
         <Button variant='outlined' onClick={handleBack}>
           練習結束
         </Button>

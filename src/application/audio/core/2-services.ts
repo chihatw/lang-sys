@@ -1,7 +1,6 @@
 import { MutableRefObject } from 'react';
 
 import { CHIN_SAN_VOICES } from '../../../assets/chinSanVoices';
-import { ISchedule } from './0-interface';
 
 export const createAudioContext = () => {
   const audioContext = new window.AudioContext();
@@ -34,39 +33,6 @@ export const blobToAudioBuffer = async (
   const arrayBuffer = await blob.arrayBuffer();
   const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
   return audioBuffer;
-};
-
-// todo will delete
-export const playAudioBuffer = (
-  pitchStr: string,
-  audioBuffer: AudioBuffer,
-  audioContext: AudioContext
-) => {
-  const item = Object.values(CHIN_SAN_VOICES).find(
-    (item) => item.pitchStr === pitchStr
-  );
-  const schedules: ISchedule[] = item?.schedules || [];
-  playScheduledItem(schedules, audioBuffer, audioContext);
-};
-
-export const playScheduledItem = async (
-  schedules: ISchedule[],
-  audioBuffer: AudioBuffer,
-  audioContext: AudioContext
-) => {
-  const sourceNodes: AudioBufferSourceNode[] = [];
-
-  schedules.map(async (_) => {
-    const sourceNode = createSourceNode(audioBuffer, audioContext);
-    sourceNodes.push(sourceNode);
-  });
-
-  const currentTime = audioContext.currentTime;
-  schedules.forEach((item, index) => {
-    const sourceNode = sourceNodes[index];
-    sourceNode.start(currentTime + item.offset, item.start);
-    sourceNode.stop(currentTime + item.offset + item.stop - item.start);
-  });
 };
 
 export const playAudioBufferAndSetSourceNode = async (

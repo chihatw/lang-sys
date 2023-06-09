@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../main';
 import { recordWorkoutPracticeActions } from '../../../../../application/recordWorkoutPractice/framework/0-reducer';
-import PlayChenVoiceCard from '../components/PlayChenVoiceCard';
+import PlayChenVoiceCard from '../0-components/PlayChenVoiceCard';
 
 const OpeningScene = () => {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const OpeningScene = () => {
       </div>
       <div style={{ display: 'grid', rowGap: 16 }}>
         {workout.cueIds.map((cueId, index) => (
-          <PlayChenVoiceCard key={index} cueId={cueId} />
+          <PlayChenVoiceCard key={index} pitchStr={cueId} />
         ))}
       </div>
 

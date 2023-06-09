@@ -33,7 +33,7 @@ const recordWorkoutPracticeSlice = createSlice({
       state.audioBuffer = payload.audioBuffer;
     },
     stopRecording: (state) => {
-      state.isChecking = true;
+      state.scene = SCENE.check;
     },
     saveAudioBuffer: (state) => state,
     clearState: (state) => initialState,

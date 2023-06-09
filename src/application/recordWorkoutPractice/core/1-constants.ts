@@ -1,6 +1,7 @@
 import { IRecordWorkoutPractice } from './0-interface';
 
 export const SCENE = {
+  check: 'check',
   opening: 'opening',
   practice: 'practice',
 };
@@ -10,7 +11,6 @@ export const initialState: IRecordWorkoutPractice = {
   scene: SCENE.opening,
   workoutId: '',
   isRunning: false,
-  isChecking: false, // scene と統一？
   audioBuffer: null,
   currentIndex: 0,
   shuffledCueIds: [],
