@@ -1,8 +1,8 @@
 import { Card, CardContent } from '@mui/material';
-import SentencePitchLine from '../../../../../components/SentencePitchLine';
+import SentencePitchLine from '../../../../components/SentencePitchLine';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../../main';
-import { playAudioBuffer } from '../../../../../../application/audio/core/2-services';
+import { RootState } from '../../../../../main';
+import { playAudioBuffer } from '../../../../../application/audio/core/2-services';
 
 function WorkoutOpeningRow({ cueId }: { cueId: string }) {
   const { audioContext, chenVoice } = useSelector(

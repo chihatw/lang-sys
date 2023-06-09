@@ -1,4 +1,4 @@
-import SentencePitchLine from '../../../../../components/SentencePitchLine';
+import SentencePitchLine from '../../../../components/SentencePitchLine';
 
 const CueCard = ({
   height,

@@ -1,12 +1,16 @@
-import { SCENE } from '../../../views/pages/Workout/commons';
-
-import { initialWorkoutLog } from '../../workoutLog/core/1-constants';
 import { IRecordWorkoutPractice } from './0-interface';
 
+export const SCENE = {
+  opening: 'opening',
+  practice: 'practice',
+};
+
 export const initialState: IRecordWorkoutPractice = {
-  log: initialWorkoutLog,
+  blob: null,
   scene: SCENE.opening,
   workoutId: '',
+  isRunning: false,
+  isChecking: false, // scene と統一？
   audioBuffer: null,
   currentIndex: 0,
   shuffledCueIds: [],

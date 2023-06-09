@@ -1,34 +1,33 @@
 import * as R from 'ramda';
 import { useTheme } from '@mui/material';
-import React, { MutableRefObject, useContext, useRef, useState } from 'react';
-import { AppContext } from '../../../../..';
-import { WorkoutState } from '../../Model';
+import { MutableRefObject, useContext, useRef, useState } from 'react';
+import { AppContext } from '../../../..';
 import CueCard from './CueCard';
 import RecButton from './RecButton';
 import CheckPane from './CheckPane';
 
-import { uploadStorage } from '../../../../../../repositories/storage';
-import { State } from '../../../../../../Model';
+import { uploadStorage } from '../../../../../repositories/storage';
+import { State } from '../../../../../Model';
 import { useNavigate } from 'react-router-dom';
-import { ActionTypes } from '../../../../../../Update';
-import { blobToAudioBuffer } from '../../../../../../application/audio/core/2-services';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../../main';
+import { ActionTypes } from '../../../../../Update';
+import { blobToAudioBuffer } from '../../../../../application/audio/core/2-services';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../../main';
+import { RECORD_WORKOUT_STORAGE_PATH } from '../../../../../application/recordWorkouts/core/1-constants';
+import { recordWorkoutPracticeActions } from '../../../../../application/recordWorkoutPractice/framework/0-reducer';
 
 const CUE_CARD_HEIGHT = 200;
-
-const RecordWorkoutPractice = ({
-  state,
-  dispatch,
-}: {
-  state: WorkoutState;
-  dispatch: React.Dispatch<WorkoutState>;
-}) => {
+const RecordWorkoutPractice = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const { audioContext } = useSelector((state: RootState) => state.audio);
+  const { workoutId, currentIndex, shuffledCueIds } = useSelector(
+    (state: RootState) => state.recordWorkoutPractice
+  );
   const [blob, setBlob] = useState<Blob | null>(null); // upload 用
   const [isRunning, setIsRunning] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
@@ -38,9 +37,9 @@ const RecordWorkoutPractice = ({
   const micAudioElemRef = useRef(new Audio());
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
-  const cue = state.cues[state.currentIndex];
+  const pitchStr = shuffledCueIds[currentIndex];
 
-  const isLast = state.currentIndex + 1 === state.cues.length;
+  const isLast = currentIndex + 1 === shuffledCueIds.length;
 
   const start = async () => {
     if (!navigator.mediaDevices || !audioContext) return;
@@ -57,13 +56,7 @@ const RecordWorkoutPractice = ({
   };
 
   const next = () => {
-    const updatedState = R.assocPath<number, WorkoutState>(
-      ['currentIndex'],
-      state.currentIndex + 1
-    )(state);
-
-    // form
-    dispatch(updatedState);
+    dispatch(recordWorkoutPracticeActions.increseCurrentIndex());
   };
 
   const stop = async () => {
@@ -93,23 +86,20 @@ const RecordWorkoutPractice = ({
     setAudioBuffer(null);
     setBlob(null);
 
-    // form
-    const updatedState = R.assocPath<number, WorkoutState>(
-      ['currentIndex'],
-      0
-    )(state);
-    dispatch(updatedState);
+    dispatch(recordWorkoutPracticeActions.abandomRecordedAudioBuffer());
   };
 
   const saveRecordedAudioBuffer = async () => {
     if (!blob || !audioBuffer) return;
     // workoutId １つに対して、１つの stroragePath しかないので、上書きになる
-    const storagePath = `/recordWorkout/${state.id}`;
+    const storagePath = RECORD_WORKOUT_STORAGE_PATH + workoutId;
 
     // storage
+    // todo middleware
     await uploadStorage(blob, storagePath);
 
     // 先に作成
+    // todo middleware
     const updatedAppState = R.assocPath<AudioBuffer, State>(
       ['audioBuffers', storagePath],
       audioBuffer
@@ -121,12 +111,7 @@ const RecordWorkoutPractice = ({
     setAudioBuffer(null);
     setBlob(null);
 
-    // form
-    const updatedState = R.assocPath<number, WorkoutState>(
-      ['currentIndex'],
-      0
-    )(state);
-    dispatch(updatedState);
+    dispatch(recordWorkoutPracticeActions.saveRecordedAudioBuffer());
 
     navigate('/list/record');
 
@@ -145,12 +130,10 @@ const RecordWorkoutPractice = ({
       }}
     >
       <div style={{ fontSize: 48, textAlign: 'center', color: '#aaa' }}>{`${
-        state.currentIndex + 1
-      }/${state.cues.length}`}</div>
+        currentIndex + 1
+      }/${shuffledCueIds.length}`}</div>
       <div style={{ height: CUE_CARD_HEIGHT }}>
-        {isRunning && (
-          <CueCard pitchStr={cue.pitchStr} height={CUE_CARD_HEIGHT} />
-        )}
+        {isRunning && <CueCard pitchStr={pitchStr} height={CUE_CARD_HEIGHT} />}
       </div>
       <RecButton
         hasNext={!isLast}
@@ -159,7 +142,6 @@ const RecordWorkoutPractice = ({
       />
       {!!audioBuffer && !!audioContext && (
         <CheckPane
-          state={state}
           isChecking={isChecking}
           audioBuffer={audioBuffer}
           saveRecordedAudioBuffer={saveRecordedAudioBuffer}

@@ -1,9 +1,17 @@
 import { Schedule } from '../Model';
 import { createSourceNode } from '../application/audio/core/2-services';
-import { TYPE } from '../views/pages/Workout/commons';
 
 import { CHIN_SAN_VOICES } from './chinSanVoices';
 import { PITCH_INPUT_ITEMS } from './pitchInputItems';
+
+const TYPE = {
+  kana: 'kana',
+  pitch: 'pitch',
+  rhythm: 'rhythm',
+  record: 'record',
+  pitchInput: 'pitchInput',
+  chineseCue: 'chineseCue',
+};
 
 type PitchCue = {
   id: string;

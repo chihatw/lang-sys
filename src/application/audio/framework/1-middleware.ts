@@ -52,7 +52,7 @@ const audioMiddleware =
         await services.api.audio.deleteStorageByPath(path);
         break;
       }
-      case 'recordWorkoutPractice/setWorkoutIdStart': {
+      case 'recordWorkoutPractice/initiate': {
         const { audioContext, chenVoice } = (getState() as RootState).audio;
         // chenVoice が存在すれば、終了
         if (!!chenVoice) break;

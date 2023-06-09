@@ -1,21 +1,25 @@
 import { Button, Container, Modal } from '@mui/material';
-import { WorkoutState } from '../../Model';
 import CheckPaneRow from './CheckPaneRow';
 import PlayButton from './PlayButton';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../main';
 
 const CheckPane = ({
-  state,
   isChecking,
   audioBuffer,
   saveRecordedAudioBuffer,
   abandonRecordedAudioBuffer,
 }: {
-  state: WorkoutState;
   isChecking: boolean;
   audioBuffer: AudioBuffer;
   saveRecordedAudioBuffer: () => void;
   abandonRecordedAudioBuffer: () => void;
 }) => {
+  const { chenVoice } = useSelector((state: RootState) => state.audio);
+  const { shuffledCueIds } = useSelector(
+    (state: RootState) => state.recordWorkoutPractice
+  );
+
   return (
     <Modal open={isChecking}>
       <div
@@ -53,11 +57,11 @@ const CheckPane = ({
             }}
           >
             <div style={{ padding: '24px 0' }}>
-              {state.cues.map((cue, index) => (
+              {shuffledCueIds.map((pitchStr, index) => (
                 <CheckPaneRow
                   key={index}
-                  cue={cue}
-                  audioBuffer={state.audioBuffer!}
+                  pitchStr={pitchStr}
+                  audioBuffer={chenVoice!}
                 />
               ))}
             </div>

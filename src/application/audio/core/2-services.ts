@@ -1,9 +1,5 @@
 import { Schedule } from '../../../Model';
 import { CHIN_SAN_VOICES } from '../../../assets/chinSanVoices';
-import { playKana } from '../../../assets/kanas';
-import { PITCH_INPUT_ITEMS } from '../../../assets/pitchInputItems';
-import { PITCH_WORKOUT_ITEMS, playRhythm } from '../../../assets/pitches';
-import { TYPE } from '../../../views/pages/Workout/commons';
 
 export const createAudioContext = () => {
   const audioContext = new window.AudioContext();

@@ -4,6 +4,7 @@ import { recordWorkoutActions } from './0-reducer';
 import { recordWorkoutListActions } from '../../recordWorkoutList/framework/0-reducer';
 import { RootState } from '../../../main';
 import { recordWorkoutPracticeActions } from '../../recordWorkoutPractice/framework/0-reducer';
+import { shuffle } from '../../../services/utils';
 
 const recordWorkoutsMiddleware =
   (services: Services): Middleware =>
@@ -25,7 +26,7 @@ const recordWorkoutsMiddleware =
         dispatch(recordWorkoutListActions.setWorkoutIds(workoutIds));
         break;
       }
-      case 'recordWorkoutPractice/setWorkoutIdStart': {
+      case 'recordWorkoutPractice/initiate': {
         const workoutId: string = action.payload.workoutId;
         const recordWorkouts = (getState() as RootState).recordWorkouts;
 
@@ -33,7 +34,13 @@ const recordWorkoutsMiddleware =
 
         // workout が存在する場合
         if (!!workout) {
-          dispatch(recordWorkoutPracticeActions.setWorkoutId(workoutId));
+          const shuffledCueIds = shuffle([...workout.cueIds]);
+          dispatch(
+            recordWorkoutPracticeActions.setWorkoutIdAndShuffledCueIds({
+              workoutId,
+              shuffledCueIds,
+            })
+          );
           break;
         }
 
@@ -45,7 +52,14 @@ const recordWorkoutsMiddleware =
           dispatch(
             recordWorkoutActions.setWorkouts({ [workoutId]: gotWorkout })
           );
-          dispatch(recordWorkoutPracticeActions.setWorkoutId(workoutId));
+
+          const shuffledCueIds = shuffle([...gotWorkout.cueIds]);
+          dispatch(
+            recordWorkoutPracticeActions.setWorkoutIdAndShuffledCueIds({
+              workoutId,
+              shuffledCueIds,
+            })
+          );
         }
 
         break;

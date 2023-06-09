@@ -1,19 +1,18 @@
 import { PlayArrow } from '@mui/icons-material';
 import { Divider, IconButton } from '@mui/material';
 import { useContext } from 'react';
-import { AppContext } from '../../../../..';
+import { AppContext } from '../../../..';
 
-import { TYPE } from '../../../commons';
-import SentencePitchLine from '../../../../../components/SentencePitchLine';
-import { playAudioBuffer } from '../../../../../../application/audio/core/2-services';
+import SentencePitchLine from '../../../../components/SentencePitchLine';
+import { playAudioBuffer } from '../../../../../application/audio/core/2-services';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../../main';
+import { RootState } from '../../../../../main';
 
 const CheckPaneRow = ({
-  cue,
+  pitchStr,
   audioBuffer,
 }: {
-  cue: { id: string; pitchStr: string };
+  pitchStr: string;
   audioBuffer: AudioBuffer;
 }) => {
   const { state } = useContext(AppContext);
@@ -22,7 +21,7 @@ const CheckPaneRow = ({
 
   const handlePlay = () => {
     if (!audioContext) return;
-    playAudioBuffer(cue.id, audioBuffer, audioContext);
+    playAudioBuffer(pitchStr, audioBuffer, audioContext);
   };
 
   return (
@@ -35,7 +34,7 @@ const CheckPaneRow = ({
           padding: '8px 0',
         }}
       >
-        <SentencePitchLine pitchStr={cue.pitchStr} />
+        <SentencePitchLine pitchStr={pitchStr} />
         <IconButton onClick={handlePlay}>
           <PlayArrow sx={{ color: '#52a2aa' }} />
         </IconButton>

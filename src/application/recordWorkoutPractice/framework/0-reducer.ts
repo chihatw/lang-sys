@@ -1,23 +1,34 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { initialState } from '../core/1-constants';
-import { SCENE } from '../../../views/pages/Workout/commons';
+import { shuffle } from '../../../services/utils';
 
 const recordWorkoutPracticeSlice = createSlice({
   name: 'recordWorkoutPractice',
   initialState,
   reducers: {
-    setWorkoutIdStart: (
+    initiate: (state, { payload }: { payload: { workoutId: string } }) =>
+      initialState,
+    setWorkoutIdAndShuffledCueIds: (
       state,
-      { payload }: { payload: { workoutId: string } }
+      { payload }: { payload: { workoutId: string; shuffledCueIds: string[] } }
     ) => {
-      state.scene = SCENE.opening;
-    },
-    setWorkoutId: (state, { payload }: { payload: string }) => {
-      state.workoutId = payload;
+      state.workoutId = payload.workoutId;
+      state.shuffledCueIds = payload.shuffledCueIds;
     },
     setChenVoiceStart: (state) => state,
     setScene: (state, { payload }: { payload: string }) => {
       state.scene = payload;
+    },
+    increseCurrentIndex: (state) => {
+      state.currentIndex++;
+    },
+    saveRecordedAudioBuffer: (state) => initialState,
+    abandomRecordedAudioBuffer: (state) => {
+      return {
+        ...initialState,
+        workoutId: state.workoutId,
+        shuffledCueIds: shuffle([...state.shuffledCueIds]),
+      };
     },
   },
 });
