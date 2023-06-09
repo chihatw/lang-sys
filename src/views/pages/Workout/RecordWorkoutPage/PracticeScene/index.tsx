@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { useTheme } from '@mui/material';
-import { MutableRefObject, useContext, useRef, useState } from 'react';
+import { Dispatch, MutableRefObject, useContext, useRef } from 'react';
 import { AppContext } from '../../../..';
 import CueCard from './CueCard';
 import RecButton from './RecButton';
@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../main';
 import { RECORD_WORKOUT_STORAGE_PATH } from '../../../../../application/recordWorkouts/core/1-constants';
 import { recordWorkoutPracticeActions } from '../../../../../application/recordWorkoutPractice/framework/0-reducer';
+import { AnyAction } from '@reduxjs/toolkit';
 
 const CUE_CARD_HEIGHT = 200;
 const PracticeScene = () => {
@@ -25,10 +26,14 @@ const PracticeScene = () => {
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const { audioContext } = useSelector((state: RootState) => state.audio);
-  const { workoutId, currentIndex, shuffledCueIds, isRunning, isChecking } =
-    useSelector((state: RootState) => state.recordWorkoutPractice);
-  const [blob, setBlob] = useState<Blob | null>(null); // upload 用
-  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null); // play 用
+  const {
+    blob,
+    isRunning,
+    workoutId,
+    audioBuffer,
+    currentIndex,
+    shuffledCueIds,
+  } = useSelector((state: RootState) => state.recordWorkoutPractice);
 
   const pitchStr = shuffledCueIds[currentIndex];
   const isLast = currentIndex + 1 === shuffledCueIds.length;
@@ -43,8 +48,7 @@ const PracticeScene = () => {
       audioContext,
       micAudioElemRef,
       mediaRecorderRef,
-      setAudioBuffer,
-      setBlob
+      dispatch
     );
 
     dispatch(recordWorkoutPracticeActions.startRecording());
@@ -70,9 +74,6 @@ const PracticeScene = () => {
   };
 
   const abandonRecordedAudioBuffer = () => {
-    // local
-    setAudioBuffer(null);
-    setBlob(null);
     dispatch(recordWorkoutPracticeActions.abandomRecordedAudioBuffer());
   };
 
@@ -121,15 +122,11 @@ const PracticeScene = () => {
       </div>
 
       {/* button */}
-      <RecButton
-        // isRunning={isRunning}
-        handleClickPlayButton={handleClickPlayButton}
-      />
+      <RecButton handleClickPlayButton={handleClickPlayButton} />
 
       {/* todo これシーン分ける？ */}
       {!!audioBuffer && !!audioContext && (
         <CheckPane
-          audioBuffer={audioBuffer}
           saveRecordedAudioBuffer={saveRecordedAudioBuffer}
           abandonRecordedAudioBuffer={abandonRecordedAudioBuffer}
         />
@@ -144,8 +141,9 @@ const startRecording = async (
   audioContext: AudioContext,
   micAudioElemRef: MutableRefObject<HTMLAudioElement>,
   mediaRecorderRef: MutableRefObject<MediaRecorder | null>,
-  setAudioBuffer: (value: AudioBuffer | null) => void,
-  setBlob: (value: Blob | null) => void
+
+  // setBlob: (value: Blob | null) => void,
+  dispatch: Dispatch<AnyAction>
 ) => {
   const stream = await navigator.mediaDevices.getUserMedia({
     audio: true,
@@ -161,8 +159,9 @@ const startRecording = async (
 
     const audioBuffer = await blobToAudioBuffer(blob, audioContext);
     if (!audioBuffer) return;
-    setAudioBuffer(audioBuffer);
-    setBlob(blob);
+    dispatch(
+      recordWorkoutPracticeActions.setBlobAndAudioBuffer({ blob, audioBuffer })
+    );
   };
 
   // 録音開始

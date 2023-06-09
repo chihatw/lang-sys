@@ -1,12 +1,13 @@
-import { Card, CardContent, IconButton, useTheme } from '@mui/material';
+import { Delete } from '@mui/icons-material';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Card, CardContent, IconButton, useTheme } from '@mui/material';
+
 import { RootState } from '../../../../../main';
 import AudioBufferSlider from '../../../../components/AudioBufferSlider';
-import { Delete } from '@mui/icons-material';
 import { recordWorkoutListActions } from '../../../../../application/recordWorkoutList/framework/0-reducer';
 import { RECORD_WORKOUT_STORAGE_PATH } from '../../../../../application/recordWorkouts/core/1-constants';
-import { useEffect, useState } from 'react';
 
 const WorkoutListRow = ({ workoutId }: { workoutId: string }) => {
   const theme = useTheme();
@@ -21,15 +22,9 @@ const WorkoutListRow = ({ workoutId }: { workoutId: string }) => {
     (state: RootState) => state.recordWorkoutList
   );
 
-  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
-
-  useEffect(() => {
-    let audioBuffer: null | AudioBuffer = null;
+  const audioBuffer = useMemo(() => {
     const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
-    if (audioBufferPaths.includes(path)) {
-      audioBuffer = audioBuffers[path];
-    }
-    setAudioBuffer(audioBuffer);
+    return audioBuffers[path] || null;
   }, [workoutId, audioBufferPaths]);
 
   const handleClick = () => {

@@ -25,6 +25,13 @@ const recordWorkoutPracticeSlice = createSlice({
     startRecording: (state) => {
       state.isRunning = true;
     },
+    setBlobAndAudioBuffer: (
+      state,
+      { payload }: { payload: { audioBuffer: AudioBuffer; blob: Blob } }
+    ) => {
+      state.blob = payload.blob;
+      state.audioBuffer = payload.audioBuffer;
+    },
     stopRecording: (state) => {
       state.isChecking = true;
     },

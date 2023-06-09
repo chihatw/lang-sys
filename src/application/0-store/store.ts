@@ -17,13 +17,16 @@ export const configureStore = (services: Services) =>
             'audio/setChenVoice',
             'audio/setAudioContext',
             'audio/setAudioBuffers',
+            'recordWorkoutPractice/setBlobAndAudioBuffer',
           ],
           ignoredPaths: [
             'audio.chenVoice',
             'user.currentUser',
             'audio.audioContext',
             'audio.audioBuffers',
+            'recordWorkoutPractice.blob',
             'recordWorkoutList.audioBuffers',
+            'recordWorkoutPractice.audioBuffer',
           ],
         },
       })

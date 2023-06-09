@@ -5,16 +5,14 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../main';
 
 const CheckPane = ({
-  audioBuffer,
   saveRecordedAudioBuffer,
   abandonRecordedAudioBuffer,
 }: {
-  audioBuffer: AudioBuffer;
   saveRecordedAudioBuffer: () => void;
   abandonRecordedAudioBuffer: () => void;
 }) => {
   const { chenVoice } = useSelector((state: RootState) => state.audio);
-  const { shuffledCueIds, isChecking } = useSelector(
+  const { shuffledCueIds, isChecking, audioBuffer } = useSelector(
     (state: RootState) => state.recordWorkoutPractice
   );
 
@@ -42,7 +40,7 @@ const CheckPane = ({
             請確認錄音
           </div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <PlayButton audioBuffer={audioBuffer} />
+            <PlayButton audioBuffer={audioBuffer!} />
           </div>
           <div
             style={{

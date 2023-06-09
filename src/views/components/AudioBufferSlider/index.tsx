@@ -38,20 +38,17 @@ const AudioBufferSlider = ({
     sourceNode.onended = () => {
       stopAnimation(rafIdRef);
 
-      // local
       setIsPlaying(false);
       setElapsedTime(0);
       setSliderValue(0);
       currentPausedAtRef.current = 0;
     };
 
-    startAudio(sourceNode, currentPausedAtRef.current);
+    sourceNode.start(0, currentPausedAtRef.current);
 
-    // local
     setIsPlaying(true);
     sourseNodeRef.current = sourceNode;
     audioContextCurrentTimeAtStartRef.current = audioContext.currentTime;
-    // pausedRef.current = false;
 
     loop();
   };
@@ -61,7 +58,6 @@ const AudioBufferSlider = ({
       audioContext.currentTime - audioContextCurrentTimeAtStartRef.current;
     const elapsedTime = currentElapsedTime + currentPausedAtRef.current;
 
-    // local
     setElapsedTime(elapsedTime);
 
     // 間引かないと slider の描画が更新されない
@@ -79,9 +75,7 @@ const AudioBufferSlider = ({
     stopAudio(sourseNodeRef);
     stopAnimation(rafIdRef);
 
-    // local
     setIsPlaying(false);
-    // pausedRef.current = true;
     currentPausedAtRef.current =
       audioContext.currentTime - audioContextCurrentTimeAtStartRef.current;
   };

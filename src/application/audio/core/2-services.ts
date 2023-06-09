@@ -65,3 +65,34 @@ export const playScheduledItem = async (
     sourceNode.stop(currentTime + item.offset + item.stop - item.start);
   });
 };
+
+export const playAudioBufferAndSetSourceNode = async (
+  audioBuffer: AudioBuffer,
+  audioContext: AudioContext,
+  start: number,
+  stop: number,
+  sourceNodeRef: React.MutableRefObject<AudioBufferSourceNode | null>
+) => {
+  const sourceNode = await createSourceNode(audioBuffer, audioContext);
+  sourceNodeRef.current = sourceNode;
+  const currentTime = audioContext!.currentTime;
+  sourceNode.start(currentTime, start);
+  sourceNode.stop(currentTime + stop - start);
+};
+
+export const pauseSourceNode = (
+  sourceNodeRef: React.MutableRefObject<AudioBufferSourceNode | null>
+) => {
+  const sourceNode = sourceNodeRef.current;
+  sourceNode && sourceNode.stop(0);
+  sourceNodeRef.current = null;
+};
+
+export const getStartAndStopFromChenSanVoices = (pitchStr: string) => {
+  const target = Object.values(CHIN_SAN_VOICES).find(
+    (item) => item.pitchStr === pitchStr
+  );
+  if (!target) return { start: 0, stop: 0 };
+  const { start, stop } = target.schedules[0];
+  return { start, stop };
+};
