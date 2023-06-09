@@ -1,15 +1,17 @@
 import { PlayArrow } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
 import { Divider, IconButton } from '@mui/material';
+import { useEffect, useMemo, useRef } from 'react';
 
-import SentencePitchLine from '../../../../components/SentencePitchLine';
+import { RootState } from '../../../../../main';
+
 import {
   pauseSourceNode,
   getStartAndStopFromChenSanVoices,
   playAudioBufferAndSetSourceNode,
 } from '../../../../../application/audio/core/2-services';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../main';
-import { useEffect, useMemo, useRef } from 'react';
+
+import SentencePitchLine from '../../../../components/SentencePitchLine';
 
 const CheckChenVoiceRow = ({ pitchStr }: { pitchStr: string }) => {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);

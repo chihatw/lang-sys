@@ -6,6 +6,7 @@ export interface ISchedule {
 
 export interface IAudio {
   chenVoice: null | AudioBuffer;
+  recordedVoice: null | AudioBuffer;
   audioContext: null | AudioContext;
   audioBuffers: { [path: string]: AudioBuffer };
 }

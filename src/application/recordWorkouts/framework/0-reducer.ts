@@ -13,6 +13,6 @@ const recordWorkoutsSlice = createSlice({
   },
 });
 
-export const recordWorkoutActions = recordWorkoutsSlice.actions;
+export const recordWorkoutsActions = recordWorkoutsSlice.actions;
 
 export default recordWorkoutsSlice.reducer;

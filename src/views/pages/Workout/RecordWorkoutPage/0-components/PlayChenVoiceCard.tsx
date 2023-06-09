@@ -1,13 +1,15 @@
-import { Card, CardContent } from '@mui/material';
-import SentencePitchLine from '../../../../components/SentencePitchLine';
 import { useSelector } from 'react-redux';
+import { Card, CardContent } from '@mui/material';
+import { useEffect, useMemo, useRef } from 'react';
+
 import { RootState } from '../../../../../main';
+import SentencePitchLine from '../../../../components/SentencePitchLine';
+
 import {
   getStartAndStopFromChenSanVoices,
   pauseSourceNode,
   playAudioBufferAndSetSourceNode,
 } from '../../../../../application/audio/core/2-services';
-import { useEffect, useMemo, useRef } from 'react';
 
 function PlayChenVoiceCard({ pitchStr }: { pitchStr: string }) {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);

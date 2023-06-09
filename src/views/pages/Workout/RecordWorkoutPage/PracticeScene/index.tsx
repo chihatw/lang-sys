@@ -1,8 +1,8 @@
-import { useTheme } from '@mui/material';
 import CueCard from './CueCard';
 import RecButton from './RecButton';
-
+import { useTheme } from '@mui/material';
 import { useSelector } from 'react-redux';
+
 import { RootState } from '../../../../../main';
 
 const CUE_CARD_HEIGHT = 200;

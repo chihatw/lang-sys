@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../main';
 import { createAudioContext } from '../application/audio/core/2-services';
 import { audioActions } from '../application/audio/framework/0-reducer';
+import ChineseWorkoutListPage from './pages/Workout/ChineseCueWorkoutListPage';
+import ChineseCueWorkoutPage from './pages/Workout/ChineseCueWorkoutPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -55,7 +57,10 @@ function App() {
       <Layout>
         <Routes>
           <Route index element={currentUser ? <TopPage /> : <SignInPage />} />
-          <Route path='/list/chineseCue' element={<></>} />
+          <Route
+            path='/list/chineseCue'
+            element={currentUser ? <ChineseWorkoutListPage /> : <SignInPage />}
+          />
           <Route
             path='/list/record'
             element={currentUser ? <RecordWorkoutListPage /> : <SignInPage />}
@@ -73,7 +78,7 @@ function App() {
           <Route path='chineseCue'>
             <Route
               path=':workoutId'
-              element={currentUser ? <RecordWorkoutPage /> : <SignInPage />}
+              element={currentUser ? <ChineseCueWorkoutPage /> : <SignInPage />}
             />
           </Route>
 

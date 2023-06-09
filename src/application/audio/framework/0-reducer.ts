@@ -25,6 +25,9 @@ const audioSlice = createSlice({
     setChenVoice: (state, { payload }: { payload: AudioBuffer }) => {
       state.chenVoice = payload;
     },
+    setRecordedVoice: (state, { payload }: { payload: AudioBuffer }) => {
+      state.recordedVoice = payload;
+    },
   },
 });
 

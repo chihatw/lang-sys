@@ -30,7 +30,7 @@ const RecordWorkoutListRow = ({ workoutId }: { workoutId: string }) => {
 
   const handleDelete = () => {
     const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
-    dispatch(recordWorkoutListActions.removeAudioBufferStart(path));
+    dispatch(recordWorkoutListActions.removeAudioBufferStart({ path }));
   };
 
   const workout = recordWorkouts[workoutId];

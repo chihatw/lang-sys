@@ -40,11 +40,15 @@ export const playAudioBufferAndSetSourceNode = async (
   audioContext: AudioContext,
   start: number,
   stop: number,
-  sourceNodeRef: React.MutableRefObject<AudioBufferSourceNode | null>
+  sourceNodeRef: React.MutableRefObject<AudioBufferSourceNode | null>,
+  callback?: () => void
 ) => {
   const sourceNode = await createSourceNode(audioBuffer, audioContext);
   sourceNodeRef.current = sourceNode;
   const currentTime = audioContext!.currentTime;
+  if (callback) {
+    sourceNode.onended = callback;
+  }
   sourceNode.start(currentTime, start);
   sourceNode.stop(currentTime + stop - start);
 };

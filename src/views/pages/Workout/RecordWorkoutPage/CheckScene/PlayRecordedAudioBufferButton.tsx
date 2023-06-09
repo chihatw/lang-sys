@@ -1,12 +1,13 @@
 import { PlayArrow } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { useEffect, useRef } from 'react';
+
 import {
   pauseSourceNode,
   playAudioBufferAndSetSourceNode,
 } from '../../../../../application/audio/core/2-services';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../main';
-import { useEffect, useRef } from 'react';
 
 const PlayRecordedAudioBufferButton = () => {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);

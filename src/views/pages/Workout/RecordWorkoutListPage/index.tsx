@@ -8,6 +8,7 @@ import { RootState } from '../../../../main';
 import TouchMe from '../../../components/TouchMe';
 import CustomLabel from '../../../components/CustomLabel';
 import { recordWorkoutListActions } from '../../../../application/recordWorkoutList/framework/0-reducer';
+import { RECORD_WORKOUT_STORAGE_PATH } from '../../../../application/recordWorkouts/core/1-constants';
 
 const RecordWorkoutListPage = () => {
   const navigate = useNavigate();
@@ -20,19 +21,22 @@ const RecordWorkoutListPage = () => {
 
   // workoutIdsの取得
   useEffect(() => {
-    if (!currentUser) return;
     // 初期化が終わっていれば、終了
     if (!workoutIdsInitializing) return;
-    dispatch(recordWorkoutListActions.getList({ uid: currentUser.uid }));
+    dispatch(recordWorkoutListActions.getListStart({ uid: currentUser!.uid }));
   }, [currentUser, workoutIdsInitializing]);
 
-  // audioBufferPathsの取得
+  // audioBuffersの取得
   useEffect(() => {
     // audioContext がなければ、終了
     if (!audioContext) return;
     // workoutIds が存在しなければ、終了
     if (!workoutIds.length) return;
-    dispatch(recordWorkoutListActions.getAudioBufferPaths({ workoutIds }));
+
+    const paths = workoutIds.map(
+      (workoutId) => RECORD_WORKOUT_STORAGE_PATH + workoutId
+    );
+    dispatch(recordWorkoutListActions.getAudioBuffersStart({ paths }));
   }, [workoutIds, audioContext]);
 
   const handleBack = () => {

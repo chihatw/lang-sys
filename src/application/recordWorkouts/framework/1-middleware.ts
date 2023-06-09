@@ -1,6 +1,6 @@
 import { AnyAction, Middleware } from '@reduxjs/toolkit';
 import { Services } from '../../../infrastructure/services';
-import { recordWorkoutActions } from './0-reducer';
+import { recordWorkoutsActions } from './0-reducer';
 import { recordWorkoutListActions } from '../../recordWorkoutList/framework/0-reducer';
 import { RootState } from '../../../main';
 import { recordWorkoutPracticeActions } from '../../recordWorkoutPractice/framework/0-reducer';
@@ -13,11 +13,11 @@ const recordWorkoutsMiddleware =
   async (action: AnyAction) => {
     next(action);
     switch (action.type) {
-      case 'recordWorkoutList/getList': {
+      case 'recordWorkoutList/getListStart': {
         const uid = action.payload.uid as string;
         // workouts の取得
         const workouts = await services.api.recordWorkouts.fetchWorkouts(uid);
-        dispatch(recordWorkoutActions.setWorkouts(workouts));
+        dispatch(recordWorkoutsActions.setWorkouts(workouts));
 
         const workoutIds = Object.values(workouts)
           .sort((a, b) => a.createdAt - b.createdAt)
@@ -50,7 +50,7 @@ const recordWorkoutsMiddleware =
         );
         if (!!gotWorkout) {
           dispatch(
-            recordWorkoutActions.setWorkouts({ [workoutId]: gotWorkout })
+            recordWorkoutsActions.setWorkouts({ [workoutId]: gotWorkout })
           );
 
           const shuffledCueIds = shuffle([...gotWorkout.cueIds]);

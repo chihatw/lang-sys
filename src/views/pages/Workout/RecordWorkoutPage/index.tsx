@@ -24,7 +24,7 @@ const RecordWorkoutPage = () => {
 
   /**
    * state を初期化
-   * chenVoice を autio に設定
+   * chenVoice を audio に設定
    * workout が recordWorkouts になければ fetch
    * chenVoice、workout が設定されてから、workoutId と shuffledCueIds を設定
    */
