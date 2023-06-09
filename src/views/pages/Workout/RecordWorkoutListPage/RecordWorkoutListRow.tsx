@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, CardContent, IconButton, useTheme } from '@mui/material';
 
-import { RootState } from '../../../../../main';
-import AudioBufferSlider from '../../../../components/AudioBufferSlider';
-import { recordWorkoutListActions } from '../../../../../application/recordWorkoutList/framework/0-reducer';
-import { RECORD_WORKOUT_STORAGE_PATH } from '../../../../../application/recordWorkouts/core/1-constants';
+import { RootState } from '../../../../main';
+import AudioBufferSlider from '../../../components/AudioBufferSlider';
+import { recordWorkoutListActions } from '../../../../application/recordWorkoutList/framework/0-reducer';
+import { RECORD_WORKOUT_STORAGE_PATH } from '../../../../application/recordWorkouts/core/1-constants';
 
-const WorkoutListRow = ({ workoutId }: { workoutId: string }) => {
+const RecordWorkoutListRow = ({ workoutId }: { workoutId: string }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -91,4 +91,4 @@ const WorkoutListRow = ({ workoutId }: { workoutId: string }) => {
   );
 };
 
-export default WorkoutListRow;
+export default RecordWorkoutListRow;

@@ -1,4 +1,4 @@
-import { db } from '../../../repositories/firebase';
+import { db } from '../../../infrastructure/firebase';
 import {
   DocumentData,
   collection,
@@ -38,11 +38,10 @@ export const fetchWorkouts = async (uid: string) => {
 };
 
 const buildWorkout = (doc: DocumentData): IRecordWorkout => {
-  const { uid, cueIds, title, logs, createdAt } = doc.data();
+  const { uid, cueIds, title, createdAt } = doc.data();
   return {
     id: doc.id,
     uid: uid || '',
-    logs: logs || {},
     title: title || '',
     cueIds: cueIds || [],
     createdAt: createdAt || 0,

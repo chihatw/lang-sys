@@ -1,12 +1,12 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import TopPage from './pages/TopPage';
-import WorkoutList from './pages/Workout/WorkoutList';
+import RecordWorkoutListPage from './pages/Workout/RecordWorkoutListPage';
 import RecordWorkoutPage from './pages/Workout/RecordWorkoutPage';
 import SignInPage from './pages/SignInPage';
 import Layout from './Layout';
 import { useEffect } from 'react';
 
-import { auth } from '../repositories/firebase';
+import { auth } from '../infrastructure/firebase';
 
 import { userActions } from '../application/user/framework/0-reducer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -58,7 +58,7 @@ function App() {
           <Route path='/list/chineseCue' element={<></>} />
           <Route
             path='/list/record'
-            element={currentUser ? <WorkoutList /> : <SignInPage />}
+            element={currentUser ? <RecordWorkoutListPage /> : <SignInPage />}
           />
 
           {/* 錄音 */}

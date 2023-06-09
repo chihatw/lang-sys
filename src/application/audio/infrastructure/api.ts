@@ -4,7 +4,7 @@ import {
   getDownloadURL,
   uploadBytes,
 } from 'firebase/storage';
-import { storage } from '../../../repositories/firebase';
+import { storage } from '../../../infrastructure/firebase';
 import { blobToAudioBuffer } from '../core/2-services';
 
 export const uploadStorageByPath = async (blob: Blob, path: string) => {

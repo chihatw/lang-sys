@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Container } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
-import WorkoutListRow from './WorkoutListRow';
+import RecordWorkoutListRow from './RecordWorkoutListRow';
 import { RootState } from '../../../../main';
 import TouchMe from '../../../components/TouchMe';
 import CustomLabel from '../../../components/CustomLabel';
 import { recordWorkoutListActions } from '../../../../application/recordWorkoutList/framework/0-reducer';
 
-const WorkoutList = () => {
+const RecordWorkoutListPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.user);
@@ -47,7 +47,7 @@ const WorkoutList = () => {
         <div style={{ display: 'grid', rowGap: 24 }}>
           <CustomLabel label='練習' />
           {workoutIds.map((workoutId, index) => (
-            <WorkoutListRow key={index} workoutId={workoutId} />
+            <RecordWorkoutListRow key={index} workoutId={workoutId} />
           ))}
         </div>
         <Button
@@ -62,4 +62,4 @@ const WorkoutList = () => {
   );
 };
 
-export default WorkoutList;
+export default RecordWorkoutListPage;

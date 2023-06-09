@@ -4,7 +4,7 @@ import { recordWorkoutActions } from './0-reducer';
 import { recordWorkoutListActions } from '../../recordWorkoutList/framework/0-reducer';
 import { RootState } from '../../../main';
 import { recordWorkoutPracticeActions } from '../../recordWorkoutPractice/framework/0-reducer';
-import { shuffle } from '../../../services/utils';
+import { shuffle } from '../../utils/utils';
 
 const recordWorkoutsMiddleware =
   (services: Services): Middleware =>
