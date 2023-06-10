@@ -19,15 +19,20 @@ const audioMiddleware =
       case 'recordWorkoutList/getAudioBuffersStart':
       case 'chineseCueWorkoutList/getAudioBuffersStart': {
         const paths: string[] = action.payload.paths;
+        const { fetchedAudioBuffers } = (getState() as RootState).audio;
 
         // audioBuffers の取得
         const audioBuffers: { [path: string]: AudioBuffer } = {};
         await Promise.all(
           paths.map(async (path) => {
-            const audioBuffer =
-              await services.api.audio.fetchStorageAudioBuffer(path);
-            if (audioBuffer) {
-              audioBuffers[path] = audioBuffer;
+            const fetchedAudioBuffer = fetchedAudioBuffers[path];
+            // fetchedAudioBuffer が存在しない場合
+            if (!fetchedAudioBuffer) {
+              const gotAudioBuffer =
+                await services.api.audio.fetchStorageAudioBuffer(path);
+              if (gotAudioBuffer) {
+                audioBuffers[path] = gotAudioBuffer;
+              }
             }
           })
         );
@@ -39,12 +44,8 @@ const audioMiddleware =
       case 'recordWorkoutList/removeStorageAudioBufferStart':
       case 'chineseCueWorkoutList/removeStorageAudioBufferStart': {
         const path = action.payload.path as string;
-        dispatch(audioActions.removeStorageAudioBuffer(path));
-        break;
-      }
-      case 'audio/removeStorageAudioBuffer': {
-        const path = action.payload as string;
         await services.api.audio.deleteStorageByPath(path);
+        dispatch(audioActions.removeStorageAudioBuffer(path));
         break;
       }
       case 'recordWorkoutPractice/initiate': {

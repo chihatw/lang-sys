@@ -12,9 +12,8 @@ function ChineseWorkoutListPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const { workoutIds, workoutIdsInitializing } = useSelector(
-    (state: RootState) => state.chineseCueWorkoutList
-  );
+  const { workoutIds, workoutIdsInitializing, audioBuffersInitializing } =
+    useSelector((state: RootState) => state.chineseCueWorkoutList);
 
   // workoutIds の取得
   useEffect(() => {
@@ -27,13 +26,17 @@ function ChineseWorkoutListPage() {
 
   // audioBuffersの取得
   useEffect(() => {
+    // 初期化が終わっていれば、終了
+    if (!audioBuffersInitializing) return;
+
     // workoutIds が存在しなければ、終了
     if (!workoutIds.length) return;
+
     const paths = workoutIds.map(
       (workoutId) => CHINESE_CUE_WORKOUT_STORAGE_PATH + workoutId
     );
     dispatch(chineseCueWorkoutListActions.getAudioBuffersStart({ paths }));
-  }, [workoutIds]);
+  }, [workoutIds, audioBuffersInitializing]);
 
   const handleBack = () => {
     navigate('/');

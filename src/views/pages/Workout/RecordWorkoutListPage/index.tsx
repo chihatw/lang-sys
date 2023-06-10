@@ -13,9 +13,8 @@ const RecordWorkoutListPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const { workoutIds, workoutIdsInitializing } = useSelector(
-    (state: RootState) => state.recordWorkoutList
-  );
+  const { workoutIds, workoutIdsInitializing, audioBuffersInitializing } =
+    useSelector((state: RootState) => state.recordWorkoutList);
 
   // workoutIdsの取得
   useEffect(() => {
@@ -26,6 +25,9 @@ const RecordWorkoutListPage = () => {
 
   // audioBuffersの取得
   useEffect(() => {
+    // 初期化が終わっていれば、終了
+    if (!audioBuffersInitializing) return;
+
     // workoutIds が存在しなければ、終了
     if (!workoutIds.length) return;
 
@@ -33,7 +35,7 @@ const RecordWorkoutListPage = () => {
       (workoutId) => RECORD_WORKOUT_STORAGE_PATH + workoutId
     );
     dispatch(recordWorkoutListActions.getAudioBuffersStart({ paths }));
-  }, [workoutIds]);
+  }, [workoutIds, audioBuffersInitializing]);
 
   const handleBack = () => {
     navigate('/');
