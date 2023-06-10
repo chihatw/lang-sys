@@ -74,6 +74,13 @@ const theme = createTheme({
   } as ExtendedTypographyOptions,
 });
 
+if (import.meta.env.PROD) {
+  console.log = () => {};
+  console.error = () => {};
+  console.debug = () => {};
+  console.warn = () => {};
+}
+
 const store = configureStore(services);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
