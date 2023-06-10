@@ -1,8 +1,13 @@
-import { ISchedule } from '../application/audio/core/0-interface';
 import { createSourceNode } from '../application/audio/core/2-services';
 
 import { CHIN_SAN_VOICES } from './chinSanVoices';
 import { PITCH_INPUT_ITEMS } from './pitchInputItems';
+
+interface ISchedule {
+  offset: number;
+  start: number;
+  stop: number;
+}
 
 const TYPE = {
   kana: 'kana',
@@ -140,13 +145,9 @@ export const PITCHES: { [id: string]: PitchCue } = {
   },
 };
 
-export const playRhythm = async (
-  cueId: string,
-  audioBuffer: AudioBuffer,
-  audioContext: AudioContext
-) => {
+export const playRhythm = async (cueId: string, audioBuffer: AudioBuffer) => {
   const cue = PITCHES[cueId];
-  const sourceNode = createSourceNode(audioBuffer, audioContext);
+  const sourceNode = createSourceNode(audioBuffer);
   sourceNode.start(0, cue.start, cue.end - cue.start);
 };
 

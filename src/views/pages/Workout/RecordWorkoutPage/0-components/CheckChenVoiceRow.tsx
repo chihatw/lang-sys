@@ -15,9 +15,7 @@ import SentencePitchLine from '../../../../components/SentencePitchLine';
 
 const CheckChenVoiceRow = ({ pitchStr }: { pitchStr: string }) => {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { audioContext, chenVoice } = useSelector(
-    (state: RootState) => state.audio
-  );
+  const { chenVoice } = useSelector((state: RootState) => state.audio);
 
   const { start, stop } = useMemo(
     () => getStartAndStopFromChenSanVoices(pitchStr),
@@ -29,13 +27,7 @@ const CheckChenVoiceRow = ({ pitchStr }: { pitchStr: string }) => {
   }, []);
 
   const handlePlay = () => {
-    playAudioBufferAndSetSourceNode(
-      chenVoice!,
-      audioContext!,
-      start,
-      stop,
-      sourceNodeRef
-    );
+    playAudioBufferAndSetSourceNode(chenVoice!, start, stop, sourceNodeRef);
   };
 
   return (

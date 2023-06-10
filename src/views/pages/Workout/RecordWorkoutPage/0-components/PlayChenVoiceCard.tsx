@@ -13,9 +13,7 @@ import {
 
 function PlayChenVoiceCard({ pitchStr }: { pitchStr: string }) {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { audioContext, chenVoice } = useSelector(
-    (state: RootState) => state.audio
-  );
+  const { chenVoice } = useSelector((state: RootState) => state.audio);
 
   const { start, stop } = useMemo(
     () => getStartAndStopFromChenSanVoices(pitchStr),
@@ -27,16 +25,10 @@ function PlayChenVoiceCard({ pitchStr }: { pitchStr: string }) {
   }, []);
 
   const handleClick = () => {
-    playAudioBufferAndSetSourceNode(
-      chenVoice!,
-      audioContext!,
-      start,
-      stop,
-      sourceNodeRef
-    );
+    playAudioBufferAndSetSourceNode(chenVoice!, start, stop, sourceNodeRef);
   };
 
-  if (!chenVoice || !audioContext) return <></>;
+  if (!chenVoice) return <></>;
 
   return (
     <Card onClick={handleClick} sx={{ cursor: 'pointer' }}>

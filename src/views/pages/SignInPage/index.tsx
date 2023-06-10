@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../main';
 import { signinFormActions } from '../../../application/signinForm/framework/0-reducer';
@@ -7,11 +5,6 @@ import { Button, Container, TextField } from '@mui/material';
 
 const SignInPage = () => {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: RootState) => state.user);
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (currentUser) navigate('/');
-  }, [currentUser]);
 
   const { email, password, hasError } = useSelector(
     (state: RootState) => state.signinForm

@@ -14,7 +14,6 @@ import { recordWorkoutPracticeActions } from '../../../../../application/recordW
 
 const RecButton = () => {
   const dispatch = useDispatch();
-  const { audioContext } = useSelector((state: RootState) => state.audio);
   const { currentIndex, shuffledCueIds, isRunning } = useSelector(
     (state: RootState) => state.recordWorkoutPractice
   );
@@ -30,14 +29,13 @@ const RecButton = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   const start = async () => {
-    if (!navigator.mediaDevices || !audioContext) return;
+    if (!navigator.mediaDevices) return;
     const mediaRecorder = await createMediaRecorder(
       audioElemRef,
       mediaRecorderRef
     );
     await startRecording(
       mediaRecorder,
-      audioContext,
       (blob: Blob, audioBuffer: AudioBuffer) =>
         dispatch(
           recordWorkoutPracticeActions.setBlobAndAudioBuffer({

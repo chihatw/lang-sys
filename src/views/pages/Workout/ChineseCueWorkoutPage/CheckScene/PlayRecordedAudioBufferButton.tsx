@@ -11,7 +11,6 @@ import { RootState } from '../../../../../main';
 
 function PlayRecordedAudioBufferButton() {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { audioContext } = useSelector((state: RootState) => state.audio);
   const { audioBuffer } = useSelector(
     (state: RootState) => state.chineseCueWorkoutPractice
   );
@@ -34,7 +33,6 @@ function PlayRecordedAudioBufferButton() {
     setIsPlaying(true);
     playAudioBufferAndSetSourceNode(
       audioBuffer!,
-      audioContext!,
       0,
       audioBuffer!.duration,
       sourceNodeRef,

@@ -3,7 +3,6 @@ import { Button, Container } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import TouchMe from '../../../components/TouchMe';
 import { RootState } from '../../../../main';
 import { recordWorkoutPracticeActions } from '../../../../application/recordWorkoutPractice/framework/0-reducer';
 
@@ -17,7 +16,6 @@ const RecordWorkoutPage = () => {
   const dispatch = useDispatch();
   const { workoutId: paramWorkoutId } = useParams();
 
-  const { audioContext } = useSelector((state: RootState) => state.audio);
   const { scene } = useSelector(
     (state: RootState) => state.recordWorkoutPractice
   );
@@ -30,19 +28,16 @@ const RecordWorkoutPage = () => {
    */
   useEffect(() => {
     if (!paramWorkoutId) return;
-    if (!audioContext) return; // chenVoice の AudioBuffer 作成のために必要
     dispatch(
       recordWorkoutPracticeActions.initiate({
         workoutId: paramWorkoutId,
       })
     );
-  }, [paramWorkoutId, audioContext]);
+  }, [paramWorkoutId]);
 
   const handleBack = () => {
     navigate(`/list/record`);
   };
-
-  if (!audioContext) return <TouchMe />;
 
   return (
     <Container maxWidth='xs' sx={{ paddingTop: 2, paddingBottom: 20 }}>

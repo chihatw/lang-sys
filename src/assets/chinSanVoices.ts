@@ -1,4 +1,8 @@
-import { ISchedule } from '../application/audio/core/0-interface';
+interface ISchedule {
+  offset: number;
+  start: number;
+  stop: number;
+}
 
 export const CHIN_SAN_VOICES: {
   [id: string]: {

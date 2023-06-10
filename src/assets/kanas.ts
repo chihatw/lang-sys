@@ -757,15 +757,11 @@ export const buildKanaCues = (kanas: string[]) => {
   return kanaCues;
 };
 
-export const playKana = async (
-  cueId: string,
-  audioBuffer: AudioBuffer,
-  audioContext: AudioContext
-) => {
+export const playKana = async (cueId: string, audioBuffer: AudioBuffer) => {
   const cue = Object.values(KANAS).find((item) =>
     [item.hira, item.kata].includes(cueId)
   );
   if (!cue) return;
-  const sourceNode = createSourceNode(audioBuffer, audioContext);
+  const sourceNode = createSourceNode(audioBuffer);
   sourceNode.start(0, cue.start, cue.end - cue.start);
 };

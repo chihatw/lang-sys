@@ -14,15 +14,15 @@ const RecordWorkoutListRow = ({ workoutId }: { workoutId: string }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { audioContext, audioBuffers } = useSelector(
+  const { fetchedAudioBuffers } = useSelector(
     (state: RootState) => state.audio
   );
   const { recordWorkouts } = useSelector((state: RootState) => state);
 
   const audioBuffer = useMemo(() => {
     const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
-    return audioBuffers[path] || null;
-  }, [workoutId, audioBuffers]);
+    return fetchedAudioBuffers[path] || null;
+  }, [workoutId, fetchedAudioBuffers]);
 
   const handleClick = () => {
     navigate(`/record/${workoutId}`);
@@ -30,7 +30,7 @@ const RecordWorkoutListRow = ({ workoutId }: { workoutId: string }) => {
 
   const handleDelete = () => {
     const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
-    dispatch(recordWorkoutListActions.removeAudioBufferStart({ path }));
+    dispatch(recordWorkoutListActions.removeStorageAudioBufferStart({ path }));
   };
 
   const workout = recordWorkouts[workoutId];
@@ -66,7 +66,7 @@ const RecordWorkoutListRow = ({ workoutId }: { workoutId: string }) => {
           </div>
         </CardContent>
       </Card>
-      {!!audioBuffer && !!audioContext && (
+      {!!audioBuffer && (
         <div
           style={{
             display: 'flex',
@@ -77,10 +77,7 @@ const RecordWorkoutListRow = ({ workoutId }: { workoutId: string }) => {
           }}
         >
           <div style={{ flexGrow: 1 }}>
-            <AudioBufferSlider
-              audioBuffer={audioBuffer}
-              audioContext={audioContext}
-            />
+            <AudioBufferSlider audioBuffer={audioBuffer} />
           </div>
           <IconButton onClick={handleDelete}>
             <Delete />

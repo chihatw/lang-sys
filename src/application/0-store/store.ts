@@ -7,28 +7,36 @@ import middleware from './middleware';
 export const configureStore = (services: Services) =>
   rtk.configureStore({
     reducer,
-    devTools: true,
+    devTools: import.meta.env.DEV,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
           ignoredActions: [
+            // user
             'user/setUser',
             'user/signinSuccess',
+            // audio
             'audio/setChenVoice',
             'audio/setRecordedVoice',
             'audio/setAudioContext',
-            'audio/setAudioBuffers',
+            'audio/addFetchedAudioBuffers',
+            // recordWorkoutPractice
             'recordWorkoutPractice/setBlobAndAudioBuffer',
+            // chineseCueWorkoutPractice
             'chineseCueWorkoutPractice/setBlobAndAudioBuffer',
           ],
           ignoredPaths: [
+            // user
+            'user.currentUser',
+            // audio
             'audio.chenVoice',
             'audio.recordedVoice',
-            'user.currentUser',
-            'audio.audioContext',
-            'audio.audioBuffers',
+            'audio.fetchedAudioBuffers',
+            //recordWoroutPractice
+
             'recordWorkoutPractice.blob',
             'recordWorkoutPractice.audioBuffer',
+            // chineseCueWorkoutPractice
             'chineseCueWorkoutPractice.blob',
             'chineseCueWorkoutPractice.audioBuffer',
           ],

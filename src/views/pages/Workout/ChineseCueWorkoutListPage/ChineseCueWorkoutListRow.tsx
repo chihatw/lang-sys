@@ -13,15 +13,15 @@ function ChineseCueWorkoutListRow({ workoutId }: { workoutId: string }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { audioContext, audioBuffers } = useSelector(
+  const { fetchedAudioBuffers } = useSelector(
     (state: RootState) => state.audio
   );
   const { chineseCueWorkouts } = useSelector((state: RootState) => state);
 
   const audioBuffer = useMemo(() => {
     const path = CHINESE_CUE_WORKOUT_STORAGE_PATH + workoutId;
-    return audioBuffers[path] || null;
-  }, [workoutId, audioBuffers]);
+    return fetchedAudioBuffers[path] || null;
+  }, [workoutId, fetchedAudioBuffers]);
 
   const handleClick = () => {
     navigate(`/chineseCue/${workoutId}`);
@@ -29,7 +29,9 @@ function ChineseCueWorkoutListRow({ workoutId }: { workoutId: string }) {
 
   const handleDelete = () => {
     const path = CHINESE_CUE_WORKOUT_STORAGE_PATH + workoutId;
-    dispatch(chineseCueWorkoutListActions.removeAudioBufferStart({ path }));
+    dispatch(
+      chineseCueWorkoutListActions.removeStorageAudioBufferStart({ path })
+    );
   };
 
   const workout = chineseCueWorkouts[workoutId];
@@ -65,7 +67,7 @@ function ChineseCueWorkoutListRow({ workoutId }: { workoutId: string }) {
           </div>
         </CardContent>
       </Card>
-      {!!audioBuffer && !!audioContext && (
+      {!!audioBuffer && (
         <div
           style={{
             display: 'flex',
@@ -76,10 +78,7 @@ function ChineseCueWorkoutListRow({ workoutId }: { workoutId: string }) {
           }}
         >
           <div style={{ flexGrow: 1 }}>
-            <AudioBufferSlider
-              audioBuffer={audioBuffer}
-              audioContext={audioContext}
-            />
+            <AudioBufferSlider audioBuffer={audioBuffer} />
           </div>
           <IconButton onClick={handleDelete}>
             <Delete />

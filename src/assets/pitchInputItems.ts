@@ -1,4 +1,8 @@
-import { ISchedule } from '../application/audio/core/0-interface';
+interface ISchedule {
+  offset: number;
+  start: number;
+  stop: number;
+}
 
 export const PITCH_INPUT_ITEMS: {
   [key: string]: { pitchStr: string; schedules: ISchedule[] };

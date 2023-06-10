@@ -13,7 +13,6 @@ import { chineseCueWorkoutPracticeActions } from '../../../../../application/chi
 
 function RecButton() {
   const dispatch = useDispatch();
-  const { audioContext } = useSelector((state: RootState) => state.audio);
   const { currentIndex, shuffledCueIds, isRunning } = useSelector(
     (state: RootState) => state.chineseCueWorkoutPractice
   );
@@ -29,7 +28,7 @@ function RecButton() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   const start = async () => {
-    if (!navigator.mediaDevices || !audioContext) return;
+    if (!navigator.mediaDevices) return;
 
     const mediaRecorder = await createMediaRecorder(
       audioElemRef,
@@ -38,7 +37,6 @@ function RecButton() {
 
     await startRecording(
       mediaRecorder,
-      audioContext,
       (blob: Blob, audioBuffer: AudioBuffer) =>
         dispatch(
           chineseCueWorkoutPracticeActions.setBlobAndAudioBuffer({

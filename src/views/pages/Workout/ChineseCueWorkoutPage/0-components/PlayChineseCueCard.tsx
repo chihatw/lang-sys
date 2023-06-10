@@ -12,9 +12,7 @@ import {
 
 function PlayChineseCueCard({ cueId }: { cueId: string }) {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { audioContext, recordedVoice } = useSelector(
-    (state: RootState) => state.audio
-  );
+  const { recordedVoice } = useSelector((state: RootState) => state.audio);
 
   const { start, stop, pitchStr, chinese, japanese } = useMemo(() => {
     const target = RECORDED_VOICES[cueId];
@@ -28,16 +26,10 @@ function PlayChineseCueCard({ cueId }: { cueId: string }) {
   }, []);
 
   const handleClick = () => {
-    playAudioBufferAndSetSourceNode(
-      recordedVoice!,
-      audioContext!,
-      start,
-      stop,
-      sourceNodeRef
-    );
+    playAudioBufferAndSetSourceNode(recordedVoice!, start, stop, sourceNodeRef);
   };
 
-  if (!recordedVoice || !audioContext) return <></>;
+  if (!recordedVoice) return <></>;
 
   return (
     <Card onClick={handleClick} sx={{ cursor: 'pointer' }}>

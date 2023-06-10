@@ -22,10 +22,7 @@ export const deleteStorageByPath = async (path: string) => {
     .catch((err) => console.error(err));
 };
 
-export const fetchStorageAudioBuffer = async (
-  path: string,
-  audioContext: AudioContext
-) => {
+export const fetchStorageAudioBuffer = async (path: string) => {
   let storagePath = '';
   try {
     storagePath = await getDownloadURL(ref(storage, path));
@@ -34,18 +31,15 @@ export const fetchStorageAudioBuffer = async (
   }
   if (!storagePath) return;
 
-  return await fetchAudioBuffer(storagePath, audioContext);
+  return await fetchAudioBuffer(storagePath);
 };
 
-export const fetchLocalAudioBuffer = async (
-  path: string,
-  audioContext: AudioContext
-) => {
+export const fetchLocalAudioBuffer = async (path: string) => {
   const localPath = path;
-  return await fetchAudioBuffer(localPath, audioContext);
+  return await fetchAudioBuffer(localPath);
 };
 
-const fetchAudioBuffer = async (path: string, audioContext: AudioContext) => {
+const fetchAudioBuffer = async (path: string) => {
   const response = await fetch(path);
 
   if (!response) return;
@@ -53,6 +47,6 @@ const fetchAudioBuffer = async (path: string, audioContext: AudioContext) => {
   const blob = await response.blob();
   if (!blob) return;
 
-  const audioBuffer = await blobToAudioBuffer(blob, audioContext);
+  const audioBuffer = await blobToAudioBuffer(blob);
   return audioBuffer;
 };

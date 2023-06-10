@@ -5,22 +5,16 @@ const audioSlice = createSlice({
   name: 'audio',
   initialState,
   reducers: {
-    setAudioContext: (state, { payload }: { payload: AudioContext }) => {
-      state.audioContext = payload;
-    },
-    removeAudioContext: (state) => {
-      state.audioContext = null;
-    },
-    setAudioBuffers: (
+    addFetchedAudioBuffers: (
       state,
       { payload }: { payload: { [path: string]: AudioBuffer } }
     ) => {
-      state.audioBuffers = { ...state.audioBuffers, ...payload };
+      state.fetchedAudioBuffers = { ...state.fetchedAudioBuffers, ...payload };
     },
-    removeAudioBuffer: (state, { payload }: { payload: string }) => {
-      const audioBuffers = { ...state.audioBuffers };
-      delete audioBuffers[payload];
-      state.audioBuffers = audioBuffers;
+    removeStorageAudioBuffer: (state, { payload }: { payload: string }) => {
+      const fetchedAudioBuffers = { ...state.fetchedAudioBuffers };
+      delete fetchedAudioBuffers[payload];
+      state.fetchedAudioBuffers = fetchedAudioBuffers;
     },
     setChenVoice: (state, { payload }: { payload: AudioBuffer }) => {
       state.chenVoice = payload;

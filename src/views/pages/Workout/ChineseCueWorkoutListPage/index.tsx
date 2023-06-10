@@ -4,7 +4,6 @@ import { Button, Container } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../main';
 import { chineseCueWorkoutListActions } from '../../../../application/chineseCueWorkoutList/framework/0-reducer';
-import TouchMe from '../../../components/TouchMe';
 import CustomLabel from '../../../components/CustomLabel';
 import ChineseCueWorkoutListRow from './ChineseCueWorkoutListRow';
 import { CHINESE_CUE_WORKOUT_STORAGE_PATH } from '../../../../application/chineseCueWorkouts/core/1-constants';
@@ -13,7 +12,6 @@ function ChineseWorkoutListPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const { audioContext } = useSelector((state: RootState) => state.audio);
   const { workoutIds, workoutIdsInitializing } = useSelector(
     (state: RootState) => state.chineseCueWorkoutList
   );
@@ -29,21 +27,17 @@ function ChineseWorkoutListPage() {
 
   // audioBuffersの取得
   useEffect(() => {
-    // audioContext がなければ、終了
-    if (!audioContext) return;
     // workoutIds が存在しなければ、終了
     if (!workoutIds.length) return;
     const paths = workoutIds.map(
       (workoutId) => CHINESE_CUE_WORKOUT_STORAGE_PATH + workoutId
     );
     dispatch(chineseCueWorkoutListActions.getAudioBuffersStart({ paths }));
-  }, [workoutIds, audioContext]);
+  }, [workoutIds]);
 
   const handleBack = () => {
     navigate('/');
   };
-
-  if (!audioContext) return <TouchMe />;
 
   return (
     <Container maxWidth='sm' sx={{ paddingTop: 2, paddingBottom: 20 }}>

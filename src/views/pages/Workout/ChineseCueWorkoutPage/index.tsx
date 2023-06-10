@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../main';
 import { chineseCueWorkoutPracticeActions } from '../../../../application/chineseCueWorkoutPractice/framework/0-reducer';
-import TouchMe from '../../../components/TouchMe';
 import { SCENE } from '../../../../application/recordWorkoutPractice/core/1-constants';
 import OpeningScene from './OpeningScene';
 import PracticeScene from './PracticeScene';
@@ -15,7 +14,6 @@ function ChineseCueWorkoutPage() {
   const dispatch = useDispatch();
   const { workoutId: paramWorkoutId } = useParams();
 
-  const { audioContext } = useSelector((state: RootState) => state.audio);
   const { scene } = useSelector(
     (state: RootState) => state.chineseCueWorkoutPractice
   );
@@ -28,19 +26,16 @@ function ChineseCueWorkoutPage() {
    */
   useEffect(() => {
     if (!paramWorkoutId) return;
-    if (!audioContext) return; // recordedVoice の AudioBuffer 作成のために必要
     dispatch(
       chineseCueWorkoutPracticeActions.initiate({
         workoutId: paramWorkoutId,
       })
     );
-  }, [paramWorkoutId, audioContext]);
+  }, [paramWorkoutId]);
 
   const handleBack = () => {
     navigate(`/list/chineseCue`);
   };
-
-  if (!audioContext) return <TouchMe />;
 
   return (
     <Container maxWidth='xs' sx={{ paddingTop: 2, paddingBottom: 20 }}>

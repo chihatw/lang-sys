@@ -1,28 +1,20 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import TopPage from './pages/TopPage';
-import RecordWorkoutListPage from './pages/Workout/RecordWorkoutListPage';
-import RecordWorkoutPage from './pages/Workout/RecordWorkoutPage';
-import SignInPage from './pages/SignInPage';
-import Layout from './Layout';
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { auth } from '../infrastructure/firebase';
-
-import { userActions } from '../application/user/framework/0-reducer';
-import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../main';
-import { createAudioContext } from '../application/audio/core/2-services';
-import { audioActions } from '../application/audio/framework/0-reducer';
-import ChineseWorkoutListPage from './pages/Workout/ChineseCueWorkoutListPage';
+import { userActions } from '../application/user/framework/0-reducer';
+
+import Layout from './Layout';
+import TopPage from './pages/TopPage';
+import SignInPage from './pages/SignInPage';
 import ChineseCueWorkoutPage from './pages/Workout/ChineseCueWorkoutPage';
+import ChineseWorkoutListPage from './pages/Workout/ChineseCueWorkoutListPage';
 
 function App() {
   const dispatch = useDispatch();
-  const { currentUser, authInitializing } = useSelector(
-    (state: RootState) => state.user
-  );
-
-  const { audioContext } = useSelector((state: RootState) => state.audio);
+  const { authInitializing } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
@@ -34,55 +26,30 @@ function App() {
     });
   }, [dispatch]);
 
-  const setAudioContext = () => {
-    const audioContext = createAudioContext();
-    if (audioContext) {
-      dispatch(audioActions.setAudioContext(audioContext));
-      window.removeEventListener('click', setAudioContext);
-    } else {
-      dispatch(audioActions.removeAudioContext());
-    }
-  };
-
-  useEffect(() => {
-    if (!audioContext) {
-      window.addEventListener('click', setAudioContext);
-    }
-  }, [audioContext]);
-
   if (authInitializing) return <></>;
 
   return (
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route index element={currentUser ? <TopPage /> : <SignInPage />} />
+          <Route index element={<PrivateRoute element={<TopPage />} />} />
           <Route
             path='/list/chineseCue'
-            element={currentUser ? <ChineseWorkoutListPage /> : <SignInPage />}
+            element={<PrivateRoute element={<ChineseWorkoutListPage />} />}
           />
-          <Route
-            path='/list/record'
-            element={currentUser ? <RecordWorkoutListPage /> : <SignInPage />}
-          />
-
-          {/* 錄音 */}
-          <Route path='record'>
-            <Route
-              path=':workoutId'
-              element={currentUser ? <RecordWorkoutPage /> : <SignInPage />}
-            />
-          </Route>
 
           {/* 録音中文提示 */}
           <Route path='chineseCue'>
             <Route
               path=':workoutId'
-              element={currentUser ? <ChineseCueWorkoutPage /> : <SignInPage />}
+              element={<PrivateRoute element={<ChineseCueWorkoutPage />} />}
             />
           </Route>
 
-          <Route path='/signIn' element={<SignInPage />} />
+          <Route
+            path='/signIn'
+            element={<OnlyUnAuthorizedRoute element={<SignInPage />} />}
+          />
 
           <Route path='/*' element={<Navigate to='/' />} />
         </Routes>
@@ -92,3 +59,20 @@ function App() {
 }
 
 export default App;
+
+function PrivateRoute({ element }: { element: React.ReactElement }) {
+  const { currentUser } = useSelector((state: RootState) => state.user);
+
+  if (!currentUser) {
+    return <Navigate to='/signIn' />;
+  }
+  return element;
+}
+
+function OnlyUnAuthorizedRoute({ element }: { element: React.ReactElement }) {
+  const { currentUser } = useSelector((state: RootState) => state.user);
+  if (currentUser) {
+    return <Navigate to='/' />;
+  }
+  return element;
+}

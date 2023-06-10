@@ -5,13 +5,7 @@ import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import TimePane from './TimePane';
 import { createSourceNode } from '../../../application/audio/core/2-services';
 
-const AudioBufferSlider = ({
-  audioBuffer,
-  audioContext,
-}: {
-  audioBuffer: AudioBuffer;
-  audioContext: AudioContext;
-}) => {
+const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
   const redrawSliderTiming = 5; // 何フレームに1回更新するか
   const theme = useTheme();
 
@@ -22,8 +16,9 @@ const AudioBufferSlider = ({
   const rafIdRef = useRef(0);
   const frameCountRef = useRef(0);
   const sourseNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const audioContextCurrentTimeAtStartRef = useRef(0);
+  const audioContextRef = useRef<AudioContext | null>(null);
   const currentPausedAtRef = useRef(0);
+  const audioContextCurrentTimeAtStartRef = useRef(0);
 
   useEffect(() => {
     return () => {
@@ -32,7 +27,9 @@ const AudioBufferSlider = ({
   }, []);
 
   const play = async () => {
-    const sourceNode = await createSourceNode(audioBuffer, audioContext);
+    const audioContext = new AudioContext();
+    audioContextRef.current = audioContext;
+    const sourceNode = await createSourceNode(audioBuffer);
 
     //　最後まで再生した時の処理
     sourceNode.onended = () => {
@@ -54,6 +51,9 @@ const AudioBufferSlider = ({
   };
 
   const loop = () => {
+    const audioContext = audioContextRef.current;
+    if (!audioContext) return;
+
     const currentElapsedTime =
       audioContext.currentTime - audioContextCurrentTimeAtStartRef.current;
     const elapsedTime = currentElapsedTime + currentPausedAtRef.current;
@@ -72,6 +72,10 @@ const AudioBufferSlider = ({
   };
 
   const pause = () => {
+    const audioContext = audioContextRef.current;
+    if (!audioContext) return;
+
+    handleChangeSliderValue;
     stopAudio(sourseNodeRef);
     stopAnimation(rafIdRef);
 

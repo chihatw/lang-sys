@@ -15,9 +15,7 @@ import { RECORDED_VOICES } from '../../../../../assets/recordedVoices';
 
 function CheckRecordedVoiceRow({ cueId }: { cueId: string }) {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { audioContext, recordedVoice } = useSelector(
-    (state: RootState) => state.audio
-  );
+  const { recordedVoice } = useSelector((state: RootState) => state.audio);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const { start, stop, pitchStr, chinese, japanese } = useMemo(() => {
@@ -43,7 +41,6 @@ function CheckRecordedVoiceRow({ cueId }: { cueId: string }) {
     setIsPlaying(true);
     playAudioBufferAndSetSourceNode(
       recordedVoice!,
-      audioContext!,
       start,
       stop,
       sourceNodeRef,

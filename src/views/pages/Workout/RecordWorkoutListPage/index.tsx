@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import RecordWorkoutListRow from './RecordWorkoutListRow';
 import { RootState } from '../../../../main';
-import TouchMe from '../../../components/TouchMe';
 import CustomLabel from '../../../components/CustomLabel';
 import { recordWorkoutListActions } from '../../../../application/recordWorkoutList/framework/0-reducer';
 import { RECORD_WORKOUT_STORAGE_PATH } from '../../../../application/recordWorkouts/core/1-constants';
@@ -14,7 +13,6 @@ const RecordWorkoutListPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const { audioContext } = useSelector((state: RootState) => state.audio);
   const { workoutIds, workoutIdsInitializing } = useSelector(
     (state: RootState) => state.recordWorkoutList
   );
@@ -28,8 +26,6 @@ const RecordWorkoutListPage = () => {
 
   // audioBuffersの取得
   useEffect(() => {
-    // audioContext がなければ、終了
-    if (!audioContext) return;
     // workoutIds が存在しなければ、終了
     if (!workoutIds.length) return;
 
@@ -37,13 +33,11 @@ const RecordWorkoutListPage = () => {
       (workoutId) => RECORD_WORKOUT_STORAGE_PATH + workoutId
     );
     dispatch(recordWorkoutListActions.getAudioBuffersStart({ paths }));
-  }, [workoutIds, audioContext]);
+  }, [workoutIds]);
 
   const handleBack = () => {
     navigate('/');
   };
-
-  if (!audioContext) return <TouchMe />;
 
   return (
     <Container maxWidth='sm' sx={{ paddingTop: 2, paddingBottom: 20 }}>

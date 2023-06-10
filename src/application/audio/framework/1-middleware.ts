@@ -19,47 +19,42 @@ const audioMiddleware =
       case 'recordWorkoutList/getAudioBuffersStart':
       case 'chineseCueWorkoutList/getAudioBuffersStart': {
         const paths: string[] = action.payload.paths;
-        const { audioContext } = (getState() as RootState).audio;
 
         // audioBuffers の取得
         const audioBuffers: { [path: string]: AudioBuffer } = {};
         await Promise.all(
           paths.map(async (path) => {
             const audioBuffer =
-              await services.api.audio.fetchStorageAudioBuffer(
-                path,
-                audioContext!
-              );
+              await services.api.audio.fetchStorageAudioBuffer(path);
             if (audioBuffer) {
               audioBuffers[path] = audioBuffer;
             }
           })
         );
 
-        dispatch(audioActions.setAudioBuffers(audioBuffers));
+        dispatch(audioActions.addFetchedAudioBuffers(audioBuffers));
 
         break;
       }
-      case 'recordWorkoutList/removeAudioBufferStart':
-      case 'chineseCueWorkoutList/removeAudioBufferStart': {
+      case 'recordWorkoutList/removeStorageAudioBufferStart':
+      case 'chineseCueWorkoutList/removeStorageAudioBufferStart': {
         const path = action.payload.path as string;
-        dispatch(audioActions.removeAudioBuffer(path));
+        dispatch(audioActions.removeStorageAudioBuffer(path));
         break;
       }
-      case 'audio/removeAudioBuffer': {
+      case 'audio/removeStorageAudioBuffer': {
         const path = action.payload as string;
         await services.api.audio.deleteStorageByPath(path);
         break;
       }
       case 'recordWorkoutPractice/initiate': {
-        const { audioContext, chenVoice } = (getState() as RootState).audio;
+        const { chenVoice } = (getState() as RootState).audio;
         // chenVoice が存在すれば、終了
         if (!!chenVoice) break;
 
         // chenVoice が存在しなければ、
         const audioBuffer = await services.api.audio.fetchLocalAudioBuffer(
-          chinSan_voice,
-          audioContext!
+          chinSan_voice
         );
         if (audioBuffer) {
           dispatch(audioActions.setChenVoice(audioBuffer));
@@ -75,7 +70,7 @@ const audioMiddleware =
           await services.api.audio.uploadStorageByPath(blob, storagePath);
 
           dispatch(
-            audioActions.setAudioBuffers({ [storagePath]: audioBuffer })
+            audioActions.addFetchedAudioBuffers({ [storagePath]: audioBuffer })
           );
 
           dispatch(recordWorkoutPracticeActions.clearState());
@@ -85,14 +80,13 @@ const audioMiddleware =
       }
 
       case 'chineseCueWorkoutPractice/initiate': {
-        const { audioContext, recordedVoice } = (getState() as RootState).audio;
+        const { recordedVoice } = (getState() as RootState).audio;
         //  recordedVoice が存在すれば、終了
         if (!!recordedVoice) break;
 
         // recordedVoice が存在しなければ、
         const audioBuffer = await services.api.audio.fetchLocalAudioBuffer(
-          recorded_voice,
-          audioContext!
+          recorded_voice
         );
 
         if (audioBuffer) {
@@ -109,7 +103,7 @@ const audioMiddleware =
           await services.api.audio.uploadStorageByPath(blob, storagePath);
 
           dispatch(
-            audioActions.setAudioBuffers({ [storagePath]: audioBuffer })
+            audioActions.addFetchedAudioBuffers({ [storagePath]: audioBuffer })
           );
 
           dispatch(chineseCueWorkoutPracticeActions.clearState());
