@@ -2,11 +2,13 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Container } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../main';
-import { chineseCueWorkoutListActions } from '../../../../application/chineseCueWorkoutList/framework/0-reducer';
-import CustomLabel from '../../../components/CustomLabel';
+
+import { chineseCueWorkoutListActions } from 'application/chineseCueWorkoutList/framework/0-reducer';
+
 import ChineseCueWorkoutListRow from './ChineseCueWorkoutListRow';
-import { CHINESE_CUE_WORKOUT_STORAGE_PATH } from '../../../../application/chineseCueWorkouts/core/1-constants';
+import { CHINESE_CUE_WORKOUT_STORAGE_PATH } from 'application/chineseCueWorkouts/core/1-constants';
+import { RootState } from 'main';
+import CustomLabel from 'views/components/CustomLabel';
 
 function ChineseWorkoutListPage() {
   const navigate = useNavigate();

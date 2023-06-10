@@ -3,15 +3,15 @@ import { useSelector } from 'react-redux';
 import { Divider, IconButton } from '@mui/material';
 import { useEffect, useMemo, useRef } from 'react';
 
-import { RootState } from '../../../../../main';
+import { RootState } from 'main';
 
 import {
   pauseSourceNode,
   getStartAndStopFromChenSanVoices,
   playAudioBufferAndSetSourceNode,
-} from '../../../../../application/audio/core/2-services';
+} from 'application/audio/core/2-services';
 
-import SentencePitchLine from '../../../../components/SentencePitchLine';
+import SentencePitchLine from 'views/components/SentencePitchLine';
 
 const CheckChenVoiceRow = ({ pitchStr }: { pitchStr: string }) => {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);

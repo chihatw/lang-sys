@@ -1,9 +1,9 @@
 import * as rtk from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
-import { Services } from '../../infrastructure/services';
-import reducer from './reducer';
-import middleware from './middleware';
+import reducer from 'application/0-store/reducer';
+import middleware from 'application/0-store/middleware';
+import { Services } from 'infrastructure/services';
 
 const serializableCheck = {
   ignoredActions: [
@@ -38,17 +38,17 @@ const serializableCheck = {
 };
 
 export const configureStore = import.meta.env.DEV
-  ? // 開発の場合 logger を挟む
+  ? // 開発の場合
     (services: Services) =>
       rtk.configureStore({
         reducer,
         middleware: (getDefaultMiddleware) =>
           getDefaultMiddleware({ serializableCheck })
-            .concat(logger)
+            .concat(logger) // logger を挟む
             .concat([...middleware].map((f) => f(services))),
         devTools: import.meta.env.DEV,
       })
-  : // 本番の場合 logger を挟まない
+  : // 本番の場合
     (services: Services) =>
       rtk.configureStore({
         reducer,

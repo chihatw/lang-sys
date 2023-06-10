@@ -1,7 +1,6 @@
 import ImportContacts from '@mui/icons-material/ImportContacts';
-import { Button, useTheme } from '@mui/material';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, useTheme } from '@mui/material';
 
 const LogoButton = () => {
   const theme = useTheme();

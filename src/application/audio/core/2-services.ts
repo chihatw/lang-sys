@@ -1,6 +1,5 @@
+import { CHIN_SAN_VOICES } from 'assets/chinSanVoices';
 import { MutableRefObject } from 'react';
-
-import { CHIN_SAN_VOICES } from '../../../assets/chinSanVoices';
 
 export const createSourceNode = (audioBuffer: AudioBuffer) => {
   const audioContext = new AudioContext();

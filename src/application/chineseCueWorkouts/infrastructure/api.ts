@@ -1,4 +1,3 @@
-import { db } from '../../../infrastructure/firebase';
 import {
   DocumentData,
   collection,
@@ -10,6 +9,7 @@ import {
   doc,
 } from 'firebase/firestore';
 import { IChineseCueWorkout } from '../core/0-interface';
+import { db } from 'infrastructure/firebase';
 
 const COLLECTION = 'chineseCueWorkouts';
 

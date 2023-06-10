@@ -1,5 +1,4 @@
 import { useTheme } from '@mui/material';
-import React from 'react';
 
 const CustomLabel = ({ label }: { label: string }) => {
   const theme = useTheme();

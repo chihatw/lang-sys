@@ -23,3 +23,28 @@ document.querySelector('button').addEventListener('click', function() {
 gsutil cors get gs://lang-sys.appspot.com
 gsutil cors set cors.json gs://lang-sys.appspot.com
 ```
+
+## Use Absolute Paths
+`tsconfig.json`
+```json
+{
+  "compilerOptions":{
+    "baseUrl": "src",
+  }
+}
+```
+`vite.config.ts`
+```ts
+const directories = ['views', 'assets', 'application', 'infrastracture'];
+
+const alias = directories.reduce(
+  (acc, cur) => ({ ...acc, [cur]: `/src/${cur}` }),
+  { src: '/src' }
+);
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  resolve: { alias },
+});
+```

@@ -1,7 +1,8 @@
 import { AnyAction, Middleware } from '@reduxjs/toolkit';
-import { Services } from '../../../infrastructure/services';
-import { userActions } from './0-reducer';
-import { signinFormActions } from '../../signinForm/framework/0-reducer';
+
+import { Services } from 'infrastructure/services';
+import { userActions } from 'application/user/framework/0-reducer';
+import { signinFormActions } from 'application/signinForm/framework/0-reducer';
 
 const userMiddleware =
   (services: Services): Middleware =>

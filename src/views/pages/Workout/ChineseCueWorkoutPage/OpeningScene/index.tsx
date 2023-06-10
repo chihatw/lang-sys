@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../../main';
-import { chineseCueWorkoutPracticeActions } from '../../../../../application/chineseCueWorkoutPractice/framework/0-reducer';
+
+import { RootState } from 'main';
+import { chineseCueWorkoutPracticeActions } from 'application/chineseCueWorkoutPractice/framework/0-reducer';
 import PlayChineseCueCard from '../0-components/PlayChineseCueCard';
 
 function OpeningScene() {

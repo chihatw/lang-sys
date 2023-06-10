@@ -3,15 +3,15 @@ import { useSelector } from 'react-redux';
 import { Divider, IconButton } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { RootState } from '../../../../../main';
+import { RootState } from 'main';
 
 import {
   pauseSourceNode,
   playAudioBufferAndSetSourceNode,
-} from '../../../../../application/audio/core/2-services';
+} from 'application/audio/core/2-services';
 
-import SentencePitchLine from '../../../../components/SentencePitchLine';
-import { RECORDED_VOICES } from '../../../../../assets/recordedVoices';
+import SentencePitchLine from 'views/components/SentencePitchLine';
+import { RECORDED_VOICES } from 'assets/recordedVoices';
 
 function CheckRecordedVoiceRow({ cueId }: { cueId: string }) {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);

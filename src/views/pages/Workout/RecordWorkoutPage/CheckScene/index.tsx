@@ -2,11 +2,11 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from '../../../../../main';
+import { RootState } from 'main';
 
 import CheckChenVoiceRow from '../0-components/CheckChenVoiceRow';
 import PlayRecordedAudioBufferButton from './PlayRecordedAudioBufferButton';
-import { recordWorkoutPracticeActions } from '../../../../../application/recordWorkoutPractice/framework/0-reducer';
+import { recordWorkoutPracticeActions } from 'application/recordWorkoutPractice/framework/0-reducer';
 
 function CheckScene() {
   const dispatch = useDispatch();

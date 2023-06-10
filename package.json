@@ -25,7 +25,8 @@
     "react-redux": "^8.0.7",
     "react-router-dom": "^6.3.0",
     "redux-logger": "^3.0.6",
-    "string2pitches-array": "^1.0.1"
+    "string2pitches-array": "^1.0.1",
+    "vite-tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "@types/ramda": "^0.28.15",

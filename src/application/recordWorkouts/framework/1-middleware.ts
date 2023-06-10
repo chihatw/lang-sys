@@ -1,10 +1,11 @@
 import { AnyAction, Middleware } from '@reduxjs/toolkit';
-import { Services } from '../../../infrastructure/services';
-import { recordWorkoutsActions } from './0-reducer';
-import { recordWorkoutListActions } from '../../recordWorkoutList/framework/0-reducer';
-import { RootState } from '../../../main';
-import { recordWorkoutPracticeActions } from '../../recordWorkoutPractice/framework/0-reducer';
-import { shuffle } from '../../utils/utils';
+import { Services } from 'infrastructure/services';
+import { RootState } from 'main';
+
+import { shuffle } from 'application/utils/utils';
+import { recordWorkoutsActions } from 'application/recordWorkouts/framework/0-reducer';
+import { recordWorkoutListActions } from 'application/recordWorkoutList/framework/0-reducer';
+import { recordWorkoutPracticeActions } from 'application/recordWorkoutPractice/framework/0-reducer';
 
 const recordWorkoutsMiddleware =
   (services: Services): Middleware =>

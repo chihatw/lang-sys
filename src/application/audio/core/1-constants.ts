@@ -1,4 +1,4 @@
-import { IAudio } from './0-interface';
+import { IAudio } from 'application/audio/core/0-interface';
 
 export const initialState: IAudio = {
   chenVoice: null,

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Time = ({ seconds }: { seconds: number }) => {
   seconds = seconds > 0 ? seconds : 0;
   const mins = Math.floor(seconds / 60);

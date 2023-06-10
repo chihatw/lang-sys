@@ -1,10 +1,11 @@
 import { AnyAction, Middleware } from '@reduxjs/toolkit';
-import { Services } from '../../../infrastructure/services';
 import { chineseCueWorkoutsActions } from './0-reducer';
-import { RootState } from '../../../main';
-import { shuffle } from '../../utils/utils';
-import { chineseCueWorkoutListActions } from '../../chineseCueWorkoutList/framework/0-reducer';
-import { chineseCueWorkoutPracticeActions } from '../../chineseCueWorkoutPractice/framework/0-reducer';
+import { Services } from 'infrastructure/services';
+import { RootState } from 'main';
+
+import { shuffle } from 'application/utils/utils';
+import { chineseCueWorkoutListActions } from 'application/chineseCueWorkoutList/framework/0-reducer';
+import { chineseCueWorkoutPracticeActions } from 'application/chineseCueWorkoutPractice/framework/0-reducer';
 const chineseCueWorkoutsMiddleware =
   (services: Services): Middleware =>
   ({ dispatch, getState }) =>

@@ -1,13 +1,13 @@
-import chinSan_voice from '../../../assets/audios/chinSan_voice.mp3';
-import recorded_voice from '../../../assets/audios/recordedVoice.mp3';
+import chinSan_voice from 'assets/audios/chinSan_voice.mp3';
+import recorded_voice from 'assets/audios/recordedVoice.mp3';
 import { AnyAction, Middleware } from '@reduxjs/toolkit';
-import { Services } from '../../../infrastructure/services';
 import { audioActions } from './0-reducer';
-import { RootState } from '../../../main';
-import { RECORD_WORKOUT_STORAGE_PATH } from '../../recordWorkouts/core/1-constants';
-import { recordWorkoutPracticeActions } from '../../recordWorkoutPractice/framework/0-reducer';
-import { CHINESE_CUE_WORKOUT_STORAGE_PATH } from '../../chineseCueWorkouts/core/1-constants';
-import { chineseCueWorkoutPracticeActions } from '../../chineseCueWorkoutPractice/framework/0-reducer';
+import { Services } from 'infrastructure/services';
+import { RootState } from 'main';
+import { RECORD_WORKOUT_STORAGE_PATH } from 'application/recordWorkouts/core/1-constants';
+import { recordWorkoutPracticeActions } from 'application/recordWorkoutPractice/framework/0-reducer';
+import { CHINESE_CUE_WORKOUT_STORAGE_PATH } from 'application/chineseCueWorkouts/core/1-constants';
+import { chineseCueWorkoutPracticeActions } from 'application/chineseCueWorkoutPractice/framework/0-reducer';
 
 const audioMiddleware =
   (services: Services): Middleware =>

@@ -2,13 +2,13 @@ import { useSelector } from 'react-redux';
 import { Card, CardContent } from '@mui/material';
 import { useEffect, useMemo, useRef } from 'react';
 
-import { RootState } from '../../../../../main';
-import SentencePitchLine from '../../../../components/SentencePitchLine';
-import { RECORDED_VOICES } from '../../../../../assets/recordedVoices';
+import { RootState } from 'main';
+import SentencePitchLine from 'views/components/SentencePitchLine';
+import { RECORDED_VOICES } from 'assets/recordedVoices';
 import {
   pauseSourceNode,
   playAudioBufferAndSetSourceNode,
-} from '../../../../../application/audio/core/2-services';
+} from 'application/audio/core/2-services';
 
 function PlayChineseCueCard({ cueId }: { cueId: string }) {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);

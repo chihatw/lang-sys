@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material';
 import CueCard from './CueCard';
 import RecButton from './RecButton';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../main';
+import { RootState } from 'main';
 
 const CUE_CARD_HEIGHT = 200;
 function PracticeScene() {

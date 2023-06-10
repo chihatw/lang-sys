@@ -1,4 +1,3 @@
-import { db } from '../../../infrastructure/firebase';
 import {
   DocumentData,
   collection,
@@ -9,7 +8,8 @@ import {
   where,
   doc,
 } from 'firebase/firestore';
-import { IRecordWorkout } from '../core/0-interface';
+import { IRecordWorkout } from 'application/recordWorkouts/core/0-interface';
+import { db } from 'infrastructure/firebase';
 
 const COLLECTION = 'recordWorkouts';
 

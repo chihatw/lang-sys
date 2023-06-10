@@ -2,8 +2,8 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from '../../../../../main';
-import { chineseCueWorkoutPracticeActions } from '../../../../../application/chineseCueWorkoutPractice/framework/0-reducer';
+import { RootState } from 'main';
+import { chineseCueWorkoutPracticeActions } from 'application/chineseCueWorkoutPractice/framework/0-reducer';
 import PlayRecordedAudioBufferButton from './PlayRecordedAudioBufferButton';
 import CheckRecordedVoiceRow from '../0-components/CheckRecordedVoiceRow';
 

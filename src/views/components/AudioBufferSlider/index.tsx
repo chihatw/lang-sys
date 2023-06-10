@@ -3,7 +3,7 @@ import { IconButton, Slider, useTheme } from '@mui/material';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 
 import TimePane from './TimePane';
-import { createSourceNode } from '../../../application/audio/core/2-services';
+import { createSourceNode } from 'application/audio/core/2-services';
 
 const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
   const redrawSliderTiming = 5; // 何フレームに1回更新するか

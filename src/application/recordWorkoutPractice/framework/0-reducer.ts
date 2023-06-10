@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SCENE, initialState } from '../core/1-constants';
-import { shuffle } from '../../utils/utils';
+import { shuffle } from 'application/utils/utils';
 
 const recordWorkoutPracticeSlice = createSlice({
   name: 'recordWorkoutPractice',

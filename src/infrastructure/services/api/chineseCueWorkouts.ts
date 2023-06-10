@@ -1,7 +1,7 @@
 import {
   fetchWorkout,
   fetchWorkouts,
-} from '../../../application/chineseCueWorkouts/infrastructure/api';
+} from 'application/chineseCueWorkouts/infrastructure/api';
 
 export default {
   fetchWorkout,

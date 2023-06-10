@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import { auth } from '../infrastructure/firebase';
-import { RootState } from '../main';
-import { userActions } from '../application/user/framework/0-reducer';
+import { auth } from 'infrastructure/firebase';
+import { RootState } from 'main';
+import { userActions } from 'application/user/framework/0-reducer';
 
 import Layout from './Layout';
 import TopPage from './pages/TopPage';

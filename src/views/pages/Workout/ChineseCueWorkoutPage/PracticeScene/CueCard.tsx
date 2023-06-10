@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { RECORDED_VOICES } from '../../../../../assets/recordedVoices';
+import { RECORDED_VOICES } from 'assets/recordedVoices';
 
 function CueCard({ cueId, height }: { cueId: string; height: number }) {
   const { chinese } = useMemo(() => {

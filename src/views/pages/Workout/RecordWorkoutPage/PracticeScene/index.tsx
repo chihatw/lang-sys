@@ -3,7 +3,7 @@ import RecButton from './RecButton';
 import { useTheme } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-import { RootState } from '../../../../../main';
+import { RootState } from 'main';
 
 const CUE_CARD_HEIGHT = 200;
 const PracticeScene = () => {

@@ -6,8 +6,8 @@ import { useEffect, useRef, useState } from 'react';
 import {
   pauseSourceNode,
   playAudioBufferAndSetSourceNode,
-} from '../../../../../application/audio/core/2-services';
-import { RootState } from '../../../../../main';
+} from 'application/audio/core/2-services';
+import { RootState } from 'main';
 
 function PlayRecordedAudioBufferButton() {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);

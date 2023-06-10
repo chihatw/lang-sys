@@ -2,15 +2,15 @@ import { Button } from '@mui/material';
 import { useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from '../../../../../main';
+import { RootState } from 'main';
 
 import {
   startRecording,
   clearMediaRecorder,
   createMediaRecorder,
-} from '../../../../../application/audio/core/2-services';
+} from 'application/audio/core/2-services';
 
-import { recordWorkoutPracticeActions } from '../../../../../application/recordWorkoutPractice/framework/0-reducer';
+import { recordWorkoutPracticeActions } from 'application/recordWorkoutPractice/framework/0-reducer';
 
 const RecButton = () => {
   const dispatch = useDispatch();

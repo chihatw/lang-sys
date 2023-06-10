@@ -1,7 +1,9 @@
-import microphoneURL from '../../../assets/images/microphone.jpg';
-import { Container } from '@mui/material';
-import TopPageCard from './TopPageCard';
 import { useNavigate } from 'react-router-dom';
+import { Container } from '@mui/material';
+
+import microphoneURL from 'assets/images/microphone.jpg';
+
+import TopPageCard from './TopPageCard';
 
 const TopPage = () => {
   const navigate = useNavigate();

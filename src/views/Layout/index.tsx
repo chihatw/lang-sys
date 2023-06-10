@@ -1,11 +1,11 @@
-import LogoutIcon from '@mui/icons-material/Logout';
-import { AppBar, IconButton, Toolbar } from '@mui/material';
 import React from 'react';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppBar, IconButton, Toolbar } from '@mui/material';
 
 import LogoButton from './LogoButton';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../main';
-import { userActions } from '../../application/user/framework/0-reducer';
+import { RootState } from 'main';
+import { userActions } from 'application/user/framework/0-reducer';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();

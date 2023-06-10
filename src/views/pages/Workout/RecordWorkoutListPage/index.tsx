@@ -4,10 +4,10 @@ import { Button, Container } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 import RecordWorkoutListRow from './RecordWorkoutListRow';
-import { RootState } from '../../../../main';
-import CustomLabel from '../../../components/CustomLabel';
-import { recordWorkoutListActions } from '../../../../application/recordWorkoutList/framework/0-reducer';
-import { RECORD_WORKOUT_STORAGE_PATH } from '../../../../application/recordWorkouts/core/1-constants';
+import { RootState } from 'main';
+import CustomLabel from 'views/components/CustomLabel';
+import { recordWorkoutListActions } from 'application/recordWorkoutList/framework/0-reducer';
+import { RECORD_WORKOUT_STORAGE_PATH } from 'application/recordWorkouts/core/1-constants';
 
 const RecordWorkoutListPage = () => {
   const navigate = useNavigate();

@@ -2,14 +2,14 @@ import { Button } from '@mui/material';
 import { useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from '../../../../../main';
+import { RootState } from 'main';
 
 import {
   startRecording,
   clearMediaRecorder,
   createMediaRecorder,
-} from '../../../../../application/audio/core/2-services';
-import { chineseCueWorkoutPracticeActions } from '../../../../../application/chineseCueWorkoutPractice/framework/0-reducer';
+} from 'application/audio/core/2-services';
+import { chineseCueWorkoutPracticeActions } from 'application/chineseCueWorkoutPractice/framework/0-reducer';
 
 function RecButton() {
   const dispatch = useDispatch();

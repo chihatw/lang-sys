@@ -3,10 +3,10 @@ import { Button, Container } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from '../../../../main';
-import { recordWorkoutPracticeActions } from '../../../../application/recordWorkoutPractice/framework/0-reducer';
+import { RootState } from 'main';
+import { recordWorkoutPracticeActions } from 'application/recordWorkoutPractice/framework/0-reducer';
 
-import { SCENE } from '../../../../application/recordWorkoutPractice/core/1-constants';
+import { SCENE } from 'application/recordWorkoutPractice/core/1-constants';
 import OpeningScene from './OpeningScene';
 import PracticeScene from './PracticeScene';
 import CheckScene from './CheckScene';

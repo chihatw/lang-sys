@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../main';
-import { signinFormActions } from '../../../application/signinForm/framework/0-reducer';
+
+import { RootState } from 'main';
 import { Button, Container, TextField } from '@mui/material';
+import { signinFormActions } from 'application/signinForm/framework/0-reducer';
 
 const SignInPage = () => {
   const dispatch = useDispatch();
