@@ -7,7 +7,6 @@ import middleware from './middleware';
 export const configureStore = (services: Services) =>
   rtk.configureStore({
     reducer,
-    devTools: import.meta.env.DEV,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
@@ -44,4 +43,5 @@ export const configureStore = (services: Services) =>
       })
         .concat(logger)
         .concat([...middleware].map((f) => f(services))),
+    devTools: import.meta.env.DEV,
   });
