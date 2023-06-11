@@ -14,9 +14,7 @@ import ChineseWorkoutListPage from './pages/Workout/ChineseCueWorkoutListPage';
 
 function App() {
   const dispatch = useDispatch();
-  const { authInitializing } = useSelector(
-    (state: RootState) => state.authUser
-  );
+  const { initializing } = useSelector((state: RootState) => state.authUser);
 
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
@@ -28,7 +26,7 @@ function App() {
     });
   }, [dispatch]);
 
-  if (authInitializing) return <></>;
+  if (initializing) return <></>;
 
   return (
     <BrowserRouter>

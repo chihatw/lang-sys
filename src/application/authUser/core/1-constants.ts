@@ -1,9 +1,7 @@
 import { IAuthUser } from './0-interface';
 
 export const initialState: IAuthUser = {
-  authInitializing: true,
-  loading: false,
+  initializing: true,
   currentUid: '',
-  errorMsg: '',
   loginUser: null,
 };

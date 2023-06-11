@@ -1,18 +1,33 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from 'main';
-import { Button, Container, TextField } from '@mui/material';
+import { Button, CircularProgress, Container, TextField } from '@mui/material';
 import { signinFormActions } from 'application/signinForm/framework/0-reducer';
+import { useEffect, useState } from 'react';
 
 const SignInPage = () => {
   const dispatch = useDispatch();
 
-  const { email, password, hasError } = useSelector(
+  const { hasError, isLoading } = useSelector(
     (state: RootState) => state.signinForm
   );
 
+  const [state, setState] = useState({ email: '', password: '' });
+
+  useEffect(() => {
+    if (hasError) {
+      dispatch(signinFormActions.resetHasError());
+    }
+  }, [state]);
+
   const handleSignIn = async () => {
-    dispatch(signinFormActions.signinInitiate({ email, password }));
+    dispatch(
+      signinFormActions.signinInitiate({
+        email: state.email,
+        password: state.password,
+      })
+    );
+    setState({ email: '', password: '' });
   };
 
   return (
@@ -24,9 +39,12 @@ const SignInPage = () => {
           autoComplete='off'
           type='email'
           required
-          value={email}
+          value={state.email}
           onChange={(e) =>
-            dispatch(signinFormActions.changeEmail(e.target.value))
+            setState((currentState) => ({
+              ...currentState,
+              email: e.target.value,
+            }))
           }
         />
         <TextField
@@ -35,21 +53,31 @@ const SignInPage = () => {
           autoComplete='new-password'
           type='password'
           required
-          value={password}
+          value={state.password}
           onChange={(e) =>
-            dispatch(signinFormActions.changePassword(e.target.value))
+            setState((currentState) => ({
+              ...currentState,
+              password: e.target.value,
+            }))
           }
         />
         <div style={{ display: 'grid', rowGap: 16 }}>
-          <Button
-            fullWidth
-            variant='contained'
-            sx={{ color: 'white' }}
-            onClick={handleSignIn}
-            disabled={!email || !password}
-          >
-            登入
-          </Button>
+          {isLoading ? (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </div>
+          ) : (
+            <Button
+              fullWidth
+              variant='contained'
+              sx={{ color: 'white' }}
+              onClick={handleSignIn}
+              disabled={!state.email || !state.password}
+            >
+              登入
+            </Button>
+          )}
+
           {hasError && (
             <div
               style={{ fontSize: 12, color: 'crimson', textAlign: 'center' }}

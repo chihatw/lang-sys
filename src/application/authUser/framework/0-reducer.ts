@@ -7,8 +7,7 @@ const authUserSlice = createSlice({
   initialState: initialState,
   reducers: {
     setUser: (state, { payload }: { payload: User }) => {
-      state.loading = false;
-      state.authInitializing = false;
+      state.initializing = false;
       state.currentUid = payload.uid;
       state.loginUser = payload;
     },
@@ -16,34 +15,17 @@ const authUserSlice = createSlice({
       state.currentUid = payload;
     },
     removeUser: (state) => {
-      state.loading = false;
-      state.authInitializing = false;
+      state.initializing = false;
       state.currentUid = '';
       state.loginUser = null;
     },
-    signinStart: (state) => {
-      state.loading = true;
-    },
-    signinSuccess: (state, { payload }: { payload: User }) => {
-      state.loading = false;
+    setLoginUser: (state, { payload }: { payload: User }) => {
       state.currentUid = payload.uid;
       state.loginUser = payload;
     },
-    signinFail: (state, { payload }: { payload: string }) => {
-      state.loading = false;
-      state.errorMsg = payload;
-    },
-    signoutStart: (state) => {
-      state.loading = true;
-    },
     signoutSuccess: (state) => {
-      state.loading = false;
       state.currentUid = '';
       state.loginUser = null;
-    },
-    signoutFail: (state, { payload }: { payload: string }) => {
-      state.loading = false;
-      state.errorMsg = payload;
     },
     signoutInitiate: (state) => state,
   },

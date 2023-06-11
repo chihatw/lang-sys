@@ -9,7 +9,7 @@ const serializableCheck = {
   ignoredActions: [
     // authUser
     'authUser/setUser',
-    'authUser/signinSuccess',
+    'authUser/setLoginUser',
     // audio
     'audio/setChenVoice',
     'audio/setRecordedVoice',

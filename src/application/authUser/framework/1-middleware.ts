@@ -20,20 +20,17 @@ const userMiddleware =
             password
           );
         if (authUser) {
-          dispatch(authUserActions.signinSuccess(authUser));
+          dispatch(authUserActions.setLoginUser(authUser));
+          dispatch(signinFormActions.signInSuccess());
         } else if (errorMsg) {
-          dispatch(authUserActions.signinFail(errorMsg));
+          dispatch(signinFormActions.setHasError());
         }
-        dispatch(signinFormActions.resetSigninForm());
         break;
       }
       case 'authUser/signoutInitiate': {
-        dispatch(authUserActions.signoutStart());
         const { errorMsg } = await services.api.authUser.signOut();
         if (!errorMsg) {
           dispatch(authUserActions.signoutSuccess());
-        } else {
-          dispatch(authUserActions.signoutFail(errorMsg));
         }
         break;
       }
