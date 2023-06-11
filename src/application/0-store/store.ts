@@ -11,19 +11,23 @@ const serializableCheck = {
     'authUser/setUser',
     'authUser/setLoginUser',
     // audio
+    'audio/setBlob',
     'audio/setChenVoice',
     'audio/setRecordedVoice',
     'audio/setAudioContext',
     'audio/addFetchedAudioBuffers',
     // recordWorkoutPractice
-    'recordWorkoutPractice/setBlobAndAudioBuffer',
+    'recordWorkoutPractice/setAudioBuffer',
+    'recordWorkoutPractice/saveAudioBuffer',
     // chineseCueWorkoutPractice
-    'chineseCueWorkoutPractice/setBlobAndAudioBuffer',
+    'chineseCueWorkoutPractice/setAudioBuffer',
+    'chineseCueWorkoutPractice/saveAudioBuffer',
   ],
   ignoredPaths: [
     // authUser
     'authUser.loginUser',
     // audio
+    'audio.blob',
     'audio.chenVoice',
     'audio.recordedVoice',
     'audio.fetchedAudioBuffers',

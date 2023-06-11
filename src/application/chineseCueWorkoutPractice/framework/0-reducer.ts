@@ -25,17 +25,13 @@ const chineseCueWorkoutPracticeSlice = createSlice({
     startRecording: (state) => {
       state.isRunning = true;
     },
-    setBlobAndAudioBuffer: (
-      state,
-      { payload }: { payload: { audioBuffer: AudioBuffer; blob: Blob } }
-    ) => {
-      state.blob = payload.blob;
-      state.audioBuffer = payload.audioBuffer;
+    setAudioBuffer: (state, { payload }: { payload: AudioBuffer }) => {
+      state.audioBuffer = payload;
     },
     stopRecording: (state) => {
       state.scene = SCENE.check;
     },
-    saveAudioBuffer: (state) => state,
+    saveAudioBuffer: (state, { payload }: { payload: Blob }) => state,
     clearState: (state) => initialState,
     abandomAudioBuffer: (state) => {
       return {

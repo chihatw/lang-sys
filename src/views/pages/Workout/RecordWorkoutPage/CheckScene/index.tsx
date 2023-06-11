@@ -11,7 +11,8 @@ import { recordWorkoutPracticeActions } from 'application/recordWorkoutPractice/
 function CheckScene() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { shuffledCueIds, audioBuffer, blob } = useSelector(
+  const { blob } = useSelector((state: RootState) => state.audio);
+  const { shuffledCueIds, audioBuffer } = useSelector(
     (state: RootState) => state.recordWorkoutPractice
   );
 

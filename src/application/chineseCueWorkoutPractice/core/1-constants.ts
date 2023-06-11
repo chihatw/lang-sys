@@ -7,7 +7,6 @@ export const SCENE = {
 };
 
 export const initialState: IChineseCueWorkoutPractice = {
-  blob: null,
   scene: SCENE.opening,
   workoutId: '',
   isRunning: false,

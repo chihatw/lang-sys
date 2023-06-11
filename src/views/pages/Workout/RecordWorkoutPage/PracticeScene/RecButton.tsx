@@ -11,6 +11,7 @@ import {
 } from 'application/audio/core/2-services';
 
 import { recordWorkoutPracticeActions } from 'application/recordWorkoutPractice/framework/0-reducer';
+import { audioActions } from 'application/audio/framework/0-reducer';
 
 const RecButton = () => {
   const dispatch = useDispatch();
@@ -36,13 +37,10 @@ const RecButton = () => {
     );
     await startRecording(
       mediaRecorder,
-      (blob: Blob, audioBuffer: AudioBuffer) =>
-        dispatch(
-          recordWorkoutPracticeActions.setBlobAndAudioBuffer({
-            blob,
-            audioBuffer,
-          })
-        )
+      (blob: Blob, audioBuffer: AudioBuffer) => {
+        dispatch(audioActions.setBlob(blob));
+        dispatch(recordWorkoutPracticeActions.setAudioBuffer(audioBuffer));
+      }
     );
 
     dispatch(recordWorkoutPracticeActions.startRecording());

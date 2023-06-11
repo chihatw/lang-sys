@@ -10,6 +10,7 @@ import {
   createMediaRecorder,
 } from 'application/audio/core/2-services';
 import { chineseCueWorkoutPracticeActions } from 'application/chineseCueWorkoutPractice/framework/0-reducer';
+import { audioActions } from 'application/audio/framework/0-reducer';
 
 function RecButton() {
   const dispatch = useDispatch();
@@ -37,13 +38,10 @@ function RecButton() {
 
     await startRecording(
       mediaRecorder,
-      (blob: Blob, audioBuffer: AudioBuffer) =>
-        dispatch(
-          chineseCueWorkoutPracticeActions.setBlobAndAudioBuffer({
-            blob,
-            audioBuffer,
-          })
-        )
+      (blob: Blob, audioBuffer: AudioBuffer) => {
+        dispatch(audioActions.setBlob(blob));
+        dispatch(chineseCueWorkoutPracticeActions.setAudioBuffer(audioBuffer));
+      }
     );
 
     dispatch(chineseCueWorkoutPracticeActions.startRecording());

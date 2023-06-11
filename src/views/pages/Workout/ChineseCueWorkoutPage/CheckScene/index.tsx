@@ -10,7 +10,9 @@ import CheckRecordedVoiceRow from '../0-components/CheckRecordedVoiceRow';
 function CheckScene() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { shuffledCueIds, audioBuffer, blob } = useSelector(
+
+  const { blob } = useSelector((state: RootState) => state.audio);
+  const { shuffledCueIds, audioBuffer } = useSelector(
     (state: RootState) => state.chineseCueWorkoutPractice
   );
 
@@ -24,7 +26,7 @@ function CheckScene() {
     // storage に blob を upload
     // audioBuffers に audioBuffer をセット
     // recordWorkout の state を初期化
-    dispatch(chineseCueWorkoutPracticeActions.saveAudioBuffer());
+    dispatch(chineseCueWorkoutPracticeActions.saveAudioBuffer(blob));
     navigate('/list/chineseCue');
   };
 

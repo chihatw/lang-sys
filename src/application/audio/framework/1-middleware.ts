@@ -63,7 +63,8 @@ const audioMiddleware =
         break;
       }
       case 'recordWorkoutPractice/saveAudioBuffer': {
-        const { workoutId, blob, audioBuffer } = (getState() as RootState)
+        const { blob } = (getState() as RootState).audio;
+        const { workoutId, audioBuffer } = (getState() as RootState)
           .recordWorkoutPractice;
 
         if (!!blob && !!audioBuffer) {
@@ -75,6 +76,7 @@ const audioMiddleware =
           );
 
           dispatch(recordWorkoutPracticeActions.clearState());
+          dispatch(audioActions.resetBlob());
         }
 
         break;
@@ -96,7 +98,8 @@ const audioMiddleware =
         break;
       }
       case 'chineseCueWorkoutPractice/saveAudioBuffer': {
-        const { workoutId, blob, audioBuffer } = (getState() as RootState)
+        const { blob } = (getState() as RootState).audio;
+        const { workoutId, audioBuffer } = (getState() as RootState)
           .chineseCueWorkoutPractice;
 
         if (!!blob && !!audioBuffer) {
@@ -108,6 +111,7 @@ const audioMiddleware =
           );
 
           dispatch(chineseCueWorkoutPracticeActions.clearState());
+          dispatch(audioActions.resetBlob());
         }
 
         break;
