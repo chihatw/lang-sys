@@ -11,6 +11,7 @@ interface ImportMetaEnv {
   readonly VITE_APP_ID: string;
   readonly VITE_MESUREMENT_ID: string;
   readonly VITE_USER_CHEN_UID: string;
+  readonly VITE_ADMIN_UID: string;
 }
 
 interface ImportMeta {

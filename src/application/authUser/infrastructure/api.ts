@@ -5,7 +5,7 @@ export const signInWithEmailAndPassword = async (
   email: string,
   password: string
 ): Promise<{
-  user: firebaseAuth.User | null;
+  authUser: firebaseAuth.User | null;
   errorMsg: string;
 }> => {
   try {
@@ -14,9 +14,9 @@ export const signInWithEmailAndPassword = async (
       email,
       password
     );
-    return { user, errorMsg: '' };
+    return { authUser: user, errorMsg: '' };
   } catch (error) {
-    return { user: null, errorMsg: (error as { message: string }).message };
+    return { authUser: null, errorMsg: (error as { message: string }).message };
   }
 };
 

@@ -13,7 +13,7 @@ import CustomLabel from 'views/components/CustomLabel';
 function ChineseWorkoutListPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.authUser);
   const { workoutIds, workoutIdsInitializing, audioBuffersInitializing } =
     useSelector((state: RootState) => state.chineseCueWorkoutList);
 

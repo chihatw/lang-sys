@@ -1,5 +1,5 @@
-import user from 'application/user/framework/0-reducer';
 import audio from 'application/audio/framework/0-reducer';
+import authUser from 'application/authUser/framework/0-reducer';
 import signinForm from 'application/signinForm/framework/0-reducer';
 import recordWorkouts from 'application/recordWorkouts/framework/0-reducer';
 import recordWorkoutList from 'application/recordWorkoutList/framework/0-reducer';
@@ -9,8 +9,8 @@ import chineseCueWorkoutList from 'application/chineseCueWorkoutList/framework/0
 import chineseCueWorkoutPractice from 'application/chineseCueWorkoutPractice/framework/0-reducer';
 
 export default {
-  user,
   audio,
+  authUser,
   signinForm,
   recordWorkouts,
   recordWorkoutList,

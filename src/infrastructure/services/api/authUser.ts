@@ -1,7 +1,7 @@
 import {
   signInWithEmailAndPassword,
   signOut,
-} from 'application/user/infrastructure/api';
+} from 'application/authUser/infrastructure/api';
 
 const user = { signInWithEmailAndPassword, signOut };
 

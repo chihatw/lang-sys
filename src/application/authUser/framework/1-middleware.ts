@@ -1,7 +1,7 @@
 import { AnyAction, Middleware } from '@reduxjs/toolkit';
 
 import { Services } from 'infrastructure/services';
-import { userActions } from 'application/user/framework/0-reducer';
+import { userActions } from 'application/authUser/framework/0-reducer';
 import { signinFormActions } from 'application/signinForm/framework/0-reducer';
 
 const userMiddleware =
@@ -14,19 +14,22 @@ const userMiddleware =
       case 'signinForm/signinInitiate': {
         const { email, password }: { email: string; password: string } =
           action.payload;
-        const { user, errorMsg } =
-          await services.api.user.signInWithEmailAndPassword(email, password);
-        if (user) {
-          dispatch(userActions.signinSuccess(user));
+        const { authUser, errorMsg } =
+          await services.api.authUser.signInWithEmailAndPassword(
+            email,
+            password
+          );
+        if (authUser) {
+          dispatch(userActions.signinSuccess(authUser));
         } else if (errorMsg) {
           dispatch(userActions.signinFail(errorMsg));
         }
         dispatch(signinFormActions.resetSigninForm());
         break;
       }
-      case 'user/signoutInitiate': {
+      case 'authUser/signoutInitiate': {
         dispatch(userActions.signoutStart());
-        const { errorMsg } = await services.api.user.signOut();
+        const { errorMsg } = await services.api.authUser.signOut();
         if (!errorMsg) {
           dispatch(userActions.signoutSuccess());
         } else {

@@ -5,11 +5,11 @@ import { AppBar, IconButton, Toolbar } from '@mui/material';
 
 import LogoButton from './LogoButton';
 import { RootState } from 'main';
-import { userActions } from 'application/user/framework/0-reducer';
+import { userActions } from 'application/authUser/framework/0-reducer';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.authUser);
   const handleSignOut = () => {
     dispatch(userActions.signoutInitiate());
   };
@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       >
         <Toolbar variant='dense' sx={{ justifyContent: 'space-between' }}>
           <LogoButton />
-          {currentUser && (
+          {currentUser.uid && (
             <IconButton
               size='small'
               sx={{ color: 'white' }}

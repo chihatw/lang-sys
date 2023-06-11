@@ -7,9 +7,9 @@ import { Services } from 'infrastructure/services';
 
 const serializableCheck = {
   ignoredActions: [
-    // user
-    'user/setUser',
-    'user/signinSuccess',
+    // authUser
+    'authUser/setUser',
+    'authUser/signinSuccess',
     // audio
     'audio/setChenVoice',
     'audio/setRecordedVoice',
@@ -21,8 +21,9 @@ const serializableCheck = {
     'chineseCueWorkoutPractice/setBlobAndAudioBuffer',
   ],
   ignoredPaths: [
-    // user
-    'user.currentUser',
+    // authUser
+    'authUser.currentUser',
+    'authUser.loginUser',
     // audio
     'audio.chenVoice',
     'audio.recordedVoice',

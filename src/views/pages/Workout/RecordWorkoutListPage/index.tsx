@@ -12,7 +12,7 @@ import { RECORD_WORKOUT_STORAGE_PATH } from 'application/recordWorkouts/core/1-c
 const RecordWorkoutListPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.authUser);
   const { workoutIds, workoutIdsInitializing, audioBuffersInitializing } =
     useSelector((state: RootState) => state.recordWorkoutList);
 

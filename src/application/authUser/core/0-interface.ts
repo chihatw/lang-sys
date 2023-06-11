@@ -1,8 +1,9 @@
 import { User } from '@firebase/auth';
 
-export interface IUser {
+export interface IAuthUser {
   authInitializing: boolean;
   loading: boolean;
-  currentUser: User | null;
+  currentUser: { uid: string; isDebugging: boolean };
   errorMsg: string;
+  loginUser: User | null;
 }
