@@ -5,8 +5,11 @@ const chineseCueWorkoutListSlice = createSlice({
   name: 'chineseCueWorkoutList',
   initialState,
   reducers: {
-    getListStart: (state, { payload }: { payload: { uid: string } }) => {
-      state.workoutIdsInitializing = false;
+    initiate: (state) => {
+      state.initializing = false;
+    },
+    setWorkoutIds: (state, { payload }: { payload: string[] }) => {
+      state.workoutIds = payload;
     },
     getAudioBuffersStart: (
       state,
@@ -14,13 +17,11 @@ const chineseCueWorkoutListSlice = createSlice({
     ) => {
       state.audioBuffersInitializing = false;
     },
-    setWorkoutIds: (state, { payload }: { payload: string[] }) => {
-      state.workoutIds = payload;
-    },
     removeStorageAudioBufferStart: (
       state,
       { payload }: { payload: { path: string } }
     ) => state,
+    resetState: () => initialState,
   },
 });
 

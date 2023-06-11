@@ -8,25 +8,28 @@ import {
   where,
   doc,
 } from 'firebase/firestore';
-import { IChineseCueWorkout } from '../core/0-interface';
 import { db } from 'infrastructure/firebase';
-
-const COLLECTION = 'chineseCueWorkouts';
+import { IChineseCueWorkout } from '../core/0-interface';
+import { CHINESE_CUE_WORKOUT_STORE_COLLECTION } from '../core/1-constants';
 
 export const fetchWorkout = async (id: string) => {
-  const docSnapshot = await getDoc(doc(db, COLLECTION, id));
+  console.log(`%cfetch ${CHINESE_CUE_WORKOUT_STORE_COLLECTION}`, 'color:red');
+
+  const docSnapshot = await getDoc(
+    doc(db, CHINESE_CUE_WORKOUT_STORE_COLLECTION, id)
+  );
   if (!docSnapshot.exists()) return null;
   const workout = buildWorkout(docSnapshot);
   return workout;
 };
 
 export const fetchWorkouts = async (uid: string) => {
-  let q = query(collection(db, COLLECTION));
+  console.log(`%cfetch ${CHINESE_CUE_WORKOUT_STORE_COLLECTION}`, 'color:red');
+
+  let q = query(collection(db, CHINESE_CUE_WORKOUT_STORE_COLLECTION));
   q = query(q, where('uid', '==', uid));
   q = query(q, where('isActive', '==', true));
   q = query(q, orderBy('createdAt', 'desc'));
-
-  console.log(`%cfetch ${COLLECTION}`, 'color:red');
 
   const querySnapshot = await getDocs(q);
   const workouts: { [id: string]: IChineseCueWorkout } = {};

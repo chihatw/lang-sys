@@ -22,7 +22,6 @@ const serializableCheck = {
   ],
   ignoredPaths: [
     // authUser
-    'authUser.currentUser',
     'authUser.loginUser',
     // audio
     'audio.chenVoice',

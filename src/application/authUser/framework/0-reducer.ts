@@ -2,27 +2,31 @@ import { createSlice } from '@reduxjs/toolkit';
 import { initialState } from '../core/1-constants';
 import { User } from 'firebase/auth';
 
-const userSlice = createSlice({
+const authUserSlice = createSlice({
   name: 'authUser',
   initialState: initialState,
   reducers: {
     setUser: (state, { payload }: { payload: User }) => {
       state.loading = false;
       state.authInitializing = false;
-      state.currentUser.uid = payload.uid;
+      state.currentUid = payload.uid;
       state.loginUser = payload;
+    },
+    setCurrentUid: (state, { payload }: { payload: string }) => {
+      state.currentUid = payload;
     },
     removeUser: (state) => {
       state.loading = false;
       state.authInitializing = false;
-      state.currentUser.uid = '';
+      state.currentUid = '';
+      state.loginUser = null;
     },
     signinStart: (state) => {
       state.loading = true;
     },
     signinSuccess: (state, { payload }: { payload: User }) => {
       state.loading = false;
-      state.currentUser.uid = payload.uid;
+      state.currentUid = payload.uid;
       state.loginUser = payload;
     },
     signinFail: (state, { payload }: { payload: string }) => {
@@ -34,7 +38,7 @@ const userSlice = createSlice({
     },
     signoutSuccess: (state) => {
       state.loading = false;
-      state.currentUser.uid = '';
+      state.currentUid = '';
       state.loginUser = null;
     },
     signoutFail: (state, { payload }: { payload: string }) => {
@@ -45,6 +49,6 @@ const userSlice = createSlice({
   },
 });
 
-export default userSlice.reducer;
+export default authUserSlice.reducer;
 
-export const userActions = userSlice.actions;
+export const authUserActions = authUserSlice.actions;

@@ -6,7 +6,7 @@ const chineseCueWorkoutsSlice = createSlice({
   name: 'chineseCueWorkouts',
   initialState,
   reducers: {
-    setWorkouts: (
+    concatWorkouts: (
       state,
       { payload }: { payload: { [id: string]: IChineseCueWorkout } }
     ) => ({ ...state, ...payload }),

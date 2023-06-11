@@ -12,7 +12,6 @@ import { RECORD_WORKOUT_STORAGE_PATH } from 'application/recordWorkouts/core/1-c
 const RecordWorkoutListPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: RootState) => state.authUser);
   const { workoutIds, workoutIdsInitializing, audioBuffersInitializing } =
     useSelector((state: RootState) => state.recordWorkoutList);
 
@@ -20,8 +19,8 @@ const RecordWorkoutListPage = () => {
   useEffect(() => {
     // 初期化が終わっていれば、終了
     if (!workoutIdsInitializing) return;
-    dispatch(recordWorkoutListActions.getListStart({ uid: currentUser!.uid }));
-  }, [currentUser, workoutIdsInitializing]);
+    dispatch(recordWorkoutListActions.initiate());
+  }, [workoutIdsInitializing]);
 
   // audioBuffersの取得
   useEffect(() => {

@@ -5,8 +5,11 @@ const recordWorkoutListSlice = createSlice({
   name: 'recordWorkoutList',
   initialState,
   reducers: {
-    getListStart: (state, { payload }: { payload: { uid: string } }) => {
+    initiate: (state) => {
       state.workoutIdsInitializing = false;
+    },
+    setWorkoutIds: (state, { payload }: { payload: string[] }) => {
+      state.workoutIds = payload;
     },
     getAudioBuffersStart: (
       state,
@@ -14,13 +17,11 @@ const recordWorkoutListSlice = createSlice({
     ) => {
       state.audioBuffersInitializing = false;
     },
-    setWorkoutIds: (state, { payload }: { payload: string[] }) => {
-      state.workoutIds = payload;
-    },
     removeStorageAudioBufferStart: (
       state,
       { payload }: { payload: { path: string } }
     ) => state,
+    resetState: () => initialState,
   },
 });
 

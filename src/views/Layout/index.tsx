@@ -1,18 +1,11 @@
 import React from 'react';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppBar, IconButton, Toolbar } from '@mui/material';
+import { AppBar, Toolbar } from '@mui/material';
 
 import LogoButton from './LogoButton';
-import { RootState } from 'main';
-import { userActions } from 'application/authUser/framework/0-reducer';
+import SelectUserPane from './SelectUserPane';
+import LogoutButton from './LogoutButton';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: RootState) => state.authUser);
-  const handleSignOut = () => {
-    dispatch(userActions.signoutInitiate());
-  };
   return (
     <div>
       <AppBar
@@ -26,15 +19,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       >
         <Toolbar variant='dense' sx={{ justifyContent: 'space-between' }}>
           <LogoButton />
-          {currentUser.uid && (
-            <IconButton
-              size='small'
-              sx={{ color: 'white' }}
-              onClick={handleSignOut}
-            >
-              <LogoutIcon />
-            </IconButton>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', columnGap: 8 }}>
+            <SelectUserPane />
+            <LogoutButton />
+          </div>
         </Toolbar>
       </AppBar>
       <div>{children}</div>

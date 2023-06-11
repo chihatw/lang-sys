@@ -4,14 +4,13 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { auth } from 'infrastructure/firebase';
 import { RootState } from 'main';
-import { userActions } from 'application/authUser/framework/0-reducer';
+import { authUserActions } from 'application/authUser/framework/0-reducer';
 
 import Layout from './Layout';
 import TopPage from './pages/TopPage';
 import SignInPage from './pages/SignInPage';
 import ChineseCueWorkoutPage from './pages/Workout/ChineseCueWorkoutPage';
 import ChineseWorkoutListPage from './pages/Workout/ChineseCueWorkoutListPage';
-import ChangeUserPage from './pages/ChangeUserPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,9 +21,9 @@ function App() {
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (authUser) {
-        dispatch(userActions.setUser(authUser));
+        dispatch(authUserActions.setUser(authUser));
       } else {
-        dispatch(userActions.removeUser());
+        dispatch(authUserActions.removeUser());
       }
     });
   }, [dispatch]);
@@ -54,11 +53,6 @@ function App() {
             element={<OnlyUnAuthorizedRoute element={<SignInPage />} />}
           />
 
-          <Route
-            path='/users'
-            element={<OnlyAdminRoute element={<ChangeUserPage />} />}
-          />
-
           <Route path='/*' element={<Navigate to='/' />} />
         </Routes>
       </Layout>
@@ -69,17 +63,17 @@ function App() {
 export default App;
 
 function PrivateRoute({ element }: { element: React.ReactElement }) {
-  const { currentUser } = useSelector((state: RootState) => state.authUser);
+  const { loginUser } = useSelector((state: RootState) => state.authUser);
 
-  if (!currentUser.uid) {
+  if (!loginUser) {
     return <Navigate to='/signIn' />;
   }
   return element;
 }
 
 function OnlyUnAuthorizedRoute({ element }: { element: React.ReactElement }) {
-  const { currentUser } = useSelector((state: RootState) => state.authUser);
-  if (currentUser.uid) {
+  const { loginUser } = useSelector((state: RootState) => state.authUser);
+  if (loginUser) {
     return <Navigate to='/' />;
   }
   return element;

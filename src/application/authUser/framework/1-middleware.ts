@@ -1,7 +1,7 @@
 import { AnyAction, Middleware } from '@reduxjs/toolkit';
-
 import { Services } from 'infrastructure/services';
-import { userActions } from 'application/authUser/framework/0-reducer';
+
+import { authUserActions } from 'application/authUser/framework/0-reducer';
 import { signinFormActions } from 'application/signinForm/framework/0-reducer';
 
 const userMiddleware =
@@ -20,21 +20,26 @@ const userMiddleware =
             password
           );
         if (authUser) {
-          dispatch(userActions.signinSuccess(authUser));
+          dispatch(authUserActions.signinSuccess(authUser));
         } else if (errorMsg) {
-          dispatch(userActions.signinFail(errorMsg));
+          dispatch(authUserActions.signinFail(errorMsg));
         }
         dispatch(signinFormActions.resetSigninForm());
         break;
       }
       case 'authUser/signoutInitiate': {
-        dispatch(userActions.signoutStart());
+        dispatch(authUserActions.signoutStart());
         const { errorMsg } = await services.api.authUser.signOut();
         if (!errorMsg) {
-          dispatch(userActions.signoutSuccess());
+          dispatch(authUserActions.signoutSuccess());
         } else {
-          dispatch(userActions.signoutFail(errorMsg));
+          dispatch(authUserActions.signoutFail(errorMsg));
         }
+        break;
+      }
+      case 'userList/setSelectedUid': {
+        const currentUid = action.payload as string;
+        dispatch(authUserActions.setCurrentUid(currentUid));
         break;
       }
       default:

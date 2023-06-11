@@ -14,11 +14,11 @@ const recordWorkoutsMiddleware =
   async (action: AnyAction) => {
     next(action);
     switch (action.type) {
-      case 'recordWorkoutList/getListStart': {
-        const uid = action.payload.uid as string;
+      case 'recordWorkoutList/initiate': {
+        const uid = (getState() as RootState).authUser.currentUid;
         // workouts の取得
         const workouts = await services.api.recordWorkouts.fetchWorkouts(uid);
-        dispatch(recordWorkoutsActions.setWorkouts(workouts));
+        dispatch(recordWorkoutsActions.concatWorkouts(workouts));
 
         const workoutIds = Object.values(workouts)
           .sort((a, b) => a.createdAt - b.createdAt)
@@ -51,7 +51,7 @@ const recordWorkoutsMiddleware =
         );
         if (!!gotWorkout) {
           dispatch(
-            recordWorkoutsActions.setWorkouts({ [workoutId]: gotWorkout })
+            recordWorkoutsActions.concatWorkouts({ [workoutId]: gotWorkout })
           );
 
           const shuffledCueIds = shuffle([...gotWorkout.cueIds]);

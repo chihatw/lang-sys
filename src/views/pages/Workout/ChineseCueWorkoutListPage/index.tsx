@@ -13,18 +13,16 @@ import CustomLabel from 'views/components/CustomLabel';
 function ChineseWorkoutListPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: RootState) => state.authUser);
-  const { workoutIds, workoutIdsInitializing, audioBuffersInitializing } =
-    useSelector((state: RootState) => state.chineseCueWorkoutList);
+  const { workoutIds, initializing, audioBuffersInitializing } = useSelector(
+    (state: RootState) => state.chineseCueWorkoutList
+  );
 
   // workoutIds の取得
   useEffect(() => {
     // 初期化が終わっていれば、終了
-    if (!workoutIdsInitializing) return;
-    dispatch(
-      chineseCueWorkoutListActions.getListStart({ uid: currentUser!.uid })
-    );
-  }, [currentUser, workoutIdsInitializing]);
+    if (!initializing) return;
+    dispatch(chineseCueWorkoutListActions.initiate());
+  }, [initializing]);
 
   // audioBuffersの取得
   useEffect(() => {

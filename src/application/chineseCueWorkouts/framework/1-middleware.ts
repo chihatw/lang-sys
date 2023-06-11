@@ -13,13 +13,13 @@ const chineseCueWorkoutsMiddleware =
   async (action: AnyAction) => {
     next(action);
     switch (action.type) {
-      case 'chineseCueWorkoutList/getListStart': {
-        const uid = action.payload.uid as string;
+      case 'chineseCueWorkoutList/initiate': {
+        const uid = (getState() as RootState).authUser.currentUid;
         // workouts の取得
         const workouts = await services.api.chineseCueWorkouts.fetchWorkouts(
           uid
         );
-        dispatch(chineseCueWorkoutsActions.setWorkouts(workouts));
+        dispatch(chineseCueWorkoutsActions.concatWorkouts(workouts));
 
         const workoutIds = Object.values(workouts)
           .sort((a, b) => a.createdAt - b.createdAt)
@@ -52,7 +52,9 @@ const chineseCueWorkoutsMiddleware =
 
         if (!!gotWorkout) {
           dispatch(
-            chineseCueWorkoutsActions.setWorkouts({ [workoutId]: gotWorkout })
+            chineseCueWorkoutsActions.concatWorkouts({
+              [workoutId]: gotWorkout,
+            })
           );
 
           const shuffledCueIds = shuffle([...gotWorkout.cueIds]);
