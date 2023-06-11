@@ -11,8 +11,10 @@ function CheckScene() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { blob } = useSelector((state: RootState) => state.audio);
-  const { shuffledCueIds, audioBuffer } = useSelector(
+  const { blob, userAudioBuffer } = useSelector(
+    (state: RootState) => state.audio
+  );
+  const { shuffledCueIds } = useSelector(
     (state: RootState) => state.chineseCueWorkoutPractice
   );
 
@@ -21,12 +23,12 @@ function CheckScene() {
   };
 
   const saveRecordedAudioBuffer = async () => {
-    if (!blob || !audioBuffer) return;
+    if (!blob || !userAudioBuffer) return;
 
     // storage に blob を upload
     // audioBuffers に audioBuffer をセット
     // recordWorkout の state を初期化
-    dispatch(chineseCueWorkoutPracticeActions.saveAudioBuffer(blob));
+    dispatch(chineseCueWorkoutPracticeActions.saveAudioBuffer());
     navigate('/list/chineseCue');
   };
 

@@ -11,8 +11,10 @@ import { recordWorkoutPracticeActions } from 'application/recordWorkoutPractice/
 function CheckScene() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { blob } = useSelector((state: RootState) => state.audio);
-  const { shuffledCueIds, audioBuffer } = useSelector(
+  const { blob, userAudioBuffer } = useSelector(
+    (state: RootState) => state.audio
+  );
+  const { shuffledCueIds } = useSelector(
     (state: RootState) => state.recordWorkoutPractice
   );
 
@@ -21,7 +23,7 @@ function CheckScene() {
   };
 
   const saveRecordedAudioBuffer = async () => {
-    if (!blob || !audioBuffer) return;
+    if (!blob || !userAudioBuffer) return;
 
     // storage に blob を upload
     // audioBuffers に audioBuffer をセット

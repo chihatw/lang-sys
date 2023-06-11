@@ -63,20 +63,21 @@ const audioMiddleware =
         break;
       }
       case 'recordWorkoutPractice/saveAudioBuffer': {
-        const { blob } = (getState() as RootState).audio;
-        const { workoutId, audioBuffer } = (getState() as RootState)
-          .recordWorkoutPractice;
+        const { blob, userAudioBuffer } = (getState() as RootState).audio;
+        const { workoutId } = (getState() as RootState).recordWorkoutPractice;
 
-        if (!!blob && !!audioBuffer) {
+        if (!!blob && !!userAudioBuffer) {
           const storagePath = RECORD_WORKOUT_STORAGE_PATH + workoutId;
           await services.api.audio.uploadStorageByPath(blob, storagePath);
 
           dispatch(
-            audioActions.addFetchedAudioBuffers({ [storagePath]: audioBuffer })
+            audioActions.addFetchedAudioBuffers({
+              [storagePath]: userAudioBuffer,
+            })
           );
 
           dispatch(recordWorkoutPracticeActions.clearState());
-          dispatch(audioActions.resetBlob());
+          dispatch(audioActions.resetBlobAndAudioBuffer());
         }
 
         break;
@@ -98,20 +99,22 @@ const audioMiddleware =
         break;
       }
       case 'chineseCueWorkoutPractice/saveAudioBuffer': {
-        const { blob } = (getState() as RootState).audio;
-        const { workoutId, audioBuffer } = (getState() as RootState)
+        const { blob, userAudioBuffer } = (getState() as RootState).audio;
+        const { workoutId } = (getState() as RootState)
           .chineseCueWorkoutPractice;
 
-        if (!!blob && !!audioBuffer) {
+        if (!!blob && !!userAudioBuffer) {
           const storagePath = CHINESE_CUE_WORKOUT_STORAGE_PATH + workoutId;
           await services.api.audio.uploadStorageByPath(blob, storagePath);
 
           dispatch(
-            audioActions.addFetchedAudioBuffers({ [storagePath]: audioBuffer })
+            audioActions.addFetchedAudioBuffers({
+              [storagePath]: userAudioBuffer,
+            })
           );
 
           dispatch(chineseCueWorkoutPracticeActions.clearState());
-          dispatch(audioActions.resetBlob());
+          dispatch(audioActions.resetBlobAndAudioBuffer());
         }
 
         break;

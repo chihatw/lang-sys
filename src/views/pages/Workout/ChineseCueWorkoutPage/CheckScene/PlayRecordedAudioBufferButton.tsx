@@ -11,9 +11,7 @@ import { RootState } from 'main';
 
 function PlayRecordedAudioBufferButton() {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { audioBuffer } = useSelector(
-    (state: RootState) => state.chineseCueWorkoutPractice
-  );
+  const { userAudioBuffer } = useSelector((state: RootState) => state.audio);
 
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -32,9 +30,9 @@ function PlayRecordedAudioBufferButton() {
     }
     setIsPlaying(true);
     playAudioBufferAndSetSourceNode(
-      audioBuffer!,
+      userAudioBuffer!,
       0,
-      audioBuffer!.duration,
+      userAudioBuffer!.duration,
       sourceNodeRef,
       () => setIsPlaying(false)
     );
@@ -44,7 +42,7 @@ function PlayRecordedAudioBufferButton() {
     <IconButton
       sx={{ color: '#52a2aa' }}
       onClick={play}
-      disabled={!audioBuffer}
+      disabled={!userAudioBuffer}
     >
       {isPlaying ? (
         <Stop sx={{ fontSize: 120 }} />

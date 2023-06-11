@@ -39,8 +39,7 @@ function RecButton() {
     await startRecording(
       mediaRecorder,
       (blob: Blob, audioBuffer: AudioBuffer) => {
-        dispatch(audioActions.setBlob(blob));
-        dispatch(chineseCueWorkoutPracticeActions.setAudioBuffer(audioBuffer));
+        dispatch(audioActions.setBlobAndAudioBuffer({ blob, audioBuffer }));
       }
     );
 

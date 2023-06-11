@@ -10,7 +10,6 @@ export const initialState: IChineseCueWorkoutPractice = {
   scene: SCENE.opening,
   workoutId: '',
   isRunning: false,
-  audioBuffer: null,
   currentIndex: 0,
   shuffledCueIds: [],
 };

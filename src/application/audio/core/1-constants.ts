@@ -4,5 +4,6 @@ export const initialState: IAudio = {
   blob: null,
   chenVoice: null,
   recordedVoice: null,
+  userAudioBuffer: null,
   fetchedAudioBuffers: {},
 };
