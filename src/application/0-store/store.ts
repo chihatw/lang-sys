@@ -28,7 +28,6 @@ const serializableCheck = {
     'audio.recordedVoice',
     'audio.fetchedAudioBuffers',
     //recordWoroutPractice
-
     'recordWorkoutPractice.blob',
     'recordWorkoutPractice.audioBuffer',
     // chineseCueWorkoutPractice

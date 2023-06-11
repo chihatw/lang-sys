@@ -17,9 +17,9 @@ function App() {
   const { initializing } = useSelector((state: RootState) => state.authUser);
 
   useEffect(() => {
-    auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
-        dispatch(authUserActions.setUser(authUser));
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(authUserActions.setUser(user));
       } else {
         dispatch(authUserActions.removeUser());
       }
@@ -72,14 +72,6 @@ function PrivateRoute({ element }: { element: React.ReactElement }) {
 function OnlyUnAuthorizedRoute({ element }: { element: React.ReactElement }) {
   const { loginUser } = useSelector((state: RootState) => state.authUser);
   if (loginUser) {
-    return <Navigate to='/' />;
-  }
-  return element;
-}
-
-function OnlyAdminRoute({ element }: { element: React.ReactElement }) {
-  const { loginUser } = useSelector((state: RootState) => state.authUser);
-  if (loginUser?.uid !== import.meta.env.VITE_ADMIN_UID) {
     return <Navigate to='/' />;
   }
   return element;

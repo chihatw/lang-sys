@@ -14,7 +14,7 @@ const usersMiddleWare =
       case 'userList/initiate': {
         const { loginUser } = (getState() as RootState).authUser;
         const users = await services.api.users.fetchUsers();
-        dispatch(usersAcions.concatUsers(users));
+        dispatch(usersAcions.setUsers(users));
         const uids = Object.keys(users);
 
         dispatch(

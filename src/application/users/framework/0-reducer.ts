@@ -5,13 +5,8 @@ const usersSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    concatUsers: (
-      state,
-      { payload }: { payload: { [id: string]: string } }
-    ) => ({
-      ...state,
-      ...payload,
-    }),
+    setUsers: (state, { payload }: { payload: { [id: string]: string } }) =>
+      payload,
   },
 });
 
