@@ -98,3 +98,24 @@ export const clearMediaRecorder = (
   audioElem.srcObject = null;
   mediaRecorder = null;
 };
+
+export const updateElapsedTime = (
+  audioContext: AudioContext,
+  elapsedStartTimeRef: React.MutableRefObject<number>,
+  elapsedTimeRef: React.MutableRefObject<number>
+) => {
+  const currentTime = audioContext.currentTime;
+  // 経過時間を累積経過時間に追加
+  elapsedTimeRef.current += currentTime - elapsedStartTimeRef.current;
+  // 経過時間起点を更新
+  elapsedStartTimeRef.current = currentTime;
+
+  // debug
+  console.log(
+    JSON.stringify({
+      currentTime,
+      startTime: elapsedStartTimeRef.current,
+      elapsedTime: elapsedTimeRef.current,
+    })
+  );
+};
