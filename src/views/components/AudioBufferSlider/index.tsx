@@ -1,6 +1,6 @@
 import { Pause, PlayArrow } from '@mui/icons-material';
 import { IconButton, Slider, useTheme } from '@mui/material';
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import TimePane from './TimePane';
 import { createSourceNode } from 'application/audio/core/2-services';
@@ -20,6 +20,9 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
   const currentPausedAtRef = useRef(0);
   const audioContextCurrentTimeAtStartRef = useRef(0);
 
+  const duration = useMemo(() => audioBuffer.duration, [audioBuffer]);
+  const pausedRef = useRef(false);
+
   useEffect(() => {
     return () => {
       pause();
@@ -31,14 +34,18 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
     audioContextRef.current = audioContext;
     const sourceNode = await createSourceNode(audioBuffer);
 
+    const offset = currentPausedAtRef.current; // 開始位置を秒で指定
+
     //　最後まで再生した時の処理
     sourceNode.onended = () => {
       window.cancelAnimationFrame(rafIdRef.current);
 
       setIsPlaying(false);
-      setElapsedTime(0);
-      setSliderValue(0);
-      currentPausedAtRef.current = 0;
+      if (!pausedRef.current) {
+        setElapsedTime(0);
+        setSliderValue(0);
+        currentPausedAtRef.current = 0;
+      }
     };
 
     sourceNode.start(0, currentPausedAtRef.current);
@@ -46,6 +53,8 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
     setIsPlaying(true);
     sourseNodeRef.current = sourceNode;
     audioContextCurrentTimeAtStartRef.current = audioContext.currentTime;
+
+    pausedRef.current = false;
 
     loop();
   };
@@ -62,9 +71,7 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
 
     // 間引かないと slider の描画が更新されない
     if (frameCountRef.current % redrawSliderTiming === 0) {
-      setSliderValue(
-        currentTimeToSliderValue(elapsedTime, audioBuffer.duration)
-      );
+      setSliderValue(currentTimeToSliderValue(elapsedTime, duration, 0));
     }
 
     frameCountRef.current++;
@@ -84,11 +91,16 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
 
     currentPausedAtRef.current =
       audioContext.currentTime - audioContextCurrentTimeAtStartRef.current;
+    pausedRef.current = true;
   };
 
   const handleChangeSliderValue = (value: number) => {
     setSliderValue(value);
-    const elapsedTime = sliderValueToElapsedTime(value, audioBuffer.duration);
+    const elapsedTime = sliderValueToElapsedTime(
+      value,
+      audioBuffer.duration,
+      0
+    );
     setElapsedTime(elapsedTime);
     currentPausedAtRef.current = elapsedTime;
   };
@@ -130,15 +142,17 @@ export default AudioBufferSlider;
 
 const currentTimeToSliderValue = (
   currentTime: number,
-  duration: number
+  duration: number,
+  start: number
 ): number => {
-  const value = duration ? (currentTime / duration) * 100 : 0;
+  const value = duration ? ((currentTime - start) / duration) * 100 : 0;
   return Math.min(Math.max(value, 0), 100);
 };
 
 const sliderValueToElapsedTime = (
   sliderValue: number,
-  duration: number
+  duration: number,
+  start?: number
 ): number => {
-  return (duration * sliderValue) / 100;
+  return (duration * sliderValue) / 100 + (start || 0);
 };
