@@ -38,7 +38,7 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
 
   // debug
   useEffect(() => {
-    console.log({ sliderValue: Math.round(sliderValue) });
+    console.log(JSON.stringify({ sliderValue: Math.round(sliderValue) }));
   }, [sliderValue]);
 
   const play = async () => {
@@ -79,7 +79,7 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
     const currentElapsedTime =
       audioContext.currentTime - audioContextCurrentTimeAtStartRef.current;
     const elapsedTime = currentElapsedTime + currentPausedAtRef.current;
-    console.log({ elapsedTime: elapsedTime.toFixed(1) });
+    console.log(JSON.stringify({ elapsedTime: elapsedTime.toFixed(1) }));
     setElapsedTime(elapsedTime);
 
     // 間引かないと slider の描画が更新されない
