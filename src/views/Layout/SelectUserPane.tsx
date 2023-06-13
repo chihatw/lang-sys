@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MenuItem, Select } from '@mui/material';
 import { useEffect } from 'react';
 import { userListActions } from 'application/userList/framework/0-reducer';
-import { LOCAL_STORAGE_KEY } from 'application/userList/core/1-constants';
 import {
   getSelectedUidFromLocalStorage,
   setSelectedUidToLocalStorage,
 } from 'application/userList/core/2-services';
+import { useNavigate } from 'react-router-dom';
 
 function SelectUserPane() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { loginUser } = useSelector((state: RootState) => state.authUser);
   const { uids, selectedUid } = useSelector(
     (state: RootState) => state.userList
@@ -37,6 +38,7 @@ function SelectUserPane() {
       onChange={(e) => {
         setSelectedUidToLocalStorage(e.target.value);
         dispatch(userListActions.setSelectedUid(e.target.value));
+        navigate('/');
       }}
       disableUnderline
     >

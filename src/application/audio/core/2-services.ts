@@ -1,11 +1,14 @@
 import { CHIN_SAN_VOICES } from 'assets/chinSanVoices';
 import { MutableRefObject } from 'react';
 
-export const createSourceNode = (audioBuffer: AudioBuffer) => {
-  const audioContext = new AudioContext();
-  const sourceNode = audioContext.createBufferSource();
+export const createSourceNode = (
+  audioBuffer: AudioBuffer,
+  audioContext?: AudioContext
+) => {
+  const _audioContext = audioContext || new AudioContext();
+  const sourceNode = _audioContext.createBufferSource();
   sourceNode.buffer = audioBuffer;
-  sourceNode.connect(audioContext.destination);
+  sourceNode.connect(_audioContext.destination);
   return sourceNode;
 };
 
@@ -100,10 +103,11 @@ export const clearMediaRecorder = (
 };
 
 export const updateElapsedTime = (
+  audioContext: AudioContext,
   elapsedStartTimeRef: React.MutableRefObject<number>,
   elapsedTimeRef: React.MutableRefObject<number>
 ) => {
-  const currentTime = performance.now() / 1000;
+  const currentTime = audioContext.currentTime;
   // 経過時間を累積経過時間に追加
   elapsedTimeRef.current += currentTime - elapsedStartTimeRef.current;
   // 経過時間起点を更新

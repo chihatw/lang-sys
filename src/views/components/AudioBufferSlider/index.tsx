@@ -13,18 +13,16 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
   const redrawSliderTiming = 4; // 何フレームに1回更新するか
   const theme = useTheme();
 
+  const [progress, setProgress] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [sliderValue, setSliderValue] = useState(0);
-  const [elapsedTimeDisplay, setElapsedTimeDisplay] = useState(0);
 
   const rafIdRef = useRef(0);
   const sourseNodeRef = useRef<AudioBufferSourceNode | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
   const frameCountRef = useRef(0); // 間引きのためのカウンター
-
   const elapsedTimeRef = useRef(0); // 累積経過時間
-  const elapsedStartTimeRef = useRef(0); // 経過時間算出の起点
+  const elapsedStartTimeRef = useRef(0); // 経過時間の起点
 
   const pausedRef = useRef(false);
 
@@ -43,10 +41,11 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
   }, []);
 
   const play = async () => {
-    const audioContext = new AudioContext();
-    audioContextRef.current = audioContext;
-
-    const sourceNode = await createSourceNode(audioBuffer);
+    audioContextRef.current = new AudioContext();
+    const sourceNode = await createSourceNode(
+      audioBuffer,
+      audioContextRef.current
+    );
     sourseNodeRef.current = sourceNode;
 
     //　pause または最後まで再生した時の処理
@@ -54,32 +53,32 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
       window.cancelAnimationFrame(rafIdRef.current);
       setIsPlaying(false);
 
-      // pause ではない場合
+      // 最後まで再生した場合、経過時間をリセット
       if (!pausedRef.current) {
         elapsedTimeRef.current = 0;
-        setSliderValue(elapsedTimeRef.current / duration);
-        setElapsedTimeDisplay(elapsedTimeRef.current);
+        setProgress(0);
       }
     };
 
     // elapsedTime が duration の範囲外の場合は、0 に変更する
     if (elapsedTimeRef.current < 0 || elapsedTimeRef.current > duration) {
       elapsedTimeRef.current = 0;
-      setElapsedTimeDisplay(elapsedTimeRef.current);
+      setProgress(0);
     }
 
     sourceNode.start(
-      audioContext.currentTime,
+      audioContextRef.current.currentTime,
       start + elapsedTimeRef.current // ファイルのスタート位置に経過時間を追加したところから再生
     );
+
     sourceNode.stop(
-      audioContext.currentTime + duration - elapsedTimeRef.current // duration から経過時間分を引いた時間まで、再生
+      audioContextRef.current.currentTime + duration - elapsedTimeRef.current // duration から経過時間分を引いた時間まで、再生
     );
 
     setIsPlaying(true);
 
     // 経過時間の起点を更新
-    elapsedStartTimeRef.current = performance.now() / 1000;
+    elapsedStartTimeRef.current = audioContextRef.current.currentTime;
 
     pausedRef.current = false;
 
@@ -89,13 +88,11 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
   const loop = () => {
     const audioContext = audioContextRef.current;
     if (!audioContext) return;
+    updateElapsedTime(audioContext, elapsedStartTimeRef, elapsedTimeRef);
 
-    updateElapsedTime(elapsedStartTimeRef, elapsedTimeRef);
-    setElapsedTimeDisplay(elapsedTimeRef.current);
-
-    // slider の描画は間引いて行う
+    // 描画は間引いて行う
     if (frameCountRef.current % redrawSliderTiming === 0) {
-      setSliderValue((elapsedTimeRef.current / duration) * 100);
+      setProgress((elapsedTimeRef.current / duration) * 100);
     }
 
     frameCountRef.current++;
@@ -103,22 +100,17 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
   };
 
   const pause = () => {
-    const audioContext = audioContextRef.current;
-    if (!audioContext) return;
-
     pauseSourceNode(sourseNodeRef);
-
     pausedRef.current = true;
-
     setIsPlaying(false);
     window.cancelAnimationFrame(rafIdRef.current);
   };
 
   const handleChangeSliderValue = (value: number) => {
-    setSliderValue(value);
-    const elapsedTime = duration * (sliderValue / 100);
+    pause();
+    setProgress(value);
+    const elapsedTime = duration * (value / 100);
     elapsedTimeRef.current = elapsedTime;
-    setElapsedTimeDisplay(elapsedTimeRef.current);
   };
 
   return (
@@ -140,11 +132,14 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
       >
         {isPlaying ? <Pause /> : <PlayArrow />}
       </IconButton>
-      <TimePane elapsed={elapsedTimeDisplay} duration={audioBuffer.duration} />
+      <TimePane
+        elapsed={(duration * progress) / 100}
+        duration={audioBuffer.duration}
+      />
       <Slider
         sx={{ paddingTop: '14px', marginRight: '6px' }}
         color='primary'
-        value={sliderValue}
+        value={progress}
         onChange={(e, value) => {
           e.stopPropagation();
           handleChangeSliderValue(value as number);
