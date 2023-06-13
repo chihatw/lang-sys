@@ -3,12 +3,11 @@ import { MutableRefObject } from 'react';
 
 export const createSourceNode = (
   audioBuffer: AudioBuffer,
-  audioContext?: AudioContext
+  audioContext: AudioContext
 ) => {
-  const _audioContext = audioContext || new AudioContext();
-  const sourceNode = _audioContext.createBufferSource();
+  const sourceNode = audioContext.createBufferSource();
   sourceNode.buffer = audioBuffer;
-  sourceNode.connect(_audioContext.destination);
+  sourceNode.connect(audioContext.destination);
   return sourceNode;
 };
 
@@ -27,7 +26,7 @@ export const playAudioBufferAndSetSourceNode = async (
   callback?: () => void
 ) => {
   const audioContext = new AudioContext();
-  const sourceNode = await createSourceNode(audioBuffer);
+  const sourceNode = await createSourceNode(audioBuffer, audioContext);
   sourceNodeRef.current = sourceNode;
   const currentTime = audioContext.currentTime;
   if (callback) {

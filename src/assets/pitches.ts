@@ -1,5 +1,3 @@
-import { createSourceNode } from '../application/audio/core/2-services';
-
 import { CHIN_SAN_VOICES } from './chinSanVoices';
 import { PITCH_INPUT_ITEMS } from './pitchInputItems';
 
@@ -143,12 +141,6 @@ export const PITCHES: { [id: string]: PitchCue } = {
     end: 40.3,
     pitchStr: 'タ＼ンタン',
   },
-};
-
-export const playRhythm = async (cueId: string, audioBuffer: AudioBuffer) => {
-  const cue = PITCHES[cueId];
-  const sourceNode = createSourceNode(audioBuffer);
-  sourceNode.start(0, cue.start, cue.end - cue.start);
 };
 
 const GAP = {

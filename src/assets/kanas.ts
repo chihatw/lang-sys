@@ -1,4 +1,3 @@
-import { createSourceNode } from '../application/audio/core/2-services';
 type KanaCue = {
   id: string;
   end: number;
@@ -755,13 +754,4 @@ export const buildKanaCues = (kanas: string[]) => {
       pitchStr: '',
     }));
   return kanaCues;
-};
-
-export const playKana = async (cueId: string, audioBuffer: AudioBuffer) => {
-  const cue = Object.values(KANAS).find((item) =>
-    [item.hira, item.kata].includes(cueId)
-  );
-  if (!cue) return;
-  const sourceNode = createSourceNode(audioBuffer);
-  sourceNode.start(0, cue.start, cue.end - cue.start);
 };
