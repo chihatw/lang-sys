@@ -79,7 +79,7 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
     setIsPlaying(true);
 
     // 経過時間の起点を更新
-    elapsedStartTimeRef.current = audioContext.currentTime;
+    elapsedStartTimeRef.current = performance.now() / 1000;
 
     pausedRef.current = false;
 
@@ -90,7 +90,7 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
     const audioContext = audioContextRef.current;
     if (!audioContext) return;
 
-    updateElapsedTime(audioContext, elapsedStartTimeRef, elapsedTimeRef);
+    updateElapsedTime(elapsedStartTimeRef, elapsedTimeRef);
     setElapsedTimeDisplay(elapsedTimeRef.current);
 
     // slider の描画は間引いて行う
