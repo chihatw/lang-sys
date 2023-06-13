@@ -19,7 +19,7 @@ const chineseCueWorkoutsMiddleware =
         const workouts = await services.api.chineseCueWorkouts.fetchWorkouts(
           uid
         );
-        dispatch(chineseCueWorkoutsActions.concatWorkouts(workouts));
+        dispatch(chineseCueWorkoutsActions.mergeWorkouts(workouts));
 
         const workoutIds = Object.values(workouts)
           .sort((a, b) => a.createdAt - b.createdAt)
@@ -52,7 +52,7 @@ const chineseCueWorkoutsMiddleware =
 
         if (!!gotWorkout) {
           dispatch(
-            chineseCueWorkoutsActions.concatWorkouts({
+            chineseCueWorkoutsActions.mergeWorkouts({
               [workoutId]: gotWorkout,
             })
           );

@@ -13,9 +13,8 @@ const serializableCheck = {
     // audio
     'audio/setChenVoice',
     'audio/setRecordedVoice',
-    'audio/setAudioContext',
     'audio/setBlobAndAudioBuffer',
-    'audio/addFetchedAudioBuffers',
+    'audio/mergeFetchedAudioBuffers',
   ],
   ignoredPaths: [
     // authUser

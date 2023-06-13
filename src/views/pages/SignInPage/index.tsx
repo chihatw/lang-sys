@@ -31,7 +31,7 @@ const SignInPage = () => {
   };
 
   return (
-    <Container maxWidth='xs' sx={{ paddingTop: 32 }}>
+    <Container maxWidth='xs' sx={{ paddingTop: 20 }}>
       <div style={{ display: 'grid', rowGap: 40 }}>
         <TextField
           size='small'

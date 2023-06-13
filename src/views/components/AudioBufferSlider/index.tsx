@@ -33,7 +33,7 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
 
     //　最後まで再生した時の処理
     sourceNode.onended = () => {
-      stopAnimation(rafIdRef);
+      window.cancelAnimationFrame(rafIdRef.current);
 
       setIsPlaying(false);
       setElapsedTime(0);
@@ -75,11 +75,13 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
     const audioContext = audioContextRef.current;
     if (!audioContext) return;
 
-    handleChangeSliderValue;
-    stopAudio(sourseNodeRef);
-    stopAnimation(rafIdRef);
+    const sourceNode = sourseNodeRef.current;
+    sourceNode && sourceNode.stop(0);
+    sourseNodeRef.current = null;
 
     setIsPlaying(false);
+    window.cancelAnimationFrame(rafIdRef.current);
+
     currentPausedAtRef.current =
       audioContext.currentTime - audioContextCurrentTimeAtStartRef.current;
   };
@@ -125,22 +127,6 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
 };
 
 export default AudioBufferSlider;
-
-const startAudio = (sourceNode: AudioBufferSourceNode, offset: number) => {
-  sourceNode.start(0, offset);
-};
-
-const stopAudio = (
-  sourseNodeRef: MutableRefObject<AudioBufferSourceNode | null>
-) => {
-  const sourceNode = sourseNodeRef.current;
-  sourceNode && sourceNode.stop(0);
-  sourseNodeRef.current = null;
-};
-
-const stopAnimation = (rafIdRef: MutableRefObject<number>) => {
-  window.cancelAnimationFrame(rafIdRef.current);
-};
 
 const currentTimeToSliderValue = (
   currentTime: number,

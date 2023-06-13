@@ -3,5 +3,6 @@ import { IUserList } from './0-interface';
 export const initialState: IUserList = {
   uids: [],
   selectedUid: '',
-  initializing: true,
 };
+
+export const LOCAL_STORAGE_KEY = 'selectedUid@lang-sys';

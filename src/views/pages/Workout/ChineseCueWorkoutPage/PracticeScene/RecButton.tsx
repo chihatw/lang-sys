@@ -50,7 +50,7 @@ function RecButton() {
     dispatch(chineseCueWorkoutPracticeActions.increseCurrentIndex());
   };
 
-  const stop = async () => {
+  const stop = () => {
     clearMediaRecorder(audioElemRef, mediaRecorderRef);
     dispatch(chineseCueWorkoutPracticeActions.stopRecording());
   };

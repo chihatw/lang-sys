@@ -6,7 +6,7 @@ const recordWorkoutsSlice = createSlice({
   name: 'recordWorkouts',
   initialState,
   reducers: {
-    concatWorkouts: (
+    mergeWorkouts: (
       state,
       { payload }: { payload: { [id: string]: IRecordWorkout } }
     ) => ({ ...state, ...payload }),

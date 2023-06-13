@@ -5,7 +5,7 @@ const audioSlice = createSlice({
   name: 'audio',
   initialState,
   reducers: {
-    addFetchedAudioBuffers: (
+    mergeFetchedAudioBuffers: (
       state,
       { payload }: { payload: { [path: string]: AudioBuffer } }
     ) => {
@@ -31,10 +31,6 @@ const audioSlice = createSlice({
     },
     resetBlobAndAudioBuffer: (state) => {
       state.blob = null;
-      state.userAudioBuffer = null;
-    },
-
-    resetUserAudioBuffer: (state) => {
       state.userAudioBuffer = null;
     },
   },

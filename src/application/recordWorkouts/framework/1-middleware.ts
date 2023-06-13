@@ -18,7 +18,7 @@ const recordWorkoutsMiddleware =
         const uid = (getState() as RootState).authUser.currentUid;
         // workouts の取得
         const workouts = await services.api.recordWorkouts.fetchWorkouts(uid);
-        dispatch(recordWorkoutsActions.concatWorkouts(workouts));
+        dispatch(recordWorkoutsActions.mergeWorkouts(workouts));
 
         const workoutIds = Object.values(workouts)
           .sort((a, b) => a.createdAt - b.createdAt)
@@ -51,7 +51,7 @@ const recordWorkoutsMiddleware =
         );
         if (!!gotWorkout) {
           dispatch(
-            recordWorkoutsActions.concatWorkouts({ [workoutId]: gotWorkout })
+            recordWorkoutsActions.mergeWorkouts({ [workoutId]: gotWorkout })
           );
 
           const shuffledCueIds = shuffle([...gotWorkout.cueIds]);
