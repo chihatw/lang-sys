@@ -20,7 +20,14 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
   const currentPausedAtRef = useRef(0);
   const audioContextCurrentTimeAtStartRef = useRef(0);
 
-  const duration = useMemo(() => audioBuffer.duration, [audioBuffer]);
+  const { start, end, duration } = useMemo(
+    () => ({
+      start: 0,
+      end: audioBuffer.duration,
+      duration: audioBuffer.duration,
+    }),
+    [audioBuffer]
+  );
   const pausedRef = useRef(false);
 
   useEffect(() => {
@@ -28,6 +35,11 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
       pause();
     };
   }, []);
+
+  // debug
+  useEffect(() => {
+    console.log({ sliderValue: Math.round(sliderValue) });
+  }, [sliderValue]);
 
   const play = async () => {
     const audioContext = new AudioContext();
@@ -44,11 +56,11 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
       if (!pausedRef.current) {
         setElapsedTime(0);
         setSliderValue(0);
-        currentPausedAtRef.current = 0;
+        currentPausedAtRef.current = start;
       }
     };
 
-    sourceNode.start(0, currentPausedAtRef.current);
+    sourceNode.start(0, offset, end - offset);
 
     setIsPlaying(true);
     sourseNodeRef.current = sourceNode;
@@ -61,17 +73,18 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
 
   const loop = () => {
     const audioContext = audioContextRef.current;
+    console.log('a');
     if (!audioContext) return;
 
     const currentElapsedTime =
       audioContext.currentTime - audioContextCurrentTimeAtStartRef.current;
     const elapsedTime = currentElapsedTime + currentPausedAtRef.current;
-
+    console.log({ elapsedTime: elapsedTime.toFixed(1) });
     setElapsedTime(elapsedTime);
 
     // 間引かないと slider の描画が更新されない
     if (frameCountRef.current % redrawSliderTiming === 0) {
-      setSliderValue(currentTimeToSliderValue(elapsedTime, duration, 0));
+      setSliderValue(currentTimeToSliderValue(elapsedTime, duration, start));
     }
 
     frameCountRef.current++;

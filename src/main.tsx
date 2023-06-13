@@ -74,12 +74,13 @@ const theme = createTheme({
   } as ExtendedTypographyOptions,
 });
 
-if (import.meta.env.PROD) {
-  console.log = () => {};
-  console.error = () => {};
-  console.debug = () => {};
-  console.warn = () => {};
-}
+// debug
+// if (import.meta.env.PROD) {
+//   console.log = () => {};
+//   console.error = () => {};
+//   console.debug = () => {};
+//   console.warn = () => {};
+// }
 
 const store = configureStore(services);
 
