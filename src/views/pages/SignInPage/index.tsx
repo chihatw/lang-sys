@@ -34,10 +34,10 @@ const SignInPage = () => {
     <Container maxWidth='xs' sx={{ paddingTop: 20 }}>
       <div style={{ display: 'grid', rowGap: 40 }}>
         <TextField
+          type='email'
           size='small'
           label='email'
           autoComplete='off'
-          type='email'
           required
           value={state.email}
           onChange={(e) =>

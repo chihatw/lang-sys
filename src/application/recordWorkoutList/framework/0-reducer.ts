@@ -17,10 +17,6 @@ const recordWorkoutListSlice = createSlice({
     ) => {
       state.audioBuffersInitializing = false;
     },
-    removeStorageAudioBufferStart: (
-      state,
-      { payload }: { payload: { path: string } }
-    ) => state,
     resetState: () => initialState,
   },
 });

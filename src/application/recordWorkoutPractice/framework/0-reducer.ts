@@ -28,7 +28,6 @@ const recordWorkoutPracticeSlice = createSlice({
     stopRecording: (state) => {
       state.scene = SCENE.check;
     },
-    saveAudioBuffer: (state) => state,
     clearState: (state) => initialState,
     abandomAudioBuffer: (state) => {
       return {

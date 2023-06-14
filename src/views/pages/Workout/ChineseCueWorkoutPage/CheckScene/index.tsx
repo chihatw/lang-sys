@@ -6,6 +6,8 @@ import { RootState } from 'main';
 import { chineseCueWorkoutPracticeActions } from 'application/chineseCueWorkoutPractice/framework/0-reducer';
 import PlayRecordedAudioBufferButton from './PlayRecordedAudioBufferButton';
 import CheckRecordedVoiceRow from '../0-components/CheckRecordedVoiceRow';
+import { audioActions } from 'application/audio/framework/0-reducer';
+import { CHINESE_CUE_WORKOUT_STORAGE_PATH } from 'application/chineseCueWorkouts/core/1-constants';
 
 function CheckScene() {
   const dispatch = useDispatch();
@@ -14,7 +16,7 @@ function CheckScene() {
   const { blob, userAudioBuffer } = useSelector(
     (state: RootState) => state.audio
   );
-  const { shuffledCueIds } = useSelector(
+  const { shuffledCueIds, workoutId } = useSelector(
     (state: RootState) => state.chineseCueWorkoutPractice
   );
 
@@ -27,8 +29,11 @@ function CheckScene() {
 
     // storage に blob を upload
     // audioBuffers に audioBuffer をセット
-    // recordWorkout の state を初期化
-    dispatch(chineseCueWorkoutPracticeActions.saveAudioBuffer());
+    const path = CHINESE_CUE_WORKOUT_STORAGE_PATH + workoutId;
+    dispatch(
+      audioActions.saveAudioBuffer({ path, audioBuffer: userAudioBuffer })
+    );
+    dispatch(chineseCueWorkoutPracticeActions.clearState());
     navigate('/list/chineseCue');
   };
 

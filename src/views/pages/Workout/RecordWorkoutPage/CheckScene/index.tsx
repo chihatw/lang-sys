@@ -7,6 +7,8 @@ import { RootState } from 'main';
 import CheckChenVoiceRow from '../0-components/CheckChenVoiceRow';
 import PlayRecordedAudioBufferButton from './PlayRecordedAudioBufferButton';
 import { recordWorkoutPracticeActions } from 'application/recordWorkoutPractice/framework/0-reducer';
+import { RECORD_WORKOUT_STORAGE_PATH } from 'application/recordWorkouts/core/1-constants';
+import { audioActions } from 'application/audio/framework/0-reducer';
 
 function CheckScene() {
   const dispatch = useDispatch();
@@ -14,7 +16,7 @@ function CheckScene() {
   const { blob, userAudioBuffer } = useSelector(
     (state: RootState) => state.audio
   );
-  const { shuffledCueIds } = useSelector(
+  const { shuffledCueIds, workoutId } = useSelector(
     (state: RootState) => state.recordWorkoutPractice
   );
 
@@ -28,7 +30,11 @@ function CheckScene() {
     // storage に blob を upload
     // audioBuffers に audioBuffer をセット
     // recordWorkout の state を初期化
-    dispatch(recordWorkoutPracticeActions.saveAudioBuffer());
+    const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
+    dispatch(
+      audioActions.saveAudioBuffer({ path, audioBuffer: userAudioBuffer })
+    );
+    dispatch(recordWorkoutPracticeActions.clearState());
     navigate('/list/record');
   };
 

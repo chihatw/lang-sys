@@ -8,6 +8,7 @@ import { RootState } from 'main';
 import AudioBufferSlider from 'views/components/AudioBufferSlider';
 import { recordWorkoutListActions } from 'application/recordWorkoutList/framework/0-reducer';
 import { RECORD_WORKOUT_STORAGE_PATH } from 'application/recordWorkouts/core/1-constants';
+import { audioActions } from 'application/audio/framework/0-reducer';
 
 const RecordWorkoutListRow = ({ workoutId }: { workoutId: string }) => {
   const theme = useTheme();
@@ -30,7 +31,7 @@ const RecordWorkoutListRow = ({ workoutId }: { workoutId: string }) => {
 
   const handleDelete = () => {
     const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
-    dispatch(recordWorkoutListActions.removeStorageAudioBufferStart({ path }));
+    dispatch(audioActions.removeFetchedAudioBuffer(path));
   };
 
   const workout = recordWorkouts[workoutId];

@@ -22,7 +22,7 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
 
   const frameCountRef = useRef(0); // 間引きのためのカウンター
   const elapsedTimeRef = useRef(0); // 累積経過時間
-  const elapsedStartTimeRef = useRef(0); // 経過時間の起点
+  const elapsedStartedAtRef = useRef(0); // 経過時間の起点
 
   const pausedRef = useRef(false);
 
@@ -68,18 +68,17 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
 
     sourceNode.start(
       audioContextRef.current.currentTime,
-      start + elapsedTimeRef.current // ファイルのスタート位置に経過時間を追加したところから再生
+      start + elapsedTimeRef.current
     );
 
     sourceNode.stop(
-      audioContextRef.current.currentTime + duration - elapsedTimeRef.current // duration から経過時間分を引いた時間まで、再生
+      audioContextRef.current.currentTime + duration - elapsedTimeRef.current
     );
 
     setIsPlaying(true);
 
     // 経過時間の起点を更新
-    elapsedStartTimeRef.current = audioContextRef.current.currentTime;
-
+    elapsedStartedAtRef.current = audioContextRef.current.currentTime;
     pausedRef.current = false;
 
     loop();
@@ -88,7 +87,7 @@ const AudioBufferSlider = ({ audioBuffer }: { audioBuffer: AudioBuffer }) => {
   const loop = () => {
     const audioContext = audioContextRef.current;
     if (!audioContext) return;
-    updateElapsedTime(audioContext, elapsedStartTimeRef, elapsedTimeRef);
+    updateElapsedTime(audioContext, elapsedStartedAtRef, elapsedTimeRef);
 
     // 描画は間引いて行う
     if (frameCountRef.current % redrawSliderTiming === 0) {

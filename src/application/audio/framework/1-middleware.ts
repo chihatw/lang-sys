@@ -43,13 +43,6 @@ const audioMiddleware =
 
         break;
       }
-      case 'recordWorkoutList/removeStorageAudioBufferStart':
-      case 'chineseCueWorkoutList/removeStorageAudioBufferStart': {
-        const path = action.payload.path as string;
-        await services.api.audio.deleteStorageByPath(path);
-        dispatch(audioActions.removeStorageAudioBuffer(path));
-        break;
-      }
       case 'recordWorkoutPractice/initiate': {
         const { chenVoice } = (getState() as RootState).audio;
         // chenVoice が存在すれば、終了
@@ -64,27 +57,20 @@ const audioMiddleware =
         }
         break;
       }
-      case 'recordWorkoutPractice/saveAudioBuffer': {
-        const { blob, userAudioBuffer } = (getState() as RootState).audio;
-        const { workoutId } = (getState() as RootState).recordWorkoutPractice;
-
-        if (!!blob && !!userAudioBuffer) {
-          const storagePath = RECORD_WORKOUT_STORAGE_PATH + workoutId;
-          await services.api.audio.uploadStorageByPath(blob, storagePath);
-
-          dispatch(
-            audioActions.mergeFetchedAudioBuffers({
-              [storagePath]: userAudioBuffer,
-            })
-          );
-
-          dispatch(recordWorkoutPracticeActions.clearState());
+      case 'audio/saveAudioBuffer': {
+        const path = action.payload.path as string;
+        const { blob } = (getState() as RootState).audio;
+        if (!!blob) {
+          await services.api.audio.uploadStorageByPath(blob, path);
           dispatch(audioActions.resetBlobAndAudioBuffer());
+          break;
         }
-
+      }
+      case 'audio/removeFetchedAudioBuffer': {
+        const path = action.payload as string;
+        await services.api.audio.deleteStorageByPath(path);
         break;
       }
-
       case 'chineseCueWorkoutPractice/initiate': {
         const { recordedVoice } = (getState() as RootState).audio;
         //  recordedVoice が存在すれば、終了
@@ -98,27 +84,6 @@ const audioMiddleware =
         if (audioBuffer) {
           dispatch(audioActions.setRecordedVoice(audioBuffer));
         }
-        break;
-      }
-      case 'chineseCueWorkoutPractice/saveAudioBuffer': {
-        const { blob, userAudioBuffer } = (getState() as RootState).audio;
-        const { workoutId } = (getState() as RootState)
-          .chineseCueWorkoutPractice;
-
-        if (!!blob && !!userAudioBuffer) {
-          const storagePath = CHINESE_CUE_WORKOUT_STORAGE_PATH + workoutId;
-          await services.api.audio.uploadStorageByPath(blob, storagePath);
-
-          dispatch(
-            audioActions.mergeFetchedAudioBuffers({
-              [storagePath]: userAudioBuffer,
-            })
-          );
-
-          dispatch(chineseCueWorkoutPracticeActions.clearState());
-          dispatch(audioActions.resetBlobAndAudioBuffer());
-        }
-
         break;
       }
       default:

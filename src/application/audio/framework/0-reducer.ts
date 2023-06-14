@@ -11,7 +11,16 @@ const audioSlice = createSlice({
     ) => {
       state.fetchedAudioBuffers = { ...state.fetchedAudioBuffers, ...payload };
     },
-    removeStorageAudioBuffer: (state, { payload }: { payload: string }) => {
+    saveAudioBuffer: (
+      state,
+      { payload }: { payload: { path: string; audioBuffer: AudioBuffer } }
+    ) => {
+      state.fetchedAudioBuffers = {
+        ...state.fetchedAudioBuffers,
+        [payload.path]: payload.audioBuffer,
+      };
+    },
+    removeFetchedAudioBuffer: (state, { payload }: { payload: string }) => {
       const fetchedAudioBuffers = { ...state.fetchedAudioBuffers };
       delete fetchedAudioBuffers[payload];
       state.fetchedAudioBuffers = fetchedAudioBuffers;

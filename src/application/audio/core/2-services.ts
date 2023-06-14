@@ -103,12 +103,12 @@ export const clearMediaRecorder = (
 
 export const updateElapsedTime = (
   audioContext: AudioContext,
-  elapsedStartTimeRef: React.MutableRefObject<number>,
+  elapsedStartedAtRef: React.MutableRefObject<number>,
   elapsedTimeRef: React.MutableRefObject<number>
 ) => {
   const currentTime = audioContext.currentTime;
   // 経過時間を累積経過時間に追加
-  elapsedTimeRef.current += currentTime - elapsedStartTimeRef.current;
-  // 経過時間起点を更新
-  elapsedStartTimeRef.current = currentTime;
+  elapsedTimeRef.current += currentTime - elapsedStartedAtRef.current;
+  // 経過時間の起点を更新
+  elapsedStartedAtRef.current = currentTime;
 };

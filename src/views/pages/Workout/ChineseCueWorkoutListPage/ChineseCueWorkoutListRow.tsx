@@ -6,8 +6,8 @@ import { Card, CardContent, IconButton, useTheme } from '@mui/material';
 
 import { RootState } from 'main';
 import AudioBufferSlider from 'views/components/AudioBufferSlider';
-import { chineseCueWorkoutListActions } from 'application/chineseCueWorkoutList/framework/0-reducer';
 import { CHINESE_CUE_WORKOUT_STORAGE_PATH } from 'application/chineseCueWorkouts/core/1-constants';
+import { audioActions } from 'application/audio/framework/0-reducer';
 
 function ChineseCueWorkoutListRow({ workoutId }: { workoutId: string }) {
   const theme = useTheme();
@@ -30,9 +30,7 @@ function ChineseCueWorkoutListRow({ workoutId }: { workoutId: string }) {
 
   const handleDelete = () => {
     const path = CHINESE_CUE_WORKOUT_STORAGE_PATH + workoutId;
-    dispatch(
-      chineseCueWorkoutListActions.removeStorageAudioBufferStart({ path })
-    );
+    dispatch(audioActions.removeFetchedAudioBuffer(path));
   };
 
   const workout = chineseCueWorkouts[workoutId];
