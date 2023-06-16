@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from 'main';
@@ -27,6 +27,12 @@ function RecButton() {
   // streamと連携してマイクを切るため
   const audioElemRef = useRef(new Audio());
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+
+  useEffect(() => {
+    return () => {
+      clearMediaRecorder(audioElemRef, mediaRecorderRef);
+    };
+  }, []);
 
   const start = async () => {
     if (!navigator.mediaDevices) return;
