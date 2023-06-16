@@ -44,9 +44,12 @@ function ChineseCueWorkoutPage() {
         {scene === SCENE.opening && <OpeningScene />}
         {scene === SCENE.practice && <PracticeScene />}
         {scene === SCENE.check && <CheckScene />}
-        <Button variant='outlined' onClick={handleBack}>
-          練習結束
-        </Button>
+
+        {scene !== SCENE.check && (
+          <Button variant='outlined' onClick={handleBack}>
+            練習結束
+          </Button>
+        )}
       </div>
     </Container>
   );
