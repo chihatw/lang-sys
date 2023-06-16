@@ -28,19 +28,21 @@ const audioSlice = createSlice({
     setChenVoice: (state, { payload }: { payload: AudioBuffer }) => {
       state.chenVoice = payload;
     },
-    setRecordedVoice: (state, { payload }: { payload: AudioBuffer }) => {
-      state.recordedVoice = payload;
+    setChenVoice2: (state, { payload }: { payload: AudioBuffer }) => {
+      state.chenVoice2 = payload;
     },
     setBlobAndAudioBuffer: (
       state,
-      { payload }: { payload: { blob: Blob; audioBuffer: AudioBuffer } }
+      {
+        payload: { recordedBlob, recordedAudioBuffer },
+      }: { payload: { recordedBlob: Blob; recordedAudioBuffer: AudioBuffer } }
     ) => {
-      state.blob = payload.blob;
-      state.userAudioBuffer = payload.audioBuffer;
+      state.recordedBlob = recordedBlob;
+      state.recordedAudioBuffer = recordedAudioBuffer;
     },
     resetBlobAndAudioBuffer: (state) => {
-      state.blob = null;
-      state.userAudioBuffer = null;
+      state.recordedBlob = null;
+      state.recordedAudioBuffer = null;
     },
   },
 });

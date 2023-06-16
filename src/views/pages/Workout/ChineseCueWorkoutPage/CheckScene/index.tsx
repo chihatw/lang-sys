@@ -13,7 +13,7 @@ function CheckScene() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { blob, userAudioBuffer } = useSelector(
+  const { recordedBlob, recordedAudioBuffer } = useSelector(
     (state: RootState) => state.audio
   );
   const { shuffledCueIds, workoutId } = useSelector(
@@ -25,13 +25,13 @@ function CheckScene() {
   };
 
   const saveRecordedAudioBuffer = async () => {
-    if (!blob || !userAudioBuffer) return;
+    if (!recordedBlob || !recordedAudioBuffer) return;
 
     // storage に blob を upload
     // audioBuffers に audioBuffer をセット
     const path = CHINESE_CUE_WORKOUT_STORAGE_PATH + workoutId;
     dispatch(
-      audioActions.saveAudioBuffer({ path, audioBuffer: userAudioBuffer })
+      audioActions.saveAudioBuffer({ path, audioBuffer: recordedAudioBuffer })
     );
     dispatch(chineseCueWorkoutPracticeActions.clearState());
     navigate('/list/chineseCue');
@@ -87,7 +87,6 @@ function CheckScene() {
             發音都正確
           </Button>
         </div>
-        {/* <div style={{ height: 180 }} /> */}
       </div>
     </div>
   );

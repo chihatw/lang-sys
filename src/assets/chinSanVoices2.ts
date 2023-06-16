@@ -1,4 +1,4 @@
-export const RECORDED_VOICES: {
+export const CHIN_SAN_VOICES2: {
   [id: string]: {
     pitchStr: string;
     japanese: string;

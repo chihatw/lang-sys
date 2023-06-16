@@ -13,7 +13,7 @@ import { audioActions } from 'application/audio/framework/0-reducer';
 function CheckScene() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { blob, userAudioBuffer } = useSelector(
+  const { recordedBlob, recordedAudioBuffer } = useSelector(
     (state: RootState) => state.audio
   );
   const { shuffledCueIds, workoutId } = useSelector(
@@ -25,14 +25,14 @@ function CheckScene() {
   };
 
   const saveRecordedAudioBuffer = async () => {
-    if (!blob || !userAudioBuffer) return;
+    if (!recordedBlob || !recordedAudioBuffer) return;
 
     // storage に blob を upload
     // audioBuffers に audioBuffer をセット
     // recordWorkout の state を初期化
     const path = RECORD_WORKOUT_STORAGE_PATH + workoutId;
     dispatch(
-      audioActions.saveAudioBuffer({ path, audioBuffer: userAudioBuffer })
+      audioActions.saveAudioBuffer({ path, audioBuffer: recordedAudioBuffer })
     );
     dispatch(recordWorkoutPracticeActions.clearState());
     navigate('/list/record');

@@ -1,9 +1,9 @@
 import { IAudio } from 'application/audio/core/0-interface';
 
 export const initialState: IAudio = {
-  blob: null,
   chenVoice: null,
-  recordedVoice: null,
-  userAudioBuffer: null,
+  chenVoice2: null,
+  recordedBlob: null,
+  recordedAudioBuffer: null,
   fetchedAudioBuffers: {},
 };

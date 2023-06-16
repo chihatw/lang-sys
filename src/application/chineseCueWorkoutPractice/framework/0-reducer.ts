@@ -15,7 +15,7 @@ const chineseCueWorkoutPracticeSlice = createSlice({
       state.workoutId = payload.workoutId;
       state.shuffledCueIds = payload.shuffledCueIds;
     },
-    setRecordedVoiceStart: (state) => state,
+    setChenVoice2Start: (state) => state,
     startPractice: (state) => {
       state.scene = SCENE.practice;
     },

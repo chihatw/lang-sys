@@ -39,7 +39,12 @@ function RecButton() {
     await startRecording(
       mediaRecorder,
       (blob: Blob, audioBuffer: AudioBuffer) => {
-        dispatch(audioActions.setBlobAndAudioBuffer({ blob, audioBuffer }));
+        dispatch(
+          audioActions.setBlobAndAudioBuffer({
+            recordedBlob: blob,
+            recordedAudioBuffer: audioBuffer,
+          })
+        );
       }
     );
 
@@ -55,7 +60,7 @@ function RecButton() {
     dispatch(chineseCueWorkoutPracticeActions.stopRecording());
   };
 
-  const handleClickPlayButton = () => {
+  const handleClick = () => {
     if (!isRunning) {
       start();
       return;
@@ -77,7 +82,7 @@ function RecButton() {
       <Button
         color='primary'
         variant='contained'
-        onClick={handleClickPlayButton}
+        onClick={handleClick}
         sx={{
           color: 'white',
           width: 120,

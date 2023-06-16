@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef } from 'react';
 
 import { RootState } from 'main';
 import SentencePitchLine from 'views/components/SentencePitchLine';
-import { RECORDED_VOICES } from 'assets/recordedVoices';
+import { CHIN_SAN_VOICES2 } from 'assets/chinSanVoices2';
 import {
   pauseSourceNode,
   playAudioBufferAndSetSourceNode,
@@ -12,10 +12,10 @@ import {
 
 function PlayChineseCueCard({ cueId }: { cueId: string }) {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { recordedVoice } = useSelector((state: RootState) => state.audio);
+  const { chenVoice2 } = useSelector((state: RootState) => state.audio);
 
   const { start, stop, pitchStr, chinese, japanese } = useMemo(() => {
-    const target = RECORDED_VOICES[cueId];
+    const target = CHIN_SAN_VOICES2[cueId];
     if (!target)
       return { start: 0, stop: 0, pitchStr: '', chinese: '', japanese: '' };
     return target;
@@ -26,10 +26,10 @@ function PlayChineseCueCard({ cueId }: { cueId: string }) {
   }, []);
 
   const handleClick = () => {
-    playAudioBufferAndSetSourceNode(recordedVoice!, start, stop, sourceNodeRef);
+    playAudioBufferAndSetSourceNode(chenVoice2!, start, stop, sourceNodeRef);
   };
 
-  if (!recordedVoice) return <></>;
+  if (!chenVoice2) return <></>;
 
   return (
     <Card onClick={handleClick} sx={{ cursor: 'pointer' }}>

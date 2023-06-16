@@ -13,7 +13,7 @@ const serializableCheck = {
     // audio
     'audio/setChenVoice',
     'audio/saveAudioBuffer',
-    'audio/setRecordedVoice',
+    'audio/setChenVoice2',
     'audio/setBlobAndAudioBuffer',
     'audio/mergeFetchedAudioBuffers',
   ],

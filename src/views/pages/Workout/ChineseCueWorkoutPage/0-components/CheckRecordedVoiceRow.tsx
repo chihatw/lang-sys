@@ -11,15 +11,15 @@ import {
 } from 'application/audio/core/2-services';
 
 import SentencePitchLine from 'views/components/SentencePitchLine';
-import { RECORDED_VOICES } from 'assets/recordedVoices';
+import { CHIN_SAN_VOICES2 } from 'assets/chinSanVoices2';
 
 function CheckRecordedVoiceRow({ cueId }: { cueId: string }) {
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { recordedVoice } = useSelector((state: RootState) => state.audio);
+  const { chenVoice2 } = useSelector((state: RootState) => state.audio);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const { start, stop, pitchStr, chinese, japanese } = useMemo(() => {
-    const target = RECORDED_VOICES[cueId];
+    const target = CHIN_SAN_VOICES2[cueId];
     if (!target)
       return { start: 0, stop: 0, pitchStr: '', chinese: '', japanese: '' };
     return target;
@@ -40,7 +40,7 @@ function CheckRecordedVoiceRow({ cueId }: { cueId: string }) {
     }
     setIsPlaying(true);
     playAudioBufferAndSetSourceNode(
-      recordedVoice!,
+      chenVoice2!,
       start,
       stop,
       sourceNodeRef,
