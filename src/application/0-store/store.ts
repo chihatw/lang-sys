@@ -21,10 +21,10 @@ const serializableCheck = {
     // authUser
     'authUser.loginUser',
     // audio
-    'audio.blob',
     'audio.chenVoice',
-    'audio.recordedVoice',
-    'audio.userAudioBuffer',
+    'audio.chenVoice2',
+    'audio.recordedBlob',
+    'audio.recordedAudioBuffer',
     'audio.fetchedAudioBuffers',
   ],
 };

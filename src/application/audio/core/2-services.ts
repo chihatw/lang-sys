@@ -93,9 +93,12 @@ export const clearMediaRecorder = (
   if (!mediaRecorder) return;
   mediaRecorder.stop();
   const stream = audioElem.srcObject as MediaStream;
-  stream.getTracks().forEach((track) => {
-    track.stop();
-  });
+
+  !!stream &&
+    stream.getTracks().forEach((track) => {
+      track.stop();
+    });
+
   // ブラウザのマイク使用中の表示を消すために必要
   audioElem.srcObject = null;
   mediaRecorder = null;
