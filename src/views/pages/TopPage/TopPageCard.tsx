@@ -31,17 +31,7 @@ const TopPageCard = ({
             fontSize: 16,
           }}
         >
-          {label.split('').map((letter, index) => (
-            <span
-              key={index}
-              style={{
-                userSelect: 'none',
-                // paddingRight: label.split('')[index + 1] ? '1em' : 0,
-              }}
-            >
-              {letter}
-            </span>
-          ))}
+          <div style={{ userSelect: 'none' }}>{label}</div>
         </div>
       </CardContent>
     </Card>

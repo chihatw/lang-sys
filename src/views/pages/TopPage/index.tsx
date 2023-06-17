@@ -4,12 +4,13 @@ import { Container } from '@mui/material';
 import microphoneURL from 'assets/images/microphone.jpg';
 
 import TopPageCard from './TopPageCard';
+import { useCallback } from 'react';
 
 const TopPage = () => {
   const navigate = useNavigate();
-  const handleClick = (path: string) => {
-    navigate(path);
-  };
+  const handleClick = useCallback(() => {
+    navigate('/list/chineseCue');
+  }, []);
   return (
     <Container maxWidth='sm'>
       <div
@@ -23,7 +24,7 @@ const TopPage = () => {
         <TopPageCard
           label='錄音'
           imageURL={microphoneURL}
-          handleClick={() => handleClick('/list/chineseCue')}
+          handleClick={handleClick}
         />
       </div>
     </Container>

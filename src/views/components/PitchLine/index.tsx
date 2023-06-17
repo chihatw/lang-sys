@@ -1,92 +1,66 @@
+import { useMemo, memo } from 'react';
+
 import Line from './Line';
 import Mora from './Mora';
 
-type PitchLineProps = {
-  /**
-   * 高ピッチは ["あ","h"]、低ピッチは ["あ"]、尾高は最後に [""]追加、['m']はミュート、空文字のみも許可
-   */
-  pitches: string[][];
-  /**
-   * リズムの境界線を表示
-   */
-  hasBorders?: boolean;
-  /**
-   * 1拍から開始
-   */
-  isOddStart?: boolean;
-  /**
-   * 既定値は0
-   */
-  paddingBottom?: number;
-};
+import { buildWordPitches } from 'application/utils/buildWordPitches';
 
-const PitchLine = ({
-  pitches,
-  hasBorders,
-  isOddStart,
-  paddingBottom,
-}: PitchLineProps) => {
+const PitchLine = memo(({ wordPitchStr }: { wordPitchStr: string }) => {
+  const wordPitches = useMemo(
+    () => buildWordPitches(wordPitchStr),
+    [wordPitchStr]
+  );
+  const wordPitchLevels = useMemo(
+    () => wordPitches.map((i) => i[1] === 'h'),
+    [wordPitches]
+  ); // 低音：false, 高音：true
+
   // 空の場合
-  const isEmpty = !pitches[0] || pitches[0][0] === '';
-  if (isEmpty) return <div style={{ height: 40, width: 15 }} />;
+  if (!wordPitches[0] || wordPitches[0][0] === '')
+    return <div style={{ height: 40, width: 15 }} />;
 
   // ミュートの場合
-  const isMute = pitches[0][0] === 'm';
-  if (isMute)
-    return (
-      <Mora
-        mora={''}
-        index={0}
-        isMute
-        currentPitch={false}
-        showOdakaLine={false}
-      />
-    );
+  if (wordPitches[0][0] === 'm')
+    return <Mora mora={''} isMute pitchLevel={false} isAccentCore={false} />;
 
-  const pitchArray = pitches.map((i) => i[1] === 'h'); // 低音：false, 高音：true
   const showOdakaLine =
     // pitchesの最後から二つ目が高ピッチ
-    !!pitches.slice(-2, -1)[0] &&
-    !!pitches.slice(-2, -1)[0][1] &&
+    !!wordPitches.slice(-2, -1)[0] &&
+    !!wordPitches.slice(-2, -1)[0][1] &&
     // pitchesの最後が空文字列
-    pitches.slice(-1)[0][0] === '';
+    wordPitches.slice(-1)[0][0] === '';
 
-  const moraArray = pitches.map((i) => i[0]);
+  const moras = wordPitches.map((i) => i[0]);
 
   // 尾高の場合、最後の[""]を取り除く
-  if (!!pitches && showOdakaLine) {
-    pitchArray.pop();
-    moraArray.pop();
+  if (!!wordPitches && showOdakaLine) {
+    wordPitchLevels.pop();
+    moras.pop();
   }
 
+  const renderedMoras = moras.map((mora, index) => {
+    const isLast = index === moras.length - 1;
+    const currentPitchLevel = wordPitchLevels[index];
+    const nextPitchLevel = !isLast ? wordPitchLevels[index + 1] : undefined;
+    const isAccentCore =
+      (isLast && showOdakaLine) ||
+      (!isLast && currentPitchLevel === true && nextPitchLevel === false);
+    return (
+      <Mora
+        key={index}
+        mora={mora}
+        pitchLevel={currentPitchLevel}
+        isAccentCore={isAccentCore}
+      />
+    );
+  });
+
   return (
-    <div
-      style={{
-        position: 'relative',
-        paddingBottom: paddingBottom || 0,
-      }}
-    >
-      <Line showOdakaLine={showOdakaLine} pitchArray={pitchArray} />
-      <div style={{ display: 'flex' }}>
-        {moraArray.map((mora, index) => {
-          const isLast = index === moraArray.length - 1;
-          return (
-            <Mora
-              key={index}
-              mora={mora}
-              index={index}
-              isLast={isLast}
-              hasBorder={hasBorders}
-              isOddStart={isOddStart}
-              showOdakaLine={showOdakaLine}
-              currentPitch={pitchArray[index]}
-              nextPitch={!isLast ? pitchArray[index + 1] : undefined}
-            />
-          );
-        })}
-      </div>
+    <div style={{ position: 'relative' }}>
+      <Line showOdakaLine={showOdakaLine} wordPitchLevels={wordPitchLevels} />
+      <div style={{ display: 'flex' }}>{renderedMoras}</div>
     </div>
   );
-};
+});
 
 export default PitchLine;

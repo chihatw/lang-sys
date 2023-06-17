@@ -1,44 +1,18 @@
-import { useEffect, useState } from 'react';
+import { memo, useMemo } from 'react';
 import PitchLine from '../PitchLine';
-import string2PitchesArray from 'string2pitches-array';
+import { buildWordPitchStrs } from 'application/utils/utils';
 
-const SentencePitchLine = ({
-  pitchStr,
-  hasBorders,
-}: {
-  pitchStr: string;
-  hasBorders?: boolean;
-}) => {
-  let totalMoras = 0;
+const SentencePitchLine = memo(({ pitchStr }: { pitchStr: string }) => {
+  const wordPitchStrs = useMemo(() => buildWordPitchStrs(pitchStr), [pitchStr]);
 
-  const [pitchesArray, setPitchesArray] = useState<string[][][]>([]);
-
-  useEffect(() => {
-    const pitchesArray: string[][][] = string2PitchesArray(pitchStr);
-    setPitchesArray(pitchesArray);
-  }, [pitchStr]);
+  const renderedWordPitchLines = wordPitchStrs.map((wordPitchStr, index) => (
+    <PitchLine key={index} wordPitchStr={wordPitchStr} />
+  ));
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-      {pitchesArray.map((pitches, index) => {
-        const _totalMoras = totalMoras;
-        // pitches が [['']] の時、totalMoras をリセット
-        if (pitches.length === 1 && !pitches[0][0]) {
-          totalMoras = 0;
-        } else {
-          totalMoras += pitches.length;
-        }
-        return (
-          <div key={index}>
-            <PitchLine
-              pitches={pitches}
-              hasBorders={hasBorders}
-              isOddStart={!!(_totalMoras % 2)}
-            />
-          </div>
-        );
-      })}
+      {renderedWordPitchLines}
     </div>
   );
-};
+});
 
 export default SentencePitchLine;

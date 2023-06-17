@@ -1,3 +1,4 @@
+import { FirebaseError } from 'firebase/app';
 import * as firebaseAuth from 'firebase/auth';
 import { auth } from 'infrastructure/firebase';
 
@@ -16,7 +17,14 @@ export const signInWithEmailAndPassword = async (
     );
     return { authUser: user, errorMsg: '' };
   } catch (error) {
-    return { authUser: null, errorMsg: (error as { message: string }).message };
+    if (error instanceof FirebaseError) {
+      return {
+        authUser: null,
+        errorMsg: error.message,
+      };
+    }
+
+    return { authUser: null, errorMsg: 'error' };
   }
 };
 

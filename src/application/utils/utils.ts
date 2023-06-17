@@ -5,3 +5,6 @@ export const shuffle = ([...array]: string[]) => {
   }
   return array;
 };
+
+export const buildWordPitchStrs = (pitchStr: string) =>
+  pitchStr ? pitchStr.split('　') : [];
