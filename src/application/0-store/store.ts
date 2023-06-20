@@ -11,9 +11,7 @@ const serializableCheck = {
     'authUser/setUser',
     'authUser/setLoginUser',
     // audio
-    'audio/setChenVoice',
     'audio/saveAudioBuffer',
-    'audio/setChenVoice2',
     'audio/setBlobAndAudioBuffer',
     'audio/mergeFetchedAudioBuffers',
   ],
@@ -21,8 +19,6 @@ const serializableCheck = {
     // authUser
     'authUser.loginUser',
     // audio
-    'audio.chenVoice',
-    'audio.chenVoice2',
     'audio.recordedBlob',
     'audio.recordedAudioBuffer',
     'audio.fetchedAudioBuffers',

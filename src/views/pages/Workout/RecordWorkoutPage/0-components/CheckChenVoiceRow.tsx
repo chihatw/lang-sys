@@ -1,33 +1,45 @@
 import { PlayArrow } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
 import { Divider, IconButton } from '@mui/material';
 import { useEffect, useMemo, useRef } from 'react';
 
-import { RootState } from 'main';
-
-import {
-  pauseSourceNode,
-  getStartAndStopFromChenSanVoices,
-  playAudioBufferAndSetSourceNode,
-} from 'application/audio/core/2-services';
+import { getStartAndStopFromChenSanVoices } from 'application/audio/core/2-services';
 
 import SentencePitchLine from 'views/components/SentencePitchLine';
 
 const CheckChenVoiceRow = ({ pitchStr }: { pitchStr: string }) => {
-  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { chenVoice } = useSelector((state: RootState) => state.audio);
-
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const { start, stop } = useMemo(
     () => getStartAndStopFromChenSanVoices(pitchStr),
     [pitchStr]
   );
 
   useEffect(() => {
-    return () => pauseSourceNode(sourceNodeRef);
+    return () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      audio.pause();
+    };
   }, []);
 
   const handlePlay = () => {
-    playAudioBufferAndSetSourceNode(chenVoice!, start, stop, sourceNodeRef);
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.ontimeupdate = () => {
+      if (audio.currentTime < stop) return;
+
+      audio.pause();
+      audio.currentTime = start;
+    };
+
+    if (audio.paused) {
+      audio.currentTime = start;
+      audio.play();
+      return;
+    }
+
+    audio.pause();
+    audio.currentTime = start;
   };
 
   return (

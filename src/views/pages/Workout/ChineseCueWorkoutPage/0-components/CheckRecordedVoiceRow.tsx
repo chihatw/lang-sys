@@ -1,21 +1,14 @@
 import { PlayArrow, Stop } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+
 import { Divider, IconButton } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { RootState } from 'main';
-
-import {
-  pauseSourceNode,
-  playAudioBufferAndSetSourceNode,
-} from 'application/audio/core/2-services';
-
 import SentencePitchLine from 'views/components/SentencePitchLine';
 import { CHIN_SAN_VOICES2 } from 'assets/chinSanVoices2';
+import chenSan2Voice from 'assets/audios/chinSan2_voice.mp3';
 
 function CheckRecordedVoiceRow({ cueId }: { cueId: string }) {
-  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { chenVoice2 } = useSelector((state: RootState) => state.audio);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const { start, stop, pitchStr, chinese, japanese } = useMemo(() => {
@@ -27,29 +20,39 @@ function CheckRecordedVoiceRow({ cueId }: { cueId: string }) {
 
   useEffect(() => {
     return () => {
-      pauseSourceNode(sourceNodeRef);
+      const audio = audioRef.current;
+      if (!audio) return;
+      audio.pause();
       setIsPlaying(false);
     };
   }, []);
 
   const handlePlay = () => {
-    if (isPlaying) {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.ontimeupdate = () => {
+      if (audio.currentTime < stop) return;
+
+      audio.pause();
+      audio.currentTime = start;
       setIsPlaying(false);
-      pauseSourceNode(sourceNodeRef);
+    };
+
+    if (audio.paused) {
+      audio.currentTime = start;
+      audio.play();
+      setIsPlaying(true);
       return;
     }
-    setIsPlaying(true);
-    playAudioBufferAndSetSourceNode(
-      chenVoice2!,
-      start,
-      stop,
-      sourceNodeRef,
-      () => setIsPlaying(false)
-    );
+
+    audio.pause();
+    audio.currentTime = start;
+    setIsPlaying(false);
   };
 
   return (
     <div style={{ padding: '0 32px' }}>
+      <audio ref={audioRef} src={chenSan2Voice} />
       <div
         style={{
           display: 'flex',

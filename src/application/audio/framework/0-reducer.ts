@@ -25,12 +25,6 @@ const audioSlice = createSlice({
       delete fetchedAudioBuffers[payload];
       state.fetchedAudioBuffers = fetchedAudioBuffers;
     },
-    setChenVoice: (state, { payload }: { payload: AudioBuffer }) => {
-      state.chenVoice = payload;
-    },
-    setChenVoice2: (state, { payload }: { payload: AudioBuffer }) => {
-      state.chenVoice2 = payload;
-    },
     setBlobAndAudioBuffer: (
       state,
       {

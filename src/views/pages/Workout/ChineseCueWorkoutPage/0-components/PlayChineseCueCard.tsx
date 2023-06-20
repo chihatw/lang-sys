@@ -1,18 +1,12 @@
-import { useSelector } from 'react-redux';
 import { Card, CardContent } from '@mui/material';
 import { useEffect, useMemo, useRef } from 'react';
 
-import { RootState } from 'main';
+import chenSan2Voice from 'assets/audios/chinSan2_voice.mp3';
 import SentencePitchLine from 'views/components/SentencePitchLine';
 import { CHIN_SAN_VOICES2 } from 'assets/chinSanVoices2';
-import {
-  pauseSourceNode,
-  playAudioBufferAndSetSourceNode,
-} from 'application/audio/core/2-services';
 
 function PlayChineseCueCard({ cueId }: { cueId: string }) {
-  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const { chenVoice2 } = useSelector((state: RootState) => state.audio);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const { start, stop, pitchStr, chinese, japanese } = useMemo(() => {
     const target = CHIN_SAN_VOICES2[cueId];
@@ -22,17 +16,35 @@ function PlayChineseCueCard({ cueId }: { cueId: string }) {
   }, [cueId]);
 
   useEffect(() => {
-    return () => pauseSourceNode(sourceNodeRef);
+    return () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      audio.pause();
+    };
   }, []);
 
   const handleClick = () => {
-    playAudioBufferAndSetSourceNode(chenVoice2!, start, stop, sourceNodeRef);
-  };
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.ontimeupdate = () => {
+      if (audio.currentTime < stop) return;
+      audio.pause();
+      audio.currentTime = start;
+    };
 
-  if (!chenVoice2) return <></>;
+    if (audio.paused) {
+      audio.currentTime = start;
+      audio.play();
+      return;
+    }
+
+    audio.pause();
+    audio.currentTime = start;
+  };
 
   return (
     <Card onClick={handleClick} sx={{ cursor: 'pointer' }}>
+      <audio ref={audioRef} src={chenSan2Voice} />
       <CardContent
         sx={{
           marginBottom: -1,
