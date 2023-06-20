@@ -11,11 +11,8 @@ function OpeningScene() {
   const { workoutId } = useSelector(
     (state: RootState) => state.chineseCueWorkoutPractice
   );
-  const { chineseCueWorkouts } = useSelector((state: RootState) => state);
-
-  const workout = useMemo(
-    () => chineseCueWorkouts[workoutId] || null,
-    [workoutId, chineseCueWorkouts]
+  const workout = useSelector(
+    (state: RootState) => state.chineseCueWorkouts[workoutId] || null
   );
 
   const handleNext = () => {
