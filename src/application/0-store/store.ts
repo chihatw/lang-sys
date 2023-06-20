@@ -7,18 +7,11 @@ import { Services } from 'infrastructure/services';
 
 const serializableCheck = {
   ignoredActions: [
-    // authUser
-    'authUser/setUser',
-    'authUser/setLoginUser',
-    // audio
     'audio/saveAudioBuffer',
     'audio/setBlobAndAudioBuffer',
     'audio/mergeFetchedAudioBuffers',
   ],
   ignoredPaths: [
-    // authUser
-    'authUser.loginUser',
-    // audio
     'audio.recordedBlob',
     'audio.recordedAudioBuffer',
     'audio.fetchedAudioBuffers',

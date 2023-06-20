@@ -1,15 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { initialState } from '../core/1-constants';
-import { User } from 'firebase/auth';
 
 const authUserSlice = createSlice({
   name: 'authUser',
   initialState: initialState,
   reducers: {
-    setUser: (state, { payload }: { payload: User }) => {
+    setUser: (
+      state,
+      { payload }: { payload: { loginUserUid: string; currentUid: string } }
+    ) => {
       state.initializing = false;
-      state.currentUid = payload.uid;
-      state.loginUser = payload;
+      state.currentUid = payload.currentUid;
+      state.loginUser.uid = payload.loginUserUid;
     },
     setCurrentUid: (state, { payload }: { payload: string }) => {
       state.currentUid = payload;
@@ -17,15 +19,15 @@ const authUserSlice = createSlice({
     removeUser: (state) => {
       state.initializing = false;
       state.currentUid = '';
-      state.loginUser = null;
+      state.loginUser.uid = '';
     },
-    setLoginUser: (state, { payload }: { payload: User }) => {
-      state.currentUid = payload.uid;
-      state.loginUser = payload;
+    setLoginUser: (state, { payload }: { payload: string }) => {
+      state.currentUid = payload;
+      state.loginUser.uid = payload;
     },
     signoutSuccess: (state) => {
       state.currentUid = '';
-      state.loginUser = null;
+      state.loginUser.uid = '';
     },
     signoutInitiate: (state) => state,
   },

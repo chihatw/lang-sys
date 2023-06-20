@@ -3,11 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MenuItem, Select } from '@mui/material';
 import { useEffect } from 'react';
 import { userListActions } from 'application/userList/framework/0-reducer';
-import {
-  getSelectedUidFromLocalStorage,
-  setSelectedUidToLocalStorage,
-} from 'application/userList/core/2-services';
 import { useNavigate } from 'react-router-dom';
+import { LOCAL_STORAGE_KEY } from 'application/userList/core/1-constants';
 
 function SelectUserPane() {
   const dispatch = useDispatch();
@@ -23,8 +20,8 @@ function SelectUserPane() {
   useEffect(() => {
     if (!loginUser) return;
     if (!!uids.length) return; // 初期化されていれば、終了（uids は初期化後に必ず存在する）
-    const selectedUid = getSelectedUidFromLocalStorage(loginUser);
-    dispatch(userListActions.initiate(selectedUid));
+    const currentUid = localStorage.getItem(LOCAL_STORAGE_KEY) || loginUser.uid;
+    dispatch(userListActions.initiate(currentUid));
   }, [uids, loginUser]);
 
   if (!loginUser || loginUser.uid !== import.meta.env.VITE_ADMIN_UID)
@@ -36,7 +33,7 @@ function SelectUserPane() {
       value={selectedUid}
       variant='standard'
       onChange={(e) => {
-        setSelectedUidToLocalStorage(e.target.value);
+        localStorage.setItem(LOCAL_STORAGE_KEY, e.target.value);
         dispatch(userListActions.setSelectedUid(e.target.value));
         navigate('/');
       }}

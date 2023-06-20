@@ -11,6 +11,7 @@ import TopPage from './pages/TopPage';
 import SignInPage from './pages/SignInPage';
 import ChineseCueWorkoutPage from './pages/Workout/ChineseCueWorkoutPage';
 import ChineseWorkoutListPage from './pages/Workout/ChineseCueWorkoutListPage';
+import { LOCAL_STORAGE_KEY } from 'application/userList/core/1-constants';
 
 function App() {
   const dispatch = useDispatch();
@@ -19,7 +20,11 @@ function App() {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        dispatch(authUserActions.setUser(user));
+        // currentUid は localStorage から受け取る
+        const currentUid = localStorage.getItem(LOCAL_STORAGE_KEY) || user.uid;
+        dispatch(
+          authUserActions.setUser({ loginUserUid: user.uid, currentUid })
+        );
       } else {
         dispatch(authUserActions.removeUser());
       }
@@ -61,17 +66,17 @@ function App() {
 export default App;
 
 function PrivateRoute({ element }: { element: React.ReactElement }) {
-  const { loginUser } = useSelector((state: RootState) => state.authUser);
+  const loginUser = useSelector((state: RootState) => state.authUser.loginUser);
 
-  if (!loginUser) {
+  if (!loginUser.uid) {
     return <Navigate to='/signIn' />;
   }
   return element;
 }
 
 function OnlyUnAuthorizedRoute({ element }: { element: React.ReactElement }) {
-  const { loginUser } = useSelector((state: RootState) => state.authUser);
-  if (loginUser) {
+  const loginUser = useSelector((state: RootState) => state.authUser.loginUser);
+  if (loginUser.uid) {
     return <Navigate to='/' />;
   }
   return element;
