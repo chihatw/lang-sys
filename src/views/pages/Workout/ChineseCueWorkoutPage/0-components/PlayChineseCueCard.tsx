@@ -1,15 +1,15 @@
 import { Card, CardContent } from '@mui/material';
 import { useEffect, useMemo, useRef } from 'react';
 
-import chenSan2Voice from 'assets/audios/chinSan2_voice.mp3';
+import workoutVoice from 'assets/audios/workout.mp3';
 import SentencePitchLine from 'views/components/SentencePitchLine';
-import { CHIN_SAN_VOICES2 } from 'assets/chinSanVoices2';
+import { WORKOUT_VOICES } from 'assets/workoutVoice';
 
 function PlayChineseCueCard({ cueId }: { cueId: string }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const { start, stop, pitchStr, chinese, japanese } = useMemo(() => {
-    const target = CHIN_SAN_VOICES2[cueId];
+    const target = WORKOUT_VOICES[cueId];
     if (!target)
       return { start: 0, stop: 0, pitchStr: '', chinese: '', japanese: '' };
     return target;
@@ -44,7 +44,7 @@ function PlayChineseCueCard({ cueId }: { cueId: string }) {
 
   return (
     <Card onClick={handleClick} sx={{ cursor: 'pointer' }}>
-      <audio ref={audioRef} src={chenSan2Voice} />
+      <audio ref={audioRef} src={workoutVoice} />
       <CardContent
         sx={{
           marginBottom: -1,

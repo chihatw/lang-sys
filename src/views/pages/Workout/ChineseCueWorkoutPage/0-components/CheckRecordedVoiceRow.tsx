@@ -4,15 +4,15 @@ import { Divider, IconButton } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import SentencePitchLine from 'views/components/SentencePitchLine';
-import { CHIN_SAN_VOICES2 } from 'assets/chinSanVoices2';
-import chenSan2Voice from 'assets/audios/chinSan2_voice.mp3';
+import { WORKOUT_VOICES } from 'assets/workoutVoice';
+import workoutVoice from 'assets/audios/workout.mp3';
 
 function CheckRecordedVoiceRow({ cueId }: { cueId: string }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const { start, stop, pitchStr, chinese, japanese } = useMemo(() => {
-    const target = CHIN_SAN_VOICES2[cueId];
+    const target = WORKOUT_VOICES[cueId];
     if (!target)
       return { start: 0, stop: 0, pitchStr: '', chinese: '', japanese: '' };
     return target;
@@ -52,7 +52,7 @@ function CheckRecordedVoiceRow({ cueId }: { cueId: string }) {
 
   return (
     <div style={{ padding: '0 32px' }}>
-      <audio ref={audioRef} src={chenSan2Voice} />
+      <audio ref={audioRef} src={workoutVoice} />
       <div
         style={{
           display: 'flex',
