@@ -2,9 +2,8 @@ import { AnyAction, Middleware } from '@reduxjs/toolkit';
 import { Services } from 'infrastructure/services';
 
 import { authUserActions } from 'application/authUser/framework/0-reducer';
-import { signinFormActions } from 'application/signinForm/framework/0-reducer';
 import { chineseCueWorkoutListActions } from 'application/chineseCueWorkoutList/framework/0-reducer';
-import { recordWorkoutListActions } from 'application/recordWorkoutList/framework/0-reducer';
+import { signinFormActions } from 'application/signinForm/framework/0-reducer';
 
 const userMiddleware =
   (services: Services): Middleware =>
@@ -39,7 +38,6 @@ const userMiddleware =
       case 'userList/setSelectedUid': {
         const currentUid = action.payload as string;
         dispatch(authUserActions.setCurrentUid(currentUid));
-        dispatch(recordWorkoutListActions.resetState());
         dispatch(chineseCueWorkoutListActions.resetState());
         break;
       }

@@ -1,4 +1,3 @@
-import { CHIN_SAN_VOICES } from 'assets/chinSanVoices';
 import { MutableRefObject } from 'react';
 
 export const createSourceNode = (
@@ -42,15 +41,6 @@ export const pauseSourceNode = (
   const sourceNode = sourceNodeRef.current;
   sourceNode && sourceNode.stop(0);
   sourceNodeRef.current = null;
-};
-
-export const getStartAndStopFromChenSanVoices = (pitchStr: string) => {
-  const target = Object.values(CHIN_SAN_VOICES).find(
-    (item) => item.pitchStr === pitchStr
-  );
-  if (!target) return { start: 0, stop: 0 };
-  const { start, stop } = target.schedules[0];
-  return { start, stop };
 };
 
 export const createMediaRecorder = async (

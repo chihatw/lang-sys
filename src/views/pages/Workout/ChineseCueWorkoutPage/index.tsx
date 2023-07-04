@@ -1,14 +1,15 @@
-import { useEffect } from 'react';
 import { Button, Container } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { RootState } from 'main';
 import { chineseCueWorkoutPracticeActions } from 'application/chineseCueWorkoutPractice/framework/0-reducer';
-import { SCENE } from 'application/recordWorkoutPractice/core/1-constants';
+import { RootState } from 'main';
+
+import { SCENE } from 'application/chineseCueWorkoutPractice/core/1-constants';
+import CheckScene from './CheckScene';
 import OpeningScene from './OpeningScene';
 import PracticeScene from './PracticeScene';
-import CheckScene from './CheckScene';
 
 function ChineseCueWorkoutPage() {
   const navigate = useNavigate();

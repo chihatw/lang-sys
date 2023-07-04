@@ -1,13 +1,11 @@
-import users from './users';
 import audio from './audio';
 import authUser from './authUser';
-import recordWorkouts from './recordWorkouts';
 import chineseCueWorkouts from './chineseCueWorkouts';
+import users from './users';
 
 export default {
   users,
   audio,
   authUser,
-  recordWorkouts,
   chineseCueWorkouts,
 };
