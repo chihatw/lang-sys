@@ -59,7 +59,7 @@ export const WORKOUT_VOICES: {
   sample8: {
     japanese: 'ゴミを捨てなかった行為',
     pitchStr: 'ゴミ＼を　すてな＼かった　こ＼ーい',
-    chinese: '當時不丟垃圾這個行為',
+    chinese: '當時沒有丟垃圾這個行為',
     start: 21.5,
     stop: 24.2,
   },
